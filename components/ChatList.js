@@ -1,22 +1,8 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert, Text } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { Avatar } from "react-native-elements";
 
 // TODO: create ChatList for user
-const s = StyleSheet.create({
-  container: {
-    backgroundColor: "#F5F5F5",
-    marginTop: 60,
-  },
-  label: {
-    color: "black",
-    fontSize: 12,
-  },
-  input: {
-    fontSize: 16,
-    color: "black",
-  },
-});
 
 export default class ChatList extends Component {
   state = {
@@ -26,13 +12,34 @@ export default class ChatList extends Component {
   };
 
   render() {
-    return <View style={s.container}></View>;
+    return (
+      <View
+        style={{
+          flexDirection: "row",
+          height: 90,
+          padding: 20,
+          borderBottomWidth: 1,
+        }}
+      >
+        {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
+        <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
+        {/* Standard Avatar */}
+        <Avatar
+          rounded
+          source={{
+            uri:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+          }}
+        />
+        <Text style={styles.titleText}>Diane Tucker</Text>
+      </View>
+    );
   }
 }
-// const offset = 16;
-// const styles = StyleSheet.create({
-//   buttonText: {
-//     marginLeft: offset,
-//     fontSize: 42,
-//   },
-// });
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    paddingLeft: 15,
+  },
+});

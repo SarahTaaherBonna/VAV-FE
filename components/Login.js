@@ -34,12 +34,16 @@ export default class Login extends React.Component {
   // TODO: navigate to Chat List after login
   loginSuccess = () => {
     console.log("login successful, navigate to chat.");
-    this.props.navigation.navigate("Chat", {
+    // this.props.navigation.navigate("Chat", {
+    //   name: this.state.name,
+    //   email: this.state.email,
+    //   avatar: this.state.avatar,
+    // });
+    this.props.navigation.navigate("ChatList", {
       name: this.state.name,
       email: this.state.email,
       avatar: this.state.avatar,
     });
-    // this.props.navigation.navigate("ChatList", {});
   };
 
   loginFailed = () => {

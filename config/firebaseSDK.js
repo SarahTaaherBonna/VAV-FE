@@ -1,8 +1,6 @@
 import firebase from "firebase";
 import { Alert } from "react-native";
 
-// TODO: get Token for authentication to be sent to backend team
-// TODO: update account
 class FirebaseSDK {
   constructor() {
     if (!firebase.apps.length) {
