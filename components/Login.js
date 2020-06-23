@@ -10,7 +10,7 @@ export default class Login extends React.Component {
   state = {
     name: "Test2",
     email: "Test2@gmail.com",
-    password: "Test12",
+    password: "password",
     avatar: "",
   };
 
