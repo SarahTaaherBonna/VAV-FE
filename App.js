@@ -6,11 +6,12 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Chat from "./components/Chat";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
+import CreditCard from "./components/CreditCard";
 
 // export default createStackNavigator({
 //   Chat: { screen: Chat },
 // });
-
+console.disableYellowBox = true;
 const Stack = createStackNavigator();
 
 function MyStack() {
@@ -18,6 +19,7 @@ function MyStack() {
     <Stack.Navigator>
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="CreditCard" component={CreditCard} />
       <Stack.Screen name="Chat" component={Chat} />
     </Stack.Navigator>
   );

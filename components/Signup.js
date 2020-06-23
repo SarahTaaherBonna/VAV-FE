@@ -33,6 +33,7 @@ export default class Signup extends React.Component {
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
+    this.props.navigation.navigate("CreditCard", {});
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
