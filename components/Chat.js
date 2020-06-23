@@ -69,6 +69,6 @@ export default class Chat extends React.Component<Props> {
     );
   }
   componentWillUnmount() {
-    firebaseSDK.shared.off();
+    firebaseSDK.off();
   }
 }

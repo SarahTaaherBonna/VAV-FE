@@ -74,7 +74,7 @@ export default class Login extends React.Component {
           style={styles.buttonText}
           onPress={this.onPressLogin}
         />
-
+        <TextInput returnKeyType={"go"} />
         <Button
           title="Signup"
           style={styles.buttonText}

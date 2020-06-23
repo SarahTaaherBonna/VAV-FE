@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert } from "react-native";
 import * as firebase from "firebase";
+import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput } from "react-native-credit-card-input";
 import { TextInput } from "react-native-gesture-handler";
 
@@ -26,13 +27,18 @@ export default class CreditCard extends Component {
     cardName: "",
     cardNumber: "",
     expiryDate: "",
-    cvc: "",
+    cardcvc: "",
   };
 
   _onChange = (form) => {
     /* eslint no-console: 0 */
-    // console.log(JSON.stringify(formData, null, " "));
-    console.log(form);
+    // console.log(form);
+    if (form.valid == true) {
+      this.state.cardName = form.values.name;
+      this.state.cardNumber = form.values.number;
+      this.state.cardcvc = form.values.cvc;
+      this.state.expiryDate = form.values.expiry;
+    }
   };
 
   _onFocus = (field) => {
@@ -40,38 +46,26 @@ export default class CreditCard extends Component {
     console.log(field);
   };
 
-  // getAuthenticationToken = async () => {
-  //   firebase
-  //     .auth()
-  //     .currentUser.getIdToken(/* forceRefresh */ true)
-  //     .then(function (idToken) {
-  //       // Send token to your backend via HTTPS
-  //       // ...
-  //       return idToken;
-  //     })
-  //     .catch(function (error) {});
-  // };
-
   onPressSubmit = async () => {
     try {
-      await firebaseSDK.getToken();
+      const tokenObject = firebaseSDK.getToken();
+      // console.log(Object.values(token));
+      // console.log(typeof token);
+      var token = Object.values(tokenObject);
+      var dataToSend =
+        this.state.cardName +
+        "," +
+        this.state.cardNumber +
+        "," +
+        this.state.cardcvc +
+        "," +
+        this.state.expiryDate;
+
+      console.log(token);
+      console.log(dataToSend);
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
-    // firebase
-    //   .auth()
-    //   .currentUser.getIdToken(/* forceRefresh */ true)
-    //   .then(function (idToken) {
-    //     // Send token to your backend via HTTPS
-    //     // ...
-    //   })
-    // .catch(function (error) {});
-    // submit authentication token + card details when making call (sending details) to BE team
-    // this.props.navigation.navigate("Chat", {
-    //   name: this.state.name,
-    //   email: this.state.email,
-    //   avatar: this.state.avatar,
-    // });
   };
 
   render() {
@@ -88,7 +82,7 @@ export default class CreditCard extends Component {
           placeholderColor={"darkgray"}
           allowScroll={true}
           // onFocus={this._onFocus}
-          // onChange={this._onChange}
+          onChange={this._onChange}
         />
         <TextInput returnKeyType={"go"} />
         <Button

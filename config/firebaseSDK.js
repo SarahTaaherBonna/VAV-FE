@@ -88,11 +88,11 @@ class FirebaseSDK {
   };
 
   // TODO: update account
-  updateAccount = async (user) => {
-    var user = firebase.auth().currentUser;
-    user
+  updateAccount = async (newUser) => {
+    var currentUser = firebase.auth().currentUser;
+    currentUser
       .updateProfile({
-        displayName: user.name,
+        displayName: newUser.name,
         // photoURL: "https://example.com/jane-q-user/profile.jpg",
       })
       .then(function () {
@@ -103,8 +103,8 @@ class FirebaseSDK {
         // An error happened.
         Alert.alert("Update failed.");
       });
-    user
-      .updateEmail(user.email)
+    currentUser
+      .updateEmail(newUser.email)
       .then(function () {
         // Update successful.
         Alert.alert("Update success");
