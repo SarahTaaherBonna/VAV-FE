@@ -32,6 +32,7 @@ export default class Chat extends React.Component<Props> {
       _id: firebaseSDK.uid,
     };
   }
+
   render() {
     const chat = (
       <GiftedChat
@@ -41,9 +42,9 @@ export default class Chat extends React.Component<Props> {
       />
     );
 
-    console.log(this.props.route.params.name)
-    console.log(this.props.route.params.email)
-    console.log(this.props.route.params.avatar)
+    console.log(this.props.route.params.name);
+    console.log(this.props.route.params.email);
+    console.log(this.props.route.params.avatar);
 
     if (Platform.OS == "android") {
       return (

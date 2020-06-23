@@ -10,6 +10,7 @@ import {
   View,
   Button,
   TouchableOpacity,
+  Alert,
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
@@ -33,83 +34,68 @@ export default class Signup extends React.Component {
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
-    this.props.navigation.navigate("CreditCard", {});
+    this.props.navigation.navigate("CreditCard", {
+      name: this.state.name,
+      email: this.state.email,
+      avatar: this.state.avatar,
+    });
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
 
+  //   // Need to fix avatar upload
   //   onImageUpload = async () => {
-  //     const [ selectedImage, setSelectedImage ] = React.useState('');
-  //     let permissionResult = await ImagePicker.requestCameraRollPermissionsAsync();
+  //     const { status: cameraRollPerm } = await Permissions.askAsync(
+  //       Permissions.CAMERA_ROLL
+  //     );
+  //     try {
+  //       // only if user allows permission to camera roll
+  //       if (cameraRollPerm === "granted") {
+  //         // let pickerResult = await ImagePicker.launchImageLibraryAsync({
+  //         //   allowsEditing: true,
+  //         //   aspect: [4, 3],
+  //         // });
+  //         let pickerResult = await ImagePicker.launchImageLibraryAsync();
+  //         console.log(
+  //           "ready to upload... pickerResult json:" + JSON.stringify(pickerResult)
+  //         );
 
-  //     if (permissionResult.granted === false) {
-  //       alert("Permission to access camera roll is required!");
-  //       return;
+  //         // var wantedMaxSize = 150;
+  //         // var rawheight = pickerResult.height;
+  //         // var rawwidth = pickerResult.width;
+  //         // var ratio = rawwidth / rawheight;
+  //         // var wantedwidth = wantedMaxSize;
+  //         // var wantedheight = wantedMaxSize / ratio;
+  //         // // check vertical or horizontal
+  //         // if (rawheight > rawwidth) {
+  //         //   wantedwidth = wantedMaxSize * ratio;
+  //         //   wantedheight = wantedMaxSize;
+  //         // }
+  //         // let resizedUri = await new Promise((resolve, reject) => {
+  //         //   ImageEditor.cropImage(
+  //         //     pickerResult.uri,
+  //         //     {
+  //         //       offset: { x: 0, y: 0 },
+  //         //       size: { width: pickerResult.width, height: pickerResult.height },
+  //         //       displaySize: { width: wantedwidth, height: wantedheight },
+  //         //       resizeMode: "contain",
+  //         //     },
+  //         //     (uri) => resolve(uri),
+  //         //     () => reject()
+  //         //   );
+  //         // });
+  //         // let uploadUrl = await firebaseSDK.uploadImage(resizedUri);
+  //         let uploadUrl = await firebaseSDK.uploadImage(pickerResult);
+  //         this.setState({ avatar: uploadUrl });
+  //         await firebaseSDK.updateAvatar(uploadUrl);
+  //       }
+  //     } catch (err) {
+  //       console.log("onImageUpload error:" + err.message);
+  //       alert("Upload image error:" + err.message);
   //     }
-
-  //     let pickerResult = await ImagePicker.launchImageLibraryAsync({
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-  //     });
-
-  //     if (pickerResult.cancelled === true) {
-  //       return;
-  //     }
-
-  //     setSelectedImage({ localUri: pickerResult.uri });
   //   };
-
-  // Need to fix avatar upload
-  onImageUpload = async () => {
-    const { status: cameraRollPerm } = await Permissions.askAsync(
-      Permissions.CAMERA_ROLL
-    );
-    try {
-      // only if user allows permission to camera roll
-      if (cameraRollPerm === "granted") {
-        let pickerResult = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-        });
-        console.log(
-          "ready to upload... pickerResult json:" + JSON.stringify(pickerResult)
-        );
-
-        var wantedMaxSize = 150;
-        var rawheight = pickerResult.height;
-        var rawwidth = pickerResult.width;
-        var ratio = rawwidth / rawheight;
-        var wantedwidth = wantedMaxSize;
-        var wantedheight = wantedMaxSize / ratio;
-        // check vertical or horizontal
-        if (rawheight > rawwidth) {
-          wantedwidth = wantedMaxSize * ratio;
-          wantedheight = wantedMaxSize;
-        }
-        let resizedUri = await new Promise((resolve, reject) => {
-          ImageEditor.cropImage(
-            pickerResult.uri,
-            {
-              offset: { x: 0, y: 0 },
-              size: { width: pickerResult.width, height: pickerResult.height },
-              displaySize: { width: wantedwidth, height: wantedheight },
-              resizeMode: "contain",
-            },
-            (uri) => resolve(uri),
-            () => reject()
-          );
-        });
-        let uploadUrl = await firebaseSDK.uploadImage(resizedUri);
-        this.setState({ avatar: uploadUrl });
-        await firebaseSDK.updateAvatar(uploadUrl);
-      }
-    } catch (err) {
-      console.log("onImageUpload error:" + err.message);
-      alert("Upload image error:" + err.message);
-    }
-  };
 
   render() {
     return (

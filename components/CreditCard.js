@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button } from "react-native";
-
+import { StyleSheet, View, Button, Alert } from "react-native";
+import * as firebase from "firebase";
 import { CreditCardInput } from "react-native-credit-card-input";
 import { TextInput } from "react-native-gesture-handler";
 
+// TODO: send Token for authentication to backend team
+// TODO: send credit card details
 const s = StyleSheet.create({
   container: {
     backgroundColor: "#F5F5F5",
@@ -19,16 +21,18 @@ const s = StyleSheet.create({
   },
 });
 
-export default class Example extends Component {
+export default class CreditCard extends Component {
   state = {
-    name: "",
+    cardName: "",
     cardNumber: "",
     expiryDate: "",
     cvc: "",
   };
-  _onChange = (formData) => {
+
+  _onChange = (form) => {
     /* eslint no-console: 0 */
-    console.log(JSON.stringify(formData, null, " "));
+    // console.log(JSON.stringify(formData, null, " "));
+    console.log(form);
   };
 
   _onFocus = (field) => {
@@ -36,8 +40,38 @@ export default class Example extends Component {
     console.log(field);
   };
 
+  // getAuthenticationToken = async () => {
+  //   firebase
+  //     .auth()
+  //     .currentUser.getIdToken(/* forceRefresh */ true)
+  //     .then(function (idToken) {
+  //       // Send token to your backend via HTTPS
+  //       // ...
+  //       return idToken;
+  //     })
+  //     .catch(function (error) {});
+  // };
+
   onPressSubmit = async () => {
-    this.props.navigation.navigate("Chat", {});
+    try {
+      await firebaseSDK.getToken();
+    } catch ({ message }) {
+      console.log("Create account failed. Catch error:" + message);
+    }
+    // firebase
+    //   .auth()
+    //   .currentUser.getIdToken(/* forceRefresh */ true)
+    //   .then(function (idToken) {
+    //     // Send token to your backend via HTTPS
+    //     // ...
+    //   })
+    // .catch(function (error) {});
+    // submit authentication token + card details when making call (sending details) to BE team
+    // this.props.navigation.navigate("Chat", {
+    //   name: this.state.name,
+    //   email: this.state.email,
+    //   avatar: this.state.avatar,
+    // });
   };
 
   render() {
@@ -53,9 +87,8 @@ export default class Example extends Component {
           invalidColor={"red"}
           placeholderColor={"darkgray"}
           allowScroll={true}
-
-          //   onFocus={this._onFocus}
-          //   onChange={this._onChange}
+          // onFocus={this._onFocus}
+          // onChange={this._onChange}
         />
         <TextInput returnKeyType={"go"} />
         <Button

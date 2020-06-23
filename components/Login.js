@@ -1,16 +1,18 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import firebaseSDK from "../config/firebaseSDK";
 
+// TODO: navigate to Chat List after login
 export default class Login extends React.Component {
   static navigationOptions = {
     title: "ChatAppV2",
   };
 
   state = {
-    name: "Test2",
-    email: "Test2@gmail.com",
-    password: "password",
+    name: "Test0",
+    email: "Test0@gmail.com",
+    password: "Test00",
     avatar: "",
   };
 
@@ -29,6 +31,7 @@ export default class Login extends React.Component {
     );
   };
 
+  // TODO: navigate to Chat List after login
   loginSuccess = () => {
     console.log("login successful, navigate to chat.");
     this.props.navigation.navigate("Chat", {
@@ -36,6 +39,7 @@ export default class Login extends React.Component {
       email: this.state.email,
       avatar: this.state.avatar,
     });
+    // this.props.navigation.navigate("ChatList", {});
   };
 
   loginFailed = () => {

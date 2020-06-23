@@ -1,5 +1,8 @@
 import firebase from "firebase";
+import { Alert } from "react-native";
 
+// TODO: get Token for authentication to be sent to backend team
+// TODO: update account
 class FirebaseSDK {
   constructor() {
     if (!firebase.apps.length) {
@@ -58,24 +61,104 @@ class FirebaseSDK {
       );
   };
 
-  updateAvatar = (url) => {
-    var userf = firebase.auth().currentUser;
-    if (userf != null) {
-      userf.updateProfile({ avatar: url }).then(
-        function () {
-          console.log("Updated avatar successfully. url:" + url);
-          alert("Avatar image is saved successfully.");
-        },
-        function (error) {
-          console.warn("Error update avatar.");
-          alert("Error update avatar. Error:" + error.message);
-        }
-      );
-    } else {
-      console.log("can't update avatar, user is not login.");
-      alert("Unable to update avatar. You must login first.");
+  getAccountDetails = async (user) => {
+    var user = firebase.auth().currentUser;
+    var name, email, photoUrl, uid, emailVerified;
+
+    if (user != null) {
+      name = user.displayName;
+      email = user.email;
+      // photoUrl = user.photoURL;
+      // emailVerified = user.emailVerified;
+      uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
+      // this value to authenticate with your backend server, if
+      // you have one. Use User.getToken() instead.
     }
+    return name, email, uid;
   };
+
+  // TODO: get Token for authentication to be sent to backend team
+  getToken = () => {
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+      token = user.getIdToken();
+    }
+    return token;
+  };
+
+  // TODO: update account
+  updateAccount = async (user) => {
+    var user = firebase.auth().currentUser;
+    user
+      .updateProfile({
+        displayName: user.name,
+        // photoURL: "https://example.com/jane-q-user/profile.jpg",
+      })
+      .then(function () {
+        // Update successful.
+        Alert.alert("Update success");
+      })
+      .catch(function (error) {
+        // An error happened.
+        Alert.alert("Update failed.");
+      });
+    user
+      .updateEmail(user.email)
+      .then(function () {
+        // Update successful.
+        Alert.alert("Update success");
+      })
+      .catch(function (error) {
+        // An error happened.
+        Alert.alert("Update failed.");
+      });
+  };
+
+  //   uploadImage = async (uri, imageName) => {
+  //     const response = await fetch(uri);
+  //     const blob = await response.blob();
+
+  //     var ref = firebase
+  //       .storage()
+  //       .ref()
+  //       .child("images/" + imageName);
+  //     return ref.put(blob);
+  //   };
+  //   uploadImage = async (uri) => {
+  //     console.log("got image to upload. uri:" + uri);
+  //     try {
+  //       const response = await fetch(uri);
+  //       const blob = await response.blob();
+  //       //   const ref = firebase.storage().ref("avatar").child(uuid.v4());
+  //       var ref = firebase
+  //         .storage()
+  //         .ref()
+  //         .child("images/" + imageName);
+  //       return ref.put(blob);
+  //     } catch (err) {
+  //       console.log("uploadImage try/catch error: " + err.message);
+  //     }
+  //   };
+
+  //   updateAvatar = (url) => {
+  //     var userf = firebase.auth().currentUser;
+  //     if (userf != null) {
+  //       userf.updateProfile({ avatar: url }).then(
+  //         function () {
+  //           console.log("Updated avatar successfully. url:" + url);
+  //           alert("Avatar image is saved successfully.");
+  //         },
+  //         function (error) {
+  //           console.warn("Error update avatar.");
+  //           alert("Error update avatar. Error:" + error.message);
+  //         }
+  //       );
+  //     } else {
+  //       console.log("can't update avatar, user is not login.");
+  //       alert("Unable to update avatar. You must login first.");
+  //     }
+  //   };
 
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
