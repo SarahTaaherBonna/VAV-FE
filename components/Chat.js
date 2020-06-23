@@ -25,9 +25,9 @@ export default class Chat extends React.Component<Props> {
 
   get user() {
     return {
-      name: this.props.navigation.state.params.name,
-      email: this.props.navigation.state.params.email,
-      avatar: this.props.navigation.state.params.avatar,
+      name: this.props.route.params.name,
+      email: this.props.route.params.email,
+      avatar: this.props.route.params.avatar,
       id: firebaseSDK.uid,
       _id: firebaseSDK.uid,
     };
@@ -40,6 +40,10 @@ export default class Chat extends React.Component<Props> {
         user={this.user}
       />
     );
+
+    console.log(this.props.route.params.name)
+    console.log(this.props.route.params.email)
+    console.log(this.props.route.params.avatar)
 
     if (Platform.OS == "android") {
       return (
