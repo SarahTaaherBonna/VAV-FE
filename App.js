@@ -1,19 +1,32 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+// import { createStackNavigator } from "react-navigation-stack";
+import "react-native-gesture-handler";
+import * as React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import Chat from "./components/Chat";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
 
-export default function App() {
+// export default createStackNavigator({
+//   Chat: { screen: Chat },
+// });
+
+const Stack = createStackNavigator();
+
+function MyStack() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <Stack.Navigator>
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Chat" component={Chat} />
+    </Stack.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <NavigationContainer>
+      <MyStack />
+    </NavigationContainer>
+  );
+}
