@@ -172,10 +172,18 @@ class FirebaseSDK {
     return firebase.database().ref("messages");
   }
 
-  parseMessage = (snapshot) => {
+  parseChatList = (snapshot) => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
     console.log(_id)
+
+    let id1 = _id.split("_")[0];
+    let id2 = _id.split("_")[1];
+
+    if(id1 == this.uid || id2 == this.uid) {
+      console.log("true")
+    }
+
     const timestamp = new Date(numberStamp);
     const message = {
       _id,
@@ -183,18 +191,17 @@ class FirebaseSDK {
       text,
       user,
     };
-    console.log(message)
     return message;
   };
 
-  getMessages = (callback) =>
+  getChatList = (callback) =>
     this.messageRef
-      .limitToLast(20)
-      .on("child_added", (snapshot) => callback(this.parseMessage(snapshot)));
+      .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
+
   // send the message to the Backend
   sendMessage = (messages) => {
     for (let i = 0; i < messages.length; i++) {

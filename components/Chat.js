@@ -46,7 +46,7 @@ export default class Chat extends React.Component<Props> {
   }
 
   componentDidMount() {
-    firebaseSDK.getMessages((message) =>
+    firebaseSDK.getChatList((message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))

@@ -6,36 +6,36 @@ import { Avatar } from "react-native-elements";
 
 export default class ChatList extends Component {
   state = {
-    name: "",
-    email: "",
-    avatar: "",
+    chats: [],
   };
 
-  render() {
-    return (
-      <View
-        style={{
-          flexDirection: "row",
-          height: 90,
-          padding: 20,
-          borderBottomWidth: 1,
+  generateChatListing(id, name, avatar) {
+    <View
+      style={{
+        flexDirection: "row",
+        height: 90,
+        padding: 20,
+        borderBottomWidth: 1,
+      }}>
+      {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
+      <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
+      {/* Standard Avatar */}
+      <Avatar
+        rounded
+        source={{
+          uri:
+            "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
         }}
-      >
-        {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-        <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
-        {/* Standard Avatar */}
-        <Avatar
-          rounded
-          source={{
-            uri:
-              "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-          }}
-        />
-        <Text style={styles.titleText}>Diane Tucker</Text>
-      </View>
-    );
+      />
+      <Text style={styles.titleText}>Diane Tucker</Text>
+    </View>
+  }
+
+  render() {
+    return chats;
   }
 }
+
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
