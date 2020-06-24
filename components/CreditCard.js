@@ -47,6 +47,7 @@ export default class CreditCard extends Component {
   };
 
   onPressSubmit = async () => {
+    console.log(this.state.cardName)
     try {
       const tokenObject = firebaseSDK.getToken();
       // console.log(Object.values(token));
