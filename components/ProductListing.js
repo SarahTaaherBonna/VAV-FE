@@ -5,9 +5,8 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import ChatList from "./ChatList";
 import ProfilePage from "./ProfilePage";
-// TODO: create ChatList for user
 
-const Tab = createBottomTabNavigator();
+// TODO: create ChatList for user
 
 export default class ProductListing extends Component {
   state = {
@@ -20,12 +19,7 @@ export default class ProductListing extends Component {
   render() {
     return (
       <>
-        {/* <Header
-          statusBarProps={{ translucent: true }}
-          centerComponent={{ text: "Products", style: { color: "#fff" } }}
-        /> */}
         <Card
-          //   title="Desktop"
           image={require("../assets/Camera.png")}
           containerStyle={{
             width: 160,
@@ -34,16 +28,8 @@ export default class ProductListing extends Component {
           }}
         >
           <Text style={styles.titleText}>Blue-Yellow Camera</Text>
-          {/* <Text style={{ marginBottom: 10 }}>
-          This is a dummy product description
-        </Text> */}
           <Text style={styles.price}>$10</Text>
         </Card>
-        {/* <Tab.Navigator>
-          <Tab.Screen name="ProductListing" component={ProductListing} />
-          <Tab.Screen name="ChatList" component={ChatList} />
-          <Tab.Screen name="ProfilePage" component={ProfilePage} />
-        </Tab.Navigator> */}
       </>
     );
   }

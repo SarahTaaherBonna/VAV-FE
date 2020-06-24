@@ -7,7 +7,7 @@ import firebaseSDK from "../config/firebaseSDK";
 // TODO: navigate to Chat List after login
 export default class Login extends React.Component {
   static navigationOptions = {
-    title: "Sign In",
+    title: "Login",
   };
 
   state = {
@@ -32,11 +32,20 @@ export default class Login extends React.Component {
     );
   };
 
-  // TODO: navigate to Chat List after login
+  navigateToSignup = () => {
+    console.log("Sign up");
+
+    this.props.navigation.navigate("Sign Up", {
+      screen: "Signup",
+    });
+  };
+
   loginSuccess = () => {
     console.log("login successful, navigate to Products.");
 
-    this.props.navigation.navigate("TabNavigator", { screen: "ProductListing" });
+    this.props.navigation.navigate("Home", {
+      screen: "ProductListing",
+    });
   };
 
   loginFailed = () => {
@@ -48,42 +57,36 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <>
-        {/* <Header
-          statusBarProps={{ translucent: true }}
-          centerComponent={{ text: "Sign In", style: { color: "#fff" } }}
-        /> */}
-        <View>
-          <Text style={styles.title}>Email:</Text>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="Please enter email"
-            autoCorrect={false}
-            onChangeText={this.onChangeTextEmail}
-            value={this.state.email}
-          />
-          <Text style={styles.title}>Password:</Text>
-          <TextInput
-            style={styles.nameInput}
-            placeholder="Please enter password"
-            secureTextEntry={true}
-            autoCorrect={false}
-            onChangeText={this.onChangeTextPassword}
-            value={this.state.password}
-          />
-          <Button
-            title="Login"
-            style={styles.buttonText}
-            onPress={this.onPressLogin}
-          />
-          <TextInput returnKeyType={"go"} />
-          <Button
-            title="Signup"
-            style={styles.buttonText}
-            onPress={() => this.props.navigation.navigate("Signup")}
-          />
-        </View>
-      </>
+      <View>
+        <Text style={styles.title}>Email:</Text>
+        <TextInput
+          style={styles.nameInput}
+          placeholder="Please enter email"
+          autoCorrect={false}
+          onChangeText={this.onChangeTextEmail}
+          value={this.state.email}
+        />
+        <Text style={styles.title}>Password:</Text>
+        <TextInput
+          style={styles.nameInput}
+          placeholder="Please enter password"
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={this.onChangeTextPassword}
+          value={this.state.password}
+        />
+        <Button
+          title="Login"
+          style={styles.buttonText}
+          onPress={this.onPressLogin}
+        />
+        <TextInput returnKeyType={"go"} />
+        <Button
+          title="Sign Up"
+          style={styles.buttonText}
+          onPress={this.navigateToSignup}
+        />
+      </View>
     );
   }
 }

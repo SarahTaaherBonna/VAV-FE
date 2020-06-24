@@ -13,32 +13,23 @@ export default class ChatList extends Component {
 
   render() {
     return (
-      <>
-        {/* <Header
-          statusBarProps={{ translucent: true }}
-          centerComponent={{ text: "Chats", style: { color: "#fff" } }}
-        /> */}
-        <View
-          style={{
-            flexDirection: "row",
-            height: 90,
-            padding: 20,
-            borderBottomWidth: 1,
+      <View
+        style={{
+          flexDirection: "row",
+          height: 90,
+          padding: 20,
+          borderBottomWidth: 1,
+        }}
+      >
+        <Avatar
+          rounded
+          source={{
+            uri:
+              "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
           }}
-        >
-          {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-        <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
-          {/* Standard Avatar */}
-          <Avatar
-            rounded
-            source={{
-              uri:
-                "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            }}
-          />
-          <Text style={styles.titleText}>Diane Tucker</Text>
-        </View>
-      </>
+        />
+        <Text style={styles.titleText}>Diane Tucker</Text>
+      </View>
     );
   }
 }

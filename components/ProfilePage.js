@@ -19,10 +19,10 @@ import firebaseSDK from "../config/firebaseSDK";
 // TODO: allow users to update profile
 export default class ProfilePage extends React.Component {
   state = {
-    name: this.props.state.name,
-    email: this.props.state.email,
-    password: this.props.state.password,
-    avatar: this.props.state.avatar,
+    name: "",
+    email: "",
+    password: "",
+    avatar: "",
   };
 
   onPressUpdate = async () => {
@@ -36,10 +36,9 @@ export default class ProfilePage extends React.Component {
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
     }
-    this.props.navigation.navigate("Chat", {
-      name: this.state.name,
-      email: this.state.email,
-      avatar: this.state.avatar,
+
+    this.props.navigation.navigate("Home", {
+      screen: "ProductListing",
     });
   };
 
@@ -49,47 +48,51 @@ export default class ProfilePage extends React.Component {
 
   render() {
     return (
-      <>
-        {/* <Header
-          statusBarProps={{ translucent: true }}
-          centerComponent={{ text: "Chats", style: { color: "#fff" } }}
-        /> */}
-        <View>
-          <Text style={styles.title}>Name:</Text>
-          <TextInput
-            style={styles.nameInput}
-            onChangeText={this.onChangeTextName}
-            value={this.state.name}
-          />
-          <Text style={styles.title}>Email:</Text>
-          <TextInput
-            style={styles.nameInput}
-            onChangeText={this.onChangeTextEmail}
-            value={this.state.email}
-          />
-          <Text style={styles.title}>Password:</Text>
-          <TextInput
-            style={styles.nameInput}
-            secureTextEntry={true}
-            autoCorrect={false}
-            onChangeText={this.onChangeTextPassword}
-            value={this.state.password}
-          />
+      <View>
+        <Text style={styles.title}>Name:</Text>
+        <TextInput
+          style={styles.nameInput}
+          onChangeText={this.onChangeTextName}
+          value={this.state.name}
+        />
+        <Text style={styles.title}>Email:</Text>
+        <TextInput
+          style={styles.nameInput}
+          onChangeText={this.onChangeTextEmail}
+          value={this.state.email}
+        />
+        <Text style={styles.title}>Password:</Text>
+        <TextInput
+          style={styles.nameInput}
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={this.onChangeTextPassword}
+          value={this.state.password}
+        />
 
-          <Button
-            title="Update Profile"
-            style={styles.buttonText}
-            onPress={this.onPressUpdate}
-          />
-          <Button
-            title="Update Avatar"
-            style={styles.buttonText}
-            onPress={this.onImageUpload}
-          />
-        </View>
-      </>
+        <Button
+          title="Update Profile"
+          style={styles.buttonText}
+          onPress={this.onPressUpdate}
+        />
+        <TextInput returnKeyType={"go"} />
+        <Button
+          title="Update Avatar"
+          style={styles.buttonText}
+          onPress={this.onImageUpload}
+        />
+      </View>
     );
   }
+}
+
+componentDidMount() {
+  firebaseSDK.getAccountDetails()
+  // (message) =>
+  //   this.setState((previousState) => ({
+  //     messages: GiftedChat.append(previousState.messages, message),
+  //   }))
+  // );
 }
 
 const offset = 16;
