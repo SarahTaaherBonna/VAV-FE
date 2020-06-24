@@ -86,14 +86,14 @@ export default class ProfilePage extends React.Component {
   }
 }
 
-componentDidMount() {
-  firebaseSDK.getAccountDetails()
-  // (message) =>
-  //   this.setState((previousState) => ({
-  //     messages: GiftedChat.append(previousState.messages, message),
-  //   }))
-  // );
-}
+// componentDidMount() {
+//   firebaseSDK.getAccountDetails()
+//   // (message) =>
+//   //   this.setState((previousState) => ({
+//   //     messages: GiftedChat.append(previousState.messages, message),
+//   //   }))
+//   // );
+// }
 
 const offset = 16;
 const styles = StyleSheet.create({
