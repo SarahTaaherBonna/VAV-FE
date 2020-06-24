@@ -16,6 +16,8 @@ class FirebaseSDK {
     }
   }
 
+  /* Authentication Functions */
+
   login = async (user, success_callback, failed_callback) => {
     await firebase
       .auth()
@@ -59,6 +61,18 @@ class FirebaseSDK {
       );
   };
 
+  // TODO: get Token for authentication to be sent to backend team
+  getToken = () => {
+    var user = firebase.auth().currentUser;
+
+    if (user != null) {
+      token = user.getIdToken();
+    }
+    return token;
+  };
+
+  /* User Profile Functions */
+
   getAccountDetails = async (user) => {
     var user = firebase.auth().currentUser;
     var name, email, photoUrl, uid, emailVerified;
@@ -73,16 +87,6 @@ class FirebaseSDK {
       // you have one. Use User.getToken() instead.
     }
     return name, email, uid;
-  };
-
-  // TODO: get Token for authentication to be sent to backend team
-  getToken = () => {
-    var user = firebase.auth().currentUser;
-
-    if (user != null) {
-      token = user.getIdToken();
-    }
-    return token;
   };
 
   // TODO: update account
@@ -112,6 +116,8 @@ class FirebaseSDK {
         Alert.alert("Update failed.");
       });
   };
+
+  // Avatar code - to be fixed
 
   //   uploadImage = async (uri, imageName) => {
   //     const response = await fetch(uri);
@@ -209,110 +215,3 @@ class FirebaseSDK {
 }
 const firebaseSDK = new FirebaseSDK();
 export default firebaseSDK;
-
-// class FirebaseSDK {
-//   constructor() {
-//     if (!firebase.apps.length) {
-//       //avoid re-initializing
-//       firebase.initializeApp({
-//         apiKey: "AIzaSyDyYtgpEk64t6w63XuytDIyJvuUAMKaK8k",
-//         authDomain: "chatapp-6f69b.firebaseapp.com",
-//         databaseURL: "https://chatapp-6f69b.firebaseio.com",
-//         projectId: "chatapp-6f69b",
-//         storageBucket: "chatapp-6f69b.appspot.com",
-//         messagingSenderId: "862545409242",
-//       });
-//     }
-//   }
-
-//   login = async (user, success_callback, failed_callback) => {
-//     await firebase
-//       .auth()
-//       .signInWithEmailAndPassword(user.email, user.password)
-//       .then(success_callback, failed_callback);
-//   };
-
-//   createAccount = async (user) => {
-//     firebase
-//       .auth()
-//       .createUserWithEmailAndPassword(user.email, user.password)
-//       .then(
-//         function () {
-//           console.log(
-//             "created user successfully. User email:" +
-//               user.email +
-//               " name:" +
-//               user.name
-//           );
-//           var userf = firebase.auth().currentUser;
-//           userf.updateProfile({ displayName: user.name }).then(
-//             function () {
-//               console.log(
-//                 "Updated displayName successfully. name:" + user.name
-//               );
-//               alert(
-//                 "User " + user.name + " was created successfully. Please login."
-//               );
-//             },
-//             function (error) {
-//               console.warn("Error update displayName.");
-//             }
-//           );
-//         },
-//         function (error) {
-//           console.error(
-//             "got error:" + typeof error + " string:" + error.message
-//           );
-//           alert("Create account failed. Error: " + error.message);
-//         }
-//       );
-//   };
-
-//   // HAS ERRORS
-//   //   uploadImage = async uri => {
-//   //     console.log('got image to upload. uri:' + uri);
-//   //     try {
-//   //       const response = await fetch(uri);
-//   //       const blob = await response.blob();
-//   //       const ref = firebase
-//   //         .storage()
-//   //         .ref('avatar')
-//   //         .child(uuid.v4());
-//   //       const task = ref.put(blob);
-
-//   //       return new Promise((resolve, reject) => {
-//   //         task.on(
-//   //           'state_changed',
-//   //           () => {
-
-//   //           },
-//   //           reject
-//   //           () => resolve(task.snapshot.downloadURL)
-//   //         );
-//   //       });
-//   //     } catch (err) {
-//   //       console.log('uploadImage try/catch error: ' + err.message);
-//   //     }
-//   //   };
-
-//   updateAvatar = (url) => {
-//     var userf = firebase.auth().currentUser;
-//     if (userf != null) {
-//       userf.updateProfile({ avatar: url }).then(
-//         function () {
-//           console.log("Updated avatar successfully. url:" + url);
-//           alert("Avatar image is saved successfully.");
-//         },
-//         function (error) {
-//           console.warn("Error update avatar.");
-//           alert("Error update avatar. Error:" + error.message);
-//         }
-//       );
-//     } else {
-//       console.log("can't update avatar, user is not login.");
-//       alert("Unable to update avatar. You must login first.");
-//     }
-//   };
-// }
-// const firebaseSDK = new FirebaseSDK();
-// export default firebaseSDK;
