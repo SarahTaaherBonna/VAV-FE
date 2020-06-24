@@ -42,22 +42,6 @@ export default class Chat extends React.Component<Props> {
       />
     );
 
-    console.log(this.props.route.params.name);
-    console.log(this.props.route.params.email);
-    console.log(this.props.route.params.avatar);
-
-    if (Platform.OS == "android") {
-      return (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          keyboardVerticalOffset={0}
-          enabled
-        >
-          {chat}
-        </KeyboardAvoidingView>
-      );
-    }
     return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
   }
 

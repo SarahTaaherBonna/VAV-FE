@@ -175,6 +175,7 @@ class FirebaseSDK {
   parseMessage = (snapshot) => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
+    console.log(_id)
     const timestamp = new Date(numberStamp);
     const message = {
       _id,
@@ -182,6 +183,7 @@ class FirebaseSDK {
       text,
       user,
     };
+    console.log(message)
     return message;
   };
 
