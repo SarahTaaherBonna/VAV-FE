@@ -12,6 +12,7 @@ import Signup from "./components/Signup";
 import CreditCard from "./components/CreditCard";
 import ProfilePage from "./components/ProfilePage";
 import ChatList from "./components/ChatList";
+import ProductListing from "./components/ProductListing";
 
 // export default createStackNavigator({
 //   Chat: { screen: Chat },
@@ -26,6 +27,7 @@ function MyStack() {
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="ChatList" component={ChatList} />
       <Stack.Screen name="ProfilePage" component={ProfilePage} />
+      <Stack.Screen name="ProductListing" component={ProductListing} />
       <Stack.Screen name="Signup" component={Signup} />
       <Stack.Screen name="CreditCard" component={CreditCard} />
       <Stack.Screen name="Chat" component={Chat} />

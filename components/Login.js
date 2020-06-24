@@ -39,11 +39,12 @@ export default class Login extends React.Component {
     //   email: this.state.email,
     //   avatar: this.state.avatar,
     // });
-    this.props.navigation.navigate("ChatList", {
-      name: this.state.name,
-      email: this.state.email,
-      avatar: this.state.avatar,
-    });
+    // this.props.navigation.navigate("ChatList", {
+    //   name: this.state.name,
+    //   email: this.state.email,
+    //   avatar: this.state.avatar,
+    // });
+    this.props.navigation.navigate("ProductListing", {});
   };
 
   loginFailed = () => {
