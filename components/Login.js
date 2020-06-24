@@ -1,19 +1,20 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button,Image } from "react-native";
-import { CommonActions } from "@react-navigation/native";
+import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Avatar, Header } from "react-native-elements";
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
 
 // TODO: navigate to Chat List after login
 export default class Login extends React.Component {
   static navigationOptions = {
-    title: "ChatAppV2",
+    title: "Login",
   };
 
   state = {
     name: "Test0",
-    email: "Test0@gmail.com",
-    password: "Test00",
+    email: "test@dawo.me",
+    password: "password",
     avatar: "",
   };
 
@@ -32,20 +33,18 @@ export default class Login extends React.Component {
     );
   };
 
-  // TODO: navigate to Chat List after login
+  navigateToSignup = () => {
+    console.log("Sign up");
+
+    this.props.navigation.navigate("Sign Up", {
+      screen: "Signup",
+    });
+  };
+
   loginSuccess = () => {
     console.log("login successful, navigate to chat.");
-    // this.props.navigation.navigate("Chat", {
-    //   name: this.state.name,
-    //   email: this.state.email,
-    //   avatar: this.state.avatar,
-    // });
-    // this.props.navigation.navigate("ChatList", {
-    //   name: this.state.name,
-    //   email: this.state.email,
-    //   avatar: this.state.avatar,
-    // });
-    this.props.navigation.navigate("Chat", {});
+
+    this.props.navigation.navigate("Home", {});
   };
 
   loginFailed = () => {
@@ -57,12 +56,22 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={{height:667,borderRadius:20,backgroundColor:"#FFFFFF"}}> 
+      <View
+        style={{ height: 667, borderRadius: 20, backgroundColor: "#FFFFFF" }}
+      >
+        <Image
+          style={styles.logo}
+          source={require("../../ChatAppV2/assets/logo_replacement.png")}
+        />
 
-        <Image style={styles.logo} source={require("../../ChatAppV2/assets/logo_replacement.png")}/>
-
-        <View style={{marginTop:20,height:600,borderRadius:30,backgroundColor:"#16267D"}}> 
-
+        <View
+          style={{
+            marginTop: 20,
+            height: 600,
+            borderRadius: 30,
+            backgroundColor: "#16267D",
+          }}
+        >
           <Text style={styles.labeluser}>EMAIL ADDRESS</Text>
           <TextInput
             style={styles.inputuser}
@@ -83,13 +92,15 @@ export default class Login extends React.Component {
 
           <TextInput returnKeyType={"go"} />
 
-          <FlatButton text="LOGIN" onPress={this.onPressLogin}/>
+          <FlatButton text="LOGIN" onPress={this.onPressLogin} />
 
-          <FlatButton text="SIGN-UP" onPress={() => this.props.navigation.navigate("Signup")} />
+          <FlatButton text="SIGN-UP" onPress={this.navigateToSignup} />
 
-          <Text style={styles.nameInput}> Create a new acccount if you are a new user </Text>
-          
-          </View>
+          <Text style={styles.nameInput}>
+            {" "}
+            Create a new acccount if you are a new user{" "}
+          </Text>
+        </View>
       </View>
     );
   }
@@ -102,10 +113,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   nameInput: {
-    textAlign:'center',
-    marginBottom:10,
-    fontSize:10,
-    color:"#FFFFFF"
+    textAlign: "center",
+    marginBottom: 10,
+    fontSize: 10,
+    color: "#FFFFFF",
   },
   buttonText: {
     marginLeft: 16,
@@ -113,64 +124,64 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    marginTop:10,
+    marginTop: 10,
     width: null,
-    resizeMode: 'contain',
-    height: 250
+    resizeMode: "contain",
+    height: 250,
   },
 
   labeluser: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 16,
-    fontSize:18,
-    color:"#FFFFFF"
+    fontSize: 18,
+    color: "#FFFFFF",
   },
 
   labeluser2: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 15,
     marginLeft: 16,
-    fontSize:18,
-    color:"#FFFFFF"
+    fontSize: 18,
+    color: "#FFFFFF",
   },
 
   inputuser: {
-    marginLeft:10,
-    marginRight:10,
-    marginBottom:10,
-    marginTop:5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 10,
+    marginTop: 5,
     paddingHorizontal: 16,
-    width:345,
-    height:50,
-    borderColor:"#43519D",
-    backgroundColor:"#283786",
-    borderRadius:8,
-    color:"#F7B600"
+    width: 345,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600",
   },
 
   inputuser2: {
-    marginLeft:10,
-    marginRight:10,
-    marginBottom:20,
-    marginTop:5,
+    marginLeft: 10,
+    marginRight: 10,
+    marginBottom: 20,
+    marginTop: 5,
     paddingHorizontal: 16,
-    width:345,
-    height:50,
-    borderColor:"#43519D",
-    backgroundColor:"#283786",
-    borderRadius:8,
-    color:"#F7B600"
+    width: 345,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600",
   },
 
   buttons: {
     margin: 16,
     paddingHorizontal: 16,
-    width:300,
-    height:50,
-    borderColor:"#FFFFFF",
-    backgroundColor:"#FFFFFF",
-    borderRadius:8,
+    width: 300,
+    height: 50,
+    borderColor: "#FFFFFF",
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
   },
 
   linearGradient: {
@@ -178,8 +189,6 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 5,
-    height:667,
-
-  }
-
+    height: 667,
+  },
 });

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert, Text } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Header } from "react-native-elements";
 
 // TODO: create ChatList for user
 

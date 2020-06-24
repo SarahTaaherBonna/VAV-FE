@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert } from "react-native";
+import { StyleSheet, View, Button, Alert, Keyboard } from "react-native";
 import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput } from "react-native-credit-card-input";
@@ -64,6 +64,10 @@ export default class CreditCard extends Component {
 
       console.log(token);
       console.log(dataToSend);
+      this.props.navigation.navigate("Home", {
+        screen: "ProductListing",
+      });
+      Keyboard.dismiss();
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
@@ -85,7 +89,7 @@ export default class CreditCard extends Component {
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-        <TextInput returnKeyType={"go"} />
+        {/* <TextInput returnKeyType={"go"} /> */}
         <Button
           title="Submit"
           style={styles.buttonText}
