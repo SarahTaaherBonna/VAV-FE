@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert, Text } from "react-native";
-import { Avatar } from "react-native-elements";
+import { Avatar, Header } from "react-native-elements";
 
 // TODO: create ChatList for user
 
@@ -21,9 +21,6 @@ export default class ChatList extends Component {
           borderBottomWidth: 1,
         }}
       >
-        {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-        <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
-        {/* Standard Avatar */}
         <Avatar
           rounded
           source={{

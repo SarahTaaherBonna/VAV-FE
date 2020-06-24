@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Alert, Text, Image } from "react-native";
-import { Card, ListItem, Button, Icon } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Header } from "react-native-elements";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+import ChatList from "./ChatList";
+import ProfilePage from "./ProfilePage";
 
 // TODO: create ChatList for user
 
@@ -14,21 +18,19 @@ export default class ProductListing extends Component {
 
   render() {
     return (
-      <Card
-        //   title="Desktop"
-        image={require("../assets/Camera.png")}
-        containerStyle={{
-          width: 160,
-          height: 230,
-          paddingRight: 10,
-        }}
-      >
-        <Text style={styles.titleText}>Blue-Yellow Camera</Text>
-        {/* <Text style={{ marginBottom: 10 }}>
-          This is a dummy product description
-        </Text> */}
-        <Text style={styles.price}>$10</Text>
-      </Card>
+      <>
+        <Card
+          image={require("../assets/Camera.png")}
+          containerStyle={{
+            width: 160,
+            height: 230,
+            paddingRight: 10,
+          }}
+        >
+          <Text style={styles.titleText}>Blue-Yellow Camera</Text>
+          <Text style={styles.price}>$10</Text>
+        </Card>
+      </>
     );
   }
 }

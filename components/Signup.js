@@ -34,10 +34,8 @@ export default class Signup extends React.Component {
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
-    this.props.navigation.navigate("CreditCard", {
-      name: this.state.name,
-      email: this.state.email,
-      avatar: this.state.avatar,
+    this.props.navigation.navigate("Add Credit Card Details", {
+      screen: "CreditCard",
     });
   };
 
@@ -125,10 +123,11 @@ export default class Signup extends React.Component {
         />
 
         <Button
-          title="Signup"
+          title="Sign Up"
           style={styles.buttonText}
           onPress={this.onPressCreate}
         />
+        <TextInput returnKeyType={"go"} />
         <Button
           title="Upload Avatar"
           style={styles.buttonText}
