@@ -168,11 +168,11 @@ class FirebaseSDK {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  get ref() {
+  get messageRef() {
     return firebase.database().ref("messages");
   }
 
-  parse = (snapshot) => {
+  parseMessage = (snapshot) => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
     const timestamp = new Date(numberStamp);
@@ -185,16 +185,16 @@ class FirebaseSDK {
     return message;
   };
 
-  on = (callback) =>
-    this.ref
+  getMessages = (callback) =>
+    this.messageRef
       .limitToLast(20)
-      .on("child_added", (snapshot) => callback(this.parse(snapshot)));
+      .on("child_added", (snapshot) => callback(this.parseMessage(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
   // send the message to the Backend
-  send = (messages) => {
+  sendMessage = (messages) => {
     for (let i = 0; i < messages.length; i++) {
       const { text, user } = messages[i];
       const message = {
@@ -206,11 +206,11 @@ class FirebaseSDK {
     }
   };
 
-  append = (message) => this.ref.push(message);
+  append = (message) => this.messageRef.push(message);
 
   // close the connection to the Backend
-  off() {
-    this.ref.off();
+  closeConnection() {
+    this.messageRef.off();
   }
 }
 const firebaseSDK = new FirebaseSDK();

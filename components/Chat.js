@@ -37,7 +37,7 @@ export default class Chat extends React.Component<Props> {
     const chat = (
       <GiftedChat
         messages={this.state.messages}
-        onSend={firebaseSDK.send}
+        onSend={firebaseSDK.sendMessage}
         user={this.user}
       />
     );
@@ -62,13 +62,13 @@ export default class Chat extends React.Component<Props> {
   }
 
   componentDidMount() {
-    firebaseSDK.on((message) =>
+    firebaseSDK.getMessages((message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))
     );
   }
   componentWillUnmount() {
-    firebaseSDK.off();
+    firebaseSDK.closeConnection();
   }
 }
