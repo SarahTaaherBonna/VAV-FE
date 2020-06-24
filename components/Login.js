@@ -41,7 +41,7 @@ export default class Login extends React.Component {
   };
 
   loginSuccess = () => {
-    console.log("login successful, navigate to Products.");
+    console.log("login successful, navigate to Tab Navigator.");
 
     this.props.navigation.navigate("Home", {
       screen: "ProductListing",
