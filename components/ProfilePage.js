@@ -2,6 +2,7 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ImageEditor from "@react-native-community/image-editor";
+import { Avatar, Header } from "react-native-elements";
 import {
   Image,
   StyleSheet,
@@ -48,39 +49,45 @@ export default class ProfilePage extends React.Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.title}>Name:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextName}
-          value={this.state.name}
-        />
-        <Text style={styles.title}>Email:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextEmail}
-          value={this.state.email}
-        />
-        <Text style={styles.title}>Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextPassword}
-          value={this.state.password}
-        />
+      <>
+        {/* <Header
+          statusBarProps={{ translucent: true }}
+          centerComponent={{ text: "Chats", style: { color: "#fff" } }}
+        /> */}
+        <View>
+          <Text style={styles.title}>Name:</Text>
+          <TextInput
+            style={styles.nameInput}
+            onChangeText={this.onChangeTextName}
+            value={this.state.name}
+          />
+          <Text style={styles.title}>Email:</Text>
+          <TextInput
+            style={styles.nameInput}
+            onChangeText={this.onChangeTextEmail}
+            value={this.state.email}
+          />
+          <Text style={styles.title}>Password:</Text>
+          <TextInput
+            style={styles.nameInput}
+            secureTextEntry={true}
+            autoCorrect={false}
+            onChangeText={this.onChangeTextPassword}
+            value={this.state.password}
+          />
 
-        <Button
-          title="Update Profile"
-          style={styles.buttonText}
-          onPress={this.onPressUpdate}
-        />
-        <Button
-          title="Update Avatar"
-          style={styles.buttonText}
-          onPress={this.onImageUpload}
-        />
-      </View>
+          <Button
+            title="Update Profile"
+            style={styles.buttonText}
+            onPress={this.onPressUpdate}
+          />
+          <Button
+            title="Update Avatar"
+            style={styles.buttonText}
+            onPress={this.onImageUpload}
+          />
+        </View>
+      </>
     );
   }
 }

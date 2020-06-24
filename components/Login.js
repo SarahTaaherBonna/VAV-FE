@@ -1,12 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, TextInput, View, Button } from "react-native";
-import { CommonActions } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { Avatar, Header } from "react-native-elements";
 import firebaseSDK from "../config/firebaseSDK";
 
 // TODO: navigate to Chat List after login
 export default class Login extends React.Component {
   static navigationOptions = {
-    title: "ChatAppV2",
+    title: "Sign In",
   };
 
   state = {
@@ -33,7 +34,7 @@ export default class Login extends React.Component {
 
   // TODO: navigate to Chat List after login
   loginSuccess = () => {
-    console.log("login successful, navigate to chat.");
+    console.log("login successful, navigate to Products.");
     // this.props.navigation.navigate("Chat", {
     //   name: this.state.name,
     //   email: this.state.email,
@@ -56,36 +57,42 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.title}>Email:</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder="Please enter email"
-          autoCorrect={false}
-          onChangeText={this.onChangeTextEmail}
-          value={this.state.email}
-        />
-        <Text style={styles.title}>Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          placeholder="Please enter password"
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextPassword}
-          value={this.state.password}
-        />
-        <Button
-          title="Login"
-          style={styles.buttonText}
-          onPress={this.onPressLogin}
-        />
-        <TextInput returnKeyType={"go"} />
-        <Button
-          title="Signup"
-          style={styles.buttonText}
-          onPress={() => this.props.navigation.navigate("Signup")}
-        />
-      </View>
+      <>
+        {/* <Header
+          statusBarProps={{ translucent: true }}
+          centerComponent={{ text: "Sign In", style: { color: "#fff" } }}
+        /> */}
+        <View>
+          <Text style={styles.title}>Email:</Text>
+          <TextInput
+            style={styles.nameInput}
+            placeholder="Please enter email"
+            autoCorrect={false}
+            onChangeText={this.onChangeTextEmail}
+            value={this.state.email}
+          />
+          <Text style={styles.title}>Password:</Text>
+          <TextInput
+            style={styles.nameInput}
+            placeholder="Please enter password"
+            secureTextEntry={true}
+            autoCorrect={false}
+            onChangeText={this.onChangeTextPassword}
+            value={this.state.password}
+          />
+          <Button
+            title="Login"
+            style={styles.buttonText}
+            onPress={this.onPressLogin}
+          />
+          <TextInput returnKeyType={"go"} />
+          <Button
+            title="Signup"
+            style={styles.buttonText}
+            onPress={() => this.props.navigation.navigate("Signup")}
+          />
+        </View>
+      </>
     );
   }
 }
