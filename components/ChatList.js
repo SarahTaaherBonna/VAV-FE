@@ -32,7 +32,7 @@ export default class ChatList extends Component {
   }
 
   render() {
-    return chats;
+    return this.state.chats;
   }
 }
 
