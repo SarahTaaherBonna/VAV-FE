@@ -59,7 +59,7 @@ class FirebaseSDK {
       );
   };
 
-  getAccountDetails = async (user) => {
+  getAccountDetails = () => {
     var user = firebase.auth().currentUser;
     var name, email, photoUrl, uid, emailVerified;
 
@@ -72,7 +72,10 @@ class FirebaseSDK {
       // this value to authenticate with your backend server, if
       // you have one. Use User.getToken() instead.
     }
-    return name, email, uid;
+    dataToSend = name + "," + email;
+    console.log(dataToSend);
+    return dataToSend;
+    // return name, email, uid;
   };
 
   // TODO: get Token for authentication to be sent to backend team
@@ -88,29 +91,50 @@ class FirebaseSDK {
   // TODO: update account
   updateAccount = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    currentUser
-      .updateProfile({
-        displayName: newUser.name,
-        // photoURL: "https://example.com/jane-q-user/profile.jpg",
-      })
-      .then(function () {
-        // Update successful.
-        Alert.alert("Update success");
-      })
-      .catch(function (error) {
-        // An error happened.
-        Alert.alert("Update failed.");
-      });
-    currentUser
-      .updateEmail(newUser.email)
-      .then(function () {
-        // Update successful.
-        Alert.alert("Update success");
-      })
-      .catch(function (error) {
-        // An error happened.
-        Alert.alert("Update failed.");
-      });
+    if (currentUser.name != newUser.name) {
+      currentUser
+        .updateProfile({
+          displayName: newUser.name,
+          // photoURL: "https://example.com/jane-q-user/profile.jpg",
+        })
+        .then(function () {
+          // Update successful.
+          // Alert.alert("Update success");
+          console.log("Password update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          Alert.alert("Name update failed.");
+        });
+    }
+    if (currentUser.email != newUser.email) {
+      currentUser
+        .updateEmail(newUser.email)
+        .then(function () {
+          // Update successful.
+          // Alert.alert("Update success");
+          console.log("Email update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          Alert.alert("Email update failed.");
+        });
+    }
+    if (
+      newUser.oldpassword != newUser.newpassword &&
+      newUser.newpassword != ""
+    ) {
+      currentUser
+        .updatePassword(newUser.newpassword)
+        .then(function () {
+          // Update successful.
+          console.log("Password update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          Alert.alert("Password update failed.");
+        });
+    }
   };
 
   //   uploadImage = async (uri, imageName) => {

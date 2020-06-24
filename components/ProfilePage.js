@@ -21,17 +21,35 @@ export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
-    password: "",
+    oldpassword: "",
+    newpassword: "",
     avatar: "",
   };
+
+  componentDidMount() {
+    var dataObtainedFromFirebase = firebaseSDK.getAccountDetails();
+    var username = dataObtainedFromFirebase.split(",")[0];
+    var userEmail = dataObtainedFromFirebase.split(",")[1];
+    this.state.name = username;
+    this.state.email = userEmail;
+    console.log("----------------------------------");
+    console.log(this.state.name);
+    console.log(this.state.email);
+  }
 
   onPressUpdate = async () => {
     try {
       const user = {
         name: this.state.name,
         email: this.state.email,
-        password: this.state.password,
+        oldpassword: this.state.oldpassword,
+        newpassword: this.state.newpassword,
       };
+      console.log("=====================================");
+      console.log(this.state.name);
+      console.log(this.state.email);
+      console.log(this.state.oldpassword);
+      console.log(this.state.newpassword);
       await firebaseSDK.updateAccount(user);
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
@@ -43,7 +61,8 @@ export default class ProfilePage extends React.Component {
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  onChangeTextPassword = (password) => this.setState({ password });
+  onChangeTextOldPassword = (oldpassword) => this.setState({ oldpassword });
+  onChangeTextNewPassword = (newpassword) => this.setState({ newpassword });
   onChangeTextName = (name) => this.setState({ name });
 
   render() {
@@ -61,13 +80,22 @@ export default class ProfilePage extends React.Component {
           onChangeText={this.onChangeTextEmail}
           value={this.state.email}
         />
-        <Text style={styles.title}>Password:</Text>
+        <Text style={styles.title}>Old Password:</Text>
         <TextInput
           style={styles.nameInput}
           secureTextEntry={true}
           autoCorrect={false}
-          onChangeText={this.onChangeTextPassword}
-          value={this.state.password}
+          onChangeText={this.onChangeTextOldPassword}
+          value={this.state.oldpassword}
+        />
+
+        <Text style={styles.title}>New Password:</Text>
+        <TextInput
+          style={styles.nameInput}
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={this.onChangeTextNewPassword}
+          value={this.state.newpassword}
         />
 
         <Button
@@ -85,15 +113,6 @@ export default class ProfilePage extends React.Component {
     );
   }
 }
-
-// componentDidMount() {
-//   firebaseSDK.getAccountDetails()
-//   // (message) =>
-//   //   this.setState((previousState) => ({
-//   //     messages: GiftedChat.append(previousState.messages, message),
-//   //   }))
-//   // );
-// }
 
 const offset = 16;
 const styles = StyleSheet.create({
