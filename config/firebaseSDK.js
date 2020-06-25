@@ -43,9 +43,6 @@ class FirebaseSDK {
               console.log(
                 "Updated displayName successfully. name:" + user.name
               );
-              alert(
-                "User " + user.name + " was created successfully. Please login."
-              );
             },
             function (error) {
               console.warn("Error update displayName.");
@@ -73,7 +70,7 @@ class FirebaseSDK {
 
   /* User Profile Functions */
 
-  getAccountDetails = async (user) => {
+  getAccountDetails = () => {
     var user = firebase.auth().currentUser;
     var name, email, photoUrl, uid, emailVerified;
 
@@ -82,38 +79,83 @@ class FirebaseSDK {
       email = user.email;
       // photoUrl = user.photoURL;
       // emailVerified = user.emailVerified;
-      uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
-      // this value to authenticate with your backend server, if
-      // you have one. Use User.getToken() instead.
+      uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
     }
-    return name, email, uid;
+    var dataToSend = name + "," + email;
+    console.log(dataToSend);
+    return dataToSend;
+    // return name, email, uid;
   };
 
   // TODO: update account
   updateAccount = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    currentUser
-      .updateProfile({
-        displayName: newUser.name,
-        // photoURL: "https://example.com/jane-q-user/profile.jpg",
-      })
+    if (newUser.name != currentUser.name) {
+      currentUser
+        .updateProfile({
+          displayName: newUser.name,
+          // photoURL: "https://example.com/jane-q-user/profile.jpg",
+        })
+        .then(function () {
+          // Update successful.
+          // Alert.alert("Update success");
+          console.log("Name update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          console.log("Name update failed.");
+        });
+    }
+    if (newUser.email != currentUser.email) {
+      currentUser
+        .updateEmail(newUser.email)
+        .then(function () {
+          // Update successful.
+          // Alert.alert("Update success");
+          console.log("Email update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          console.log("Email update failed.");
+        });
+    }
+    if (newUser.password != "") {
+      currentUser
+        .updatePassword(newUser.password)
+        .then(function () {
+          // Update successful.
+          console.log("Password update passed");
+        })
+        .catch(function (error) {
+          // An error happened.
+          console.log("Password update failed.");
+        });
+    }
+    // if (newUser.newpassword != "" && newUser.oldpassword != "") {
+    //   currentUser
+    //     .updatePassword(newUser.newpassword)
+    //     .then(function () {
+    //       // Update successful.
+    //       console.log("Password update passed");
+    //     })
+    //     .catch(function (error) {
+    //       // An error happened.
+    //       Alert.alert("Password update failed.");
+    //     });
+    // }
+  };
+
+  logout = () => {
+    firebase
+      .auth()
+      .signOut()
       .then(function () {
-        // Update successful.
-        Alert.alert("Update success");
+        // Sign-out successful.
+        Alert.alert("You have logged out successfully.");
       })
       .catch(function (error) {
         // An error happened.
-        Alert.alert("Update failed.");
-      });
-    currentUser
-      .updateEmail(newUser.email)
-      .then(function () {
-        // Update successful.
-        Alert.alert("Update success");
-      })
-      .catch(function (error) {
-        // An error happened.
-        Alert.alert("Update failed.");
+        console.log("Logout failed");
       });
   };
 
@@ -168,15 +210,43 @@ class FirebaseSDK {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  get messageRef() {
+  get chatListRef() {
     return firebase.database().ref("messages");
   }
 
-  parseMessage = (snapshot) => {
+  chatRef = (chatId) => {
+    return firebase.database().ref("messages/" + chatId)
+  }
+
+  parseChatList = (snapshot) => {
+    const { key: _id } = snapshot;
+    console.log(_id);
+
+    let id1 = _id.split("_")[0];
+    let id2 = _id.split("_")[1];
+
+    if(id1 === this.uid) {
+      return id2
+    } else if (id2 == this.uid) {
+      return id1
+    } else {
+      return ""
+    }
+
+  };
+
+  getChatList = (callback) =>
+    this.chatListRef
+      .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
+
+  parseChat = (snapshot) => {
+    const { isPayment } = snapshot.val();
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
+
     const timestamp = new Date(numberStamp);
     const message = {
+      isPayment,
       _id,
       timestamp,
       text,
@@ -185,14 +255,14 @@ class FirebaseSDK {
     return message;
   };
 
-  getMessages = (callback) =>
-    this.messageRef
-      .limitToLast(20)
-      .on("child_added", (snapshot) => callback(this.parseMessage(snapshot)));
+  getChat = (chatId, callback) =>
+    this.chatRef(chatId)
+      .on("child_added", (snapshot) => callback(this.parseChat(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
+
   // send the message to the Backend
   sendMessage = (messages) => {
     for (let i = 0; i < messages.length; i++) {
@@ -206,11 +276,11 @@ class FirebaseSDK {
     }
   };
 
-  append = (message) => this.messageRef.push(message);
+  append = (message) => this.chatListRef.push(message);
 
   // close the connection to the Backend
   closeConnection() {
-    this.messageRef.off();
+    this.chatListRef.off();
   }
 }
 const firebaseSDK = new FirebaseSDK();
