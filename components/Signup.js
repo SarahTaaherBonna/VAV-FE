@@ -105,7 +105,6 @@ export default class Signup extends React.Component {
       <View>
         
         <View
-          behavior='padding' 
           style={
             {
              marginTop:130,
