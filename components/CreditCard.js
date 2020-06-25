@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert } from "react-native";
+import { StyleSheet, View, Button, Alert, Keyboard } from "react-native";
 import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput } from "react-native-credit-card-input";
@@ -47,7 +47,7 @@ export default class CreditCard extends Component {
   };
 
   onPressSubmit = async () => {
-    console.log(this.state.cardName)
+    console.log(this.state.cardName);
     try {
       const tokenObject = firebaseSDK.getToken();
       // console.log(Object.values(token));
@@ -64,6 +64,10 @@ export default class CreditCard extends Component {
 
       console.log(token);
       console.log(dataToSend);
+      this.props.navigation.navigate("Home", {
+        screen: "ProductListing",
+      });
+      Keyboard.dismiss();
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }

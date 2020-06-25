@@ -4,12 +4,6 @@ import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import firebaseSDK from "../config/firebaseSDK";
 
-// export default class Chat extends React.Component {
-//   render() {
-//     return <GiftedChat />;
-//   }
-// }
-
 type Props = {
   name?: string,
 };
@@ -42,32 +36,17 @@ export default class Chat extends React.Component<Props> {
       />
     );
 
-    console.log(this.props.route.params.name);
-    console.log(this.props.route.params.email);
-    console.log(this.props.route.params.avatar);
-
-    if (Platform.OS == "android") {
-      return (
-        <KeyboardAvoidingView
-          style={{ flex: 1 }}
-          behavior="padding"
-          keyboardVerticalOffset={0}
-          enabled
-        >
-          {chat}
-        </KeyboardAvoidingView>
-      );
-    }
     return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
   }
 
   componentDidMount() {
-    firebaseSDK.getMessages((message) =>
+    firebaseSDK.getChat("uid", (message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))
     );
   }
+
   componentWillUnmount() {
     firebaseSDK.closeConnection();
   }
