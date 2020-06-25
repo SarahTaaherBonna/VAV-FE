@@ -23,7 +23,7 @@ export default class ChatList extends Component {
         // onPress: {onPressListing(id, name, avatar)},
       }}>
         <TouchableOpacity
-        onPress={this.onPressListing(id, name, avatar)}
+        onPress={() => {this.onPressListing(id, name, avatar)}}
         >
           {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
           <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}

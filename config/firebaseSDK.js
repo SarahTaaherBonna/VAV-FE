@@ -240,11 +240,13 @@ class FirebaseSDK {
       .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
 
   parseChat = (snapshot) => {
+    const { isPayment } = snapshot.val();
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
 
     const timestamp = new Date(numberStamp);
     const message = {
+      isPayment,
       _id,
       timestamp,
       text,
