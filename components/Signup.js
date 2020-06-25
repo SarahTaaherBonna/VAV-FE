@@ -14,6 +14,7 @@ import {
   Alert,
   ImageBackground,
   KeyboardAvoidingView,
+  ScrollView
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
@@ -106,8 +107,11 @@ export default class Signup extends React.Component {
 
   render() {
     return (
-      <View>
-        <View
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={200}>
+
+        <ScrollView
           style={{
             marginTop: 130,
             alignSelf: "center",
@@ -149,7 +153,7 @@ export default class Signup extends React.Component {
             onChangeText={this.onChangeTextPassword}
             value={this.state.password}
           />
-        </View>
+        </ScrollView>
 
         <View
           style={{
@@ -173,7 +177,7 @@ export default class Signup extends React.Component {
         >
           <FlatButton text="SIGN-UP" onPress={this.onPressCreate} />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

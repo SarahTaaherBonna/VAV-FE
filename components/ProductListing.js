@@ -17,12 +17,11 @@ export default class ProductListing extends Component {
   render() {
     return (
       <View>
-      <View style={{marginTop:50,marginLeft:40,height:250,backgroundColor:"#F7B600",borderTopStartRadius:15,borderBottomLeftRadius:15}}>
 
         <Card
           image={require("../assets/Camera.png")}
           containerStyle={{
-            marginTop:40,
+            marginTop:100,
             width: 160,
             height: 230,
             paddingRight: 10,
@@ -31,14 +30,27 @@ export default class ProductListing extends Component {
             borderWidth:2
           }}
         >
-          
           <Text style={styles.titleText}>Blue-Yellow Camera</Text>
           <Text style={styles.price}>$10</Text>
         </Card>
-      </View>
 
-      <View style={{marginTop:50,marginRight:40,height:250,backgroundColor:"#F7B600",borderTopEndRadius:15,borderBottomRightRadius:15}}>
-
+        <Card
+          image={require("../assets/Camera.png")}
+          containerStyle={{
+            marginTop:100,
+            marginRight:240,
+            width: 160,
+            height: 230,
+            paddingRight: 10,
+            borderRadius:8,
+            borderColor:"#16267D",
+            borderWidth:2
+          }}
+        >
+          <Text style={styles.titleText}>Blue-Yellow Camera 2</Text>
+          <Text style={styles.price}>$10</Text>
+        </Card>
+      
       <Card
         image={require("../assets/Camera.png")}
         containerStyle={{
@@ -55,7 +67,7 @@ export default class ProductListing extends Component {
         <Text style={styles.titleText}>Blue-Yellow Camera</Text>
         <Text style={styles.price}>$10</Text>
       </Card>
-      </View>
+
       </View>
     );
   }

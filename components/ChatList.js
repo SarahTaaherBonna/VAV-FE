@@ -78,8 +78,6 @@ export default class ChatList extends Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
