@@ -33,10 +33,16 @@ export default class Signup extends React.Component {
         email: this.state.email,
         password: this.state.password,
       };
-      await firebaseSDK.createAccount(user);
+
+      const response = firebaseSDK.createAccount(user, this.signupSuccess);
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
+  };
+
+  signupSuccess = () => {
+    console.log("sign up successful, navigate to credit card page.");
+
     this.props.navigation.navigate("Add Credit Card Details", {
       screen: "CreditCard",
     });
@@ -100,26 +106,25 @@ export default class Signup extends React.Component {
 
   render() {
     return (
-      <View>        
-        <View 
-          style={
-            {
-             marginTop:130,
-             alignSelf:'center',
-             height:500,
-             width:350,
-             borderRadius:30,
-             backgroundColor:"#16267D"}
-            }>
-            
-            <View style={{marginTop:80}}>
+      <View>
+        <View
+          style={{
+            marginTop: 130,
+            alignSelf: "center",
+            height: 500,
+            width: 350,
+            borderRadius: 30,
+            backgroundColor: "#16267D",
+          }}
+        >
+          <View style={{ marginTop: 80 }}>
             <Button
-            title="UPLOAD AVATAR"
-            alignSelf="center"
-            style={styles.buttonText}
-            onPress={this.onImageUpload}
+              title="UPLOAD AVATAR"
+              alignSelf="center"
+              style={styles.buttonText}
+              onPress={this.onImageUpload}
             />
-            </View>
+          </View>
 
           <Text style={styles.labeluser}>NAME</Text>
           <TextInput
@@ -147,27 +152,28 @@ export default class Signup extends React.Component {
         </View>
 
         <View
-        style={
-            {
-            marginTop:60,
-            height:140,
-            width:140,
-            alignSelf:'center',
-            borderRadius:70,
-            position:"absolute",
-            flex:1
-            }
-          }>
-        <ImageBackground
-          style={styles.logo} source={require("../../ChatAppV2/assets/person.png")}>
-        </ImageBackground>
+          style={{
+            marginTop: 60,
+            height: 140,
+            width: 140,
+            alignSelf: "center",
+            borderRadius: 70,
+            position: "absolute",
+            flex: 1,
+          }}
+        >
+          <ImageBackground
+            style={styles.logo}
+            source={require("../../ChatAppV2/assets/person.png")}
+          ></ImageBackground>
         </View>
 
-        <View style={{alignSelf:"center",marginTop:600,position:"absolute"}}>
-          <FlatButton text="SIGN-UP" onPress={this.onPressCreate}/>
-          </View>
+        <View
+          style={{ alignSelf: "center", marginTop: 600, position: "absolute" }}
+        >
+          <FlatButton text="SIGN-UP" onPress={this.onPressCreate} />
+        </View>
       </View>
-
     );
   }
 }
@@ -175,46 +181,46 @@ export default class Signup extends React.Component {
 const offset = 16;
 const styles = StyleSheet.create({
   logo: {
-    flex:1,
+    flex: 1,
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    position:"absolute"
-  }, 
+    position: "absolute",
+  },
 
   buttonText: {
     marginLeft: offset,
     fontSize: 20,
-    color:"#FFFFFF"
+    color: "#FFFFFF",
   },
 
   labeluser: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 40,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF",
   },
 
   labeluser2: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 30,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF",
   },
 
   inputuser: {
-    alignSelf:"center",
-    paddingHorizontal:15,
-    width:300,
-    height:50,
-    borderColor:"#43519D",
-    backgroundColor:"#283786",
-    borderRadius:8,
-    color:"#F7B600"
+    alignSelf: "center",
+    paddingHorizontal: 15,
+    width: 300,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600",
   },
 });

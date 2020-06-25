@@ -25,7 +25,7 @@ class FirebaseSDK {
       .then(success_callback, failed_callback);
   };
 
-  createAccount = async (user) => {
+  createAccount = async (user, callback) => {
     firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
@@ -55,7 +55,8 @@ class FirebaseSDK {
           );
           alert("Create account failed. Error: " + error.message);
         }
-      );
+      )
+      .then(callback);
   };
 
   // TODO: get Token for authentication to be sent to backend team
@@ -81,10 +82,9 @@ class FirebaseSDK {
       // emailVerified = user.emailVerified;
       uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
     }
-    var dataToSend = name + "," + email;
+    var dataToSend = name + "," + email + "," + uid;
     console.log(dataToSend);
     return dataToSend;
-    // return name, email, uid;
   };
 
   // TODO: update account
@@ -131,18 +131,6 @@ class FirebaseSDK {
           console.log("Password update failed.");
         });
     }
-    // if (newUser.newpassword != "" && newUser.oldpassword != "") {
-    //   currentUser
-    //     .updatePassword(newUser.newpassword)
-    //     .then(function () {
-    //       // Update successful.
-    //       console.log("Password update passed");
-    //     })
-    //     .catch(function (error) {
-    //       // An error happened.
-    //       Alert.alert("Password update failed.");
-    //     });
-    // }
   };
 
   logout = () => {
@@ -215,8 +203,8 @@ class FirebaseSDK {
   }
 
   chatRef = (chatId) => {
-    return firebase.database().ref("messages/" + chatId)
-  }
+    return firebase.database().ref("messages/" + chatId);
+  };
 
   parseChatList = (snapshot) => {
     const { key: _id } = snapshot;
@@ -225,19 +213,19 @@ class FirebaseSDK {
     let id1 = _id.split("_")[0];
     let id2 = _id.split("_")[1];
 
-    if(id1 === this.uid) {
-      return id2
+    if (id1 === this.uid) {
+      return id2;
     } else if (id2 == this.uid) {
-      return id1
+      return id1;
     } else {
-      return ""
+      return "";
     }
-
   };
 
   getChatList = (callback) =>
-    this.chatListRef
-      .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
+    this.chatListRef.on("child_added", (snapshot) =>
+      callback(this.parseChatList(snapshot))
+    );
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -256,8 +244,9 @@ class FirebaseSDK {
   };
 
   getChat = (chatId, callback) =>
-    this.chatRef(chatId)
-      .on("child_added", (snapshot) => callback(this.parseChat(snapshot)));
+    this.chatRef(chatId).on("child_added", (snapshot) =>
+      callback(this.parseChat(snapshot))
+    );
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
