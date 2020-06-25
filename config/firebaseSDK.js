@@ -202,8 +202,9 @@ class FirebaseSDK {
     return firebase.database().ref("chats");
   }
 
-  chatRef = (chatId) => {
-    return firebase.database().ref("chats/" + chatId)
+
+  get userInfoRef() {
+    return firebase.database().ref("users")
   }
 
   parseChatList = (snapshot, callback) => {
@@ -226,20 +227,41 @@ class FirebaseSDK {
 
     ref.orderByChild('timestamp').limitToLast(1).once("value", (data) => {
       const key = Object.keys(data.val())[0]
+      const { text } = data.val()[key];
 
-      const { text, user } = data.val()[key];
-      const name = user.name
-      const id = user.id
+      let nameRef = this.userInfoRef.once("value", (data) => {
+        let name = data.val()[otherId];
+        console.log(name);
+        callback(_id, name, text)
+      })
 
-      callback(id, name, "", text)
+      // ref.orderByChild('timestamp').limitToLast(20).once("value", (data) => {
+      //   for (let k in Object.keys(data.val())) {
+      //     const { user } = data.val()[key];
+      //     if (user.id == otherId) {
+      //       callback(_id, user.name, text)
+      //     }
+      //   }
+      //   // callback(_id, "name", text)
+
+      // })
+
+      // const { text, user } = data.val()[key];
+      // const name = user.name
+
+      // callback(_id, name, text)
     })
 
   };
 
   getChatList = (callback) => this.chatListRef
       .on("child_added", (snapshot) => {
-        let id = this.parseChatList(snapshot, callback);
+        this.parseChatList(snapshot, callback);
       });
+
+  chatRef = (chatId) => {
+    return firebase.database().ref("chats/" + chatId)
+  }
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -257,29 +279,33 @@ class FirebaseSDK {
     return message;
   };
 
-  getChat = (chatId, callback) =>
-    this.chatRef(chatId).on("child_added", (snapshot) =>
-      callback(this.parseChat(snapshot))
-    );
+  getChat = (chatKey, callback) => {
+    this.chatRef(chatKey).orderByChild('timestamp').on("child_added", (snapshot) => {
+      callback(this.parseChat(snapshot));
+    });
+  }
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
   }
 
-  // send the message to the Backend
-  sendMessage = (messages) => {
-    for (let i = 0; i < messages.length; i++) {
-      const { text, user } = messages[i];
-      const message = {
-        text,
-        user,
-        timestamp: this.timestamp,
-      };
-      this.append(message);
+  getSendMessageRef = (chatKey) => {
+    let sendMessage = (messages) => {
+      for (let i = 0; i < messages.length; i++) {
+        const { text, user } = messages[i];
+        const message = {
+          text,
+          user,
+          timestamp: this.timestamp,
+        };
+        console.log(message)
+        this.chatRef(chatKey).push(message);
+        // this.append(message);
+      }
     }
-  };
-
-  append = (message) => this.chatListRef.push(message);
+    
+    return sendMessage
+  }
 
   // close the connection to the Backend
   closeConnection() {

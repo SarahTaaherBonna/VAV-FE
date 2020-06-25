@@ -7,29 +7,39 @@ import firebaseSDK from "../config/firebaseSDK";
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => ({
-    title: (navigation.state.params || {}).name || "Chat!",
+    title: "Chat!",
   });
 
   state = {
     messages: [],
   };
 
-  get user() {
+  getUserDetails() {
+    const userDetails = firebaseSDK.getAccountDetails();
+
+    let name = userDetails.split(',')[0]
+    let email = userDetails.split(',')[1]
+    let id = userDetails.split(',')[2]
+
     return {
-      name: this.props.route.params.name,
-      email: this.props.route.params.email,
-      avatar: this.props.route.params.avatar,
-      id: firebaseSDK.uid,
-      _id: firebaseSDK.uid,
-    };
+      name: name,
+      email: email,
+      avatar: "",
+      id: id,
+      _id: id,
+    }
+  }
+
+  get chatKey() {
+    return this.props.route.params.chatKey;
   }
 
   render() {
     const chat = (
       <GiftedChat
         messages={this.state.messages}
-        onSend={firebaseSDK.sendMessage}
-        user={this.user}
+        onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
+        user={this.getUserDetails()}
       />
     );
 
@@ -37,7 +47,7 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChat("uid", (message) =>
+    firebaseSDK.getChat(this.chatKey, (message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))

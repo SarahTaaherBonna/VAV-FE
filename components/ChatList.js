@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert, Text } from "react-native";
+import { StyleSheet, View, Button, Alert, Text, SafeAreaView, ScrollView, FlatView} from "react-native";
 import { Avatar, Header } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
@@ -11,11 +11,11 @@ export default class ChatList extends Component {
     chatListings: [],
   };
 
-  generateChatListing = (id, name, avatar, text) => {
+  generateChatListing = (chatKey, name, text) => {
 
     const newChatListing = (
       <TouchableOpacity
-      onPress={() => {this.onPressListing(id, name, avatar)}}
+      onPress={() => {this.onPressListing(chatKey)}}
       >
         <View
         style={{
@@ -46,17 +46,12 @@ export default class ChatList extends Component {
         </View>
       </TouchableOpacity>
     )
-
     return newChatListing
-
   }
 
-  onPressListing = (id, name, avatar) => {
-    console.log("pressed")
+  onPressListing = (chatKey) => {
     this.props.navigation.navigate("Chat", {
-      id: id,
-      name: name,
-      avatar: avatar,
+      chatKey: chatKey
     });
   }
 
@@ -65,13 +60,9 @@ export default class ChatList extends Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChatList((id, name, avatar, text) => {
-      console.log("didmount")
-      console.log(id)
-      console.log(name)
-      console.log(text)
+    firebaseSDK.getChatList((chatKey, name, text) => {
 
-      let newChatListing = this.generateChatListing(id, name, avatar, text);
+      let newChatListing = this.generateChatListing(chatKey, name, text);
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));
@@ -80,12 +71,14 @@ export default class ChatList extends Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
     paddingLeft: 15,
   },
+
+  contentContainer: {
+    paddingVertical: 20
+  }
 });
