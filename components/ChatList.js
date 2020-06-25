@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert, Text } from "react-native";
+import { StyleSheet, View, Button, Alert, Text, SafeAreaView, ScrollView, FlatView} from "react-native";
 import { Avatar, Header } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
@@ -14,12 +14,18 @@ export default class ChatList extends Component {
   generateChatListing = (id, name, avatar) => {
 
     const newChatListing = (
+      <SafeAreaView>
+      <ScrollView contentContainerStyle={styles.contentContainer}>
       <View
       style={{
         flexDirection: "row",
+        margin:7,
         height: 90,
         padding: 20,
-        borderBottomWidth: 1,
+        borderWidth: 1,
+        borderRadius:8,
+        backgroundColor:"#16267D",
+        borderColor:"#16267D"
         // onPress: {onPressListing(id, name, avatar)},
       }}>
         <TouchableOpacity
@@ -45,12 +51,10 @@ export default class ChatList extends Component {
           </View>
         </TouchableOpacity>
       </View>
-
-      
+      </ScrollView>
+      </SafeAreaView>
     )
-
     return newChatListing
-
   }
 
   onPressListing = (id, name, avatar) => {
@@ -85,4 +89,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     paddingLeft: 15,
   },
+
+  contentContainer: {
+    paddingVertical: 20
+  }
 });

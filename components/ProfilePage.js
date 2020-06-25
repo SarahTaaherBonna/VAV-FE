@@ -3,6 +3,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ImageEditor from "@react-native-community/image-editor";
 import { Avatar, Header } from "react-native-elements";
+import FlatButton from "../components/Button";
 import {
   Image,
   StyleSheet,
@@ -12,6 +13,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
+  ImageBackground
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
@@ -73,79 +75,123 @@ export default class ProfilePage extends React.Component {
 
   render() {
     return (
-      <View>
-        <Text style={styles.title}>Please fill in the following fields.</Text>
-        <Text style={styles.title}>Name:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextName}
-          value={this.state.name}
-        />
-        <Text style={styles.title}>Email:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextEmail}
-          value={this.state.email}
-        />
-        <Text style={styles.title}>Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextPassword}
-          // value={this.state.password}
-        />
-        {/* <Text style={styles.title}>Old Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextOldPassword}
-          value={this.state.oldpassword}
-        />
+      <View>        
+        <View 
+          style={
+            {
+             marginTop:90,
+             alignSelf:'center',
+             height:500,
+             width:350,
+             borderRadius:30,
+             backgroundColor:"#16267D"}
+            }>
+            
+            <View style={{marginTop:80}}>
+            <Button
+            title="UPLOAD AVATAR"
+            alignSelf="center"
+            style={styles.buttonText}
+            onPress={this.onImageUpload}
+            />
+            </View>
 
-        <Text style={styles.title}>New Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextNewPassword}
-          value={this.state.newpassword}
-        /> */}
+          <Text style={styles.labeluser}>NAME</Text>
+          <TextInput
+            style={styles.inputuser}
+            placeholder="Please enter name"
+            onChangeText={this.onChangeTextName}
+            value={this.state.name}
+          />
+          <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
+          <TextInput
+            style={styles.inputuser}
+            placeholder="Please enter email"
+            onChangeText={this.onChangeTextEmail}
+            value={this.state.email}
+          />
+          <Text style={styles.labeluser2}>PASSWORD</Text>
+          <TextInput
+            style={styles.inputuser}
+            placeholder="Please enter password"
+            secureTextEntry={true}
+            autoCorrect={false}
+            onChangeText={this.onChangeTextPassword}
+            value={this.state.password}
+          />
+        </View>
 
-        <Button
-          title="Update Profile"
-          style={styles.buttonText}
-          onPress={this.onPressUpdate}
-        />
-        {/* <TextInput returnKeyType={"go"} /> */}
-        <Button
-          title="Update Avatar"
-          style={styles.buttonText}
-          onPress={this.onImageUpload}
-        />
+        <View
+        style={
+            {
+            marginTop:20,
+            height:140,
+            width:140,
+            alignSelf:'center',
+            borderRadius:70,
+            position:"absolute",
+            flex:1
+            }
+          }>
+        <ImageBackground
+          style={styles.logo} source={require("../../ChatAppV2/assets/person.png")}>
+        </ImageBackground>
+        </View>
+
+        <View style={{alignSelf:"center",marginTop:560,position:"absolute"}}>
+          <FlatButton text="UPDATE" onPress={this.onPressCreate}/>
+          </View>
       </View>
+
     );
   }
 }
+      
 
 const offset = 16;
 const styles = StyleSheet.create({
-  title: {
-    marginTop: offset,
-    marginLeft: offset,
-    fontSize: offset,
-  },
-  nameInput: {
-    height: offset * 2,
-    margin: offset,
-    paddingHorizontal: offset,
-    borderColor: "#111111",
-    borderWidth: 1,
-    fontSize: offset,
-  },
+  logo: {
+    flex:1,
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    position:"absolute"
+  }, 
+
   buttonText: {
     marginLeft: offset,
-    fontSize: 42,
+    fontSize: 20,
+    color:"#FFFFFF"
+  },
+
+  labeluser: {
+    fontWeight:'bold',
+    marginTop: 30,
+    marginLeft: 40,
+    marginBottom:5,
+    fontSize:16,
+    color:"#FFFFFF"
+  },
+
+  labeluser2: {
+    fontWeight:'bold',
+    marginTop: 30,
+    marginLeft: 30,
+    marginBottom:5,
+    fontSize:16,
+    color:"#FFFFFF"
+  },
+
+  inputuser: {
+    alignSelf:"center",
+    paddingHorizontal:15,
+    width:300,
+    height:50,
+    borderColor:"#43519D",
+    backgroundColor:"#283786",
+    borderRadius:8,
+    color:"#F7B600"
   },
 });
+
