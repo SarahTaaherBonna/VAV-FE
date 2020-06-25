@@ -64,6 +64,7 @@ function TabNavigator() {
       tabBarOptions={{
         activeTintColor: "black",
         inactiveTintColor: "gray",
+        keyboardHidesTabBar: true,
       }}
     >
       <Tab.Screen name="Products" component={ProductListing} />
