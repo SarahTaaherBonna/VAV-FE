@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert, Text } from "react-native";
+import { StyleSheet, View, Button, Alert, Text, SafeAreaView, ScrollView, FlatView} from "react-native";
 import { Avatar, Header } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
@@ -46,9 +46,7 @@ export default class ChatList extends Component {
         </View>
       </TouchableOpacity>
     )
-
     return newChatListing
-
   }
 
   onPressListing = (chatKey) => {
@@ -73,12 +71,14 @@ export default class ChatList extends Component {
   }
 }
 
-
-
 const styles = StyleSheet.create({
   titleText: {
     fontSize: 20,
     fontWeight: "bold",
     paddingLeft: 15,
   },
+
+  contentContainer: {
+    paddingVertical: 20
+  }
 });
