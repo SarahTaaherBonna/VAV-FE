@@ -210,8 +210,12 @@ class FirebaseSDK {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  get messageRef() {
+  get chatListRef() {
     return firebase.database().ref("messages");
+  }
+
+  chatRef = (chatId) => {
+    return firebase.database().ref("messages/" + chatId)
   }
 
   parseChatList = (snapshot) => {
@@ -232,7 +236,7 @@ class FirebaseSDK {
   };
 
   getChatList = (callback) =>
-    this.messageRef
+    this.chatListRef
       .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
 
   parseChat = (snapshot) => {
@@ -249,16 +253,9 @@ class FirebaseSDK {
     return message;
   };
 
-<<<<<<< Updated upstream
-  getChatList = (callback) =>
-    this.messageRef.on("child_added", (snapshot) =>
-      callback(this.parseChatList(snapshot))
-    );
-=======
-  getChat = (callback) =>
-    this.messageRef.ref("uid_string_goes_here")
-      .onon("child_added", (snapshot) => callback(this.parseChat(snapshot)));
->>>>>>> Stashed changes
+  getChat = (chatId, callback) =>
+    this.chatRef(chatId)
+      .on("child_added", (snapshot) => callback(this.parseChat(snapshot)));
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -277,11 +274,11 @@ class FirebaseSDK {
     }
   };
 
-  append = (message) => this.messageRef.push(message);
+  append = (message) => this.chatListRef.push(message);
 
   // close the connection to the Backend
   closeConnection() {
-    this.messageRef.off();
+    this.chatListRef.off();
   }
 }
 const firebaseSDK = new FirebaseSDK();

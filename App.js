@@ -11,11 +11,8 @@ import ProductListing from "./components/ProductListing";
 import ProfilePage from "./components/ProfilePage";
 import Signup from "./components/Signup";
 import CreditCard from "./components/CreditCard";
-<<<<<<< Updated upstream
 import Logout from "./components/Logout";
-=======
 import Chat from "./components/Chat"
->>>>>>> Stashed changes
 
 console.disableYellowBox = true;
 

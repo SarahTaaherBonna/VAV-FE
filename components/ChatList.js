@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert, Text } from "react-native";
 import { Avatar, Header } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import firebaseSDK from "../config/firebaseSDK";
 
 // TODO: create ChatList for user
 
@@ -53,6 +54,7 @@ export default class ChatList extends Component {
   }
 
   onPressListing = (id, name, avatar) => {
+    console.log("pressed")
     this.props.navigation.navigate("Chat", {
       id: id,
       name: name,
@@ -66,7 +68,7 @@ export default class ChatList extends Component {
 
   componentDidMount() {
     firebaseSDK.getChatList((id) => {
-      let newChatListing = this.generateChatListing(id, name, avatar)
+      let newChatListing = this.generateChatListing(id, "name", "avatar")
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }))
