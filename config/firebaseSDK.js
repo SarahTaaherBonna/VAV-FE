@@ -203,7 +203,7 @@ class FirebaseSDK {
   }
 
   get userInfoRef() {
-    return firebase.database().ref("users")
+    return firebase.database().ref("users");
   }
 
   parseChatList = (snapshot, callback) => {
@@ -212,11 +212,11 @@ class FirebaseSDK {
     let myId = _id.split("_")[0];
     let otherId = _id.split("_")[1];
 
-    if(myId !== this.uid && otherId !== this.uid) {
+    if (myId !== this.uid && otherId !== this.uid) {
       return;
     }
 
-    if(myId !== this.uid) {
+    if (myId !== this.uid) {
       let temp = otherId;
       otherId = myId;
       myId = temp;
@@ -224,43 +224,29 @@ class FirebaseSDK {
 
     let ref = this.chatRef(_id);
 
-    ref.orderByChild('timestamp').limitToLast(1).once("value", (data) => {
-      const key = Object.keys(data.val())[0]
-      const { text } = data.val()[key];
+    ref
+      .orderByChild("timestamp")
+      .limitToLast(1)
+      .once("value", (data) => {
+        const key = Object.keys(data.val())[0];
+        const { text } = data.val()[key];
 
-      let nameRef = this.userInfoRef.once("value", (data) => {
-        let name = data.val()[otherId];
-        console.log(name);
-        callback(_id, name, text)
-      })
-
-      // ref.orderByChild('timestamp').limitToLast(20).once("value", (data) => {
-      //   for (let k in Object.keys(data.val())) {
-      //     const { user } = data.val()[key];
-      //     if (user.id == otherId) {
-      //       callback(_id, user.name, text)
-      //     }
-      //   }
-      //   // callback(_id, "name", text)
-
-      // })
-
-      // const { text, user } = data.val()[key];
-      // const name = user.name
-
-      // callback(_id, name, text)
-    })
-
+        let nameRef = this.userInfoRef.once("value", (data) => {
+          let name = data.val()[otherId];
+          console.log(name);
+          callback(_id, name, text);
+        });
+      });
   };
 
-  getChatList = (callback) => this.chatListRef
-      .on("child_added", (snapshot) => {
-        this.parseChatList(snapshot, callback);
-      });
+  getChatList = (callback) =>
+    this.chatListRef.on("child_added", (snapshot) => {
+      this.parseChatList(snapshot, callback);
+    });
 
   chatRef = (chatId) => {
-    return firebase.database().ref("chats/" + chatId)
-  }
+    return firebase.database().ref("chats/" + chatId);
+  };
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -279,10 +265,12 @@ class FirebaseSDK {
   };
 
   getChat = (chatKey, callback) => {
-    this.chatRef(chatKey).orderByChild('timestamp').on("child_added", (snapshot) => {
-      callback(this.parseChat(snapshot));
-    });
-  }
+    this.chatRef(chatKey)
+      .orderByChild("timestamp")
+      .on("child_added", (snapshot) => {
+        callback(this.parseChat(snapshot));
+      });
+  };
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -297,14 +285,14 @@ class FirebaseSDK {
           user,
           timestamp: this.timestamp,
         };
-        console.log(message)
+        console.log(message);
         this.chatRef(chatKey).push(message);
         // this.append(message);
       }
-    }
-    
-    return sendMessage
-  }
+    };
+
+    return sendMessage;
+  };
 
   // close the connection to the Backend
   closeConnection() {
