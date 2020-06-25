@@ -11,11 +11,11 @@ export default class ChatList extends Component {
     chatListings: [],
   };
 
-  generateChatListing = (id, name, avatar, text) => {
+  generateChatListing = (chatKey, name, text) => {
 
     const newChatListing = (
       <TouchableOpacity
-      onPress={() => {this.onPressListing(id, name, avatar)}}
+      onPress={() => {this.onPressListing(chatKey)}}
       >
         <View
         style={{
@@ -51,12 +51,9 @@ export default class ChatList extends Component {
 
   }
 
-  onPressListing = (id, name, avatar) => {
-    console.log("pressed")
+  onPressListing = (chatKey) => {
     this.props.navigation.navigate("Chat", {
-      id: id,
-      name: name,
-      avatar: avatar,
+      chatKey: chatKey
     });
   }
 
@@ -65,13 +62,9 @@ export default class ChatList extends Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChatList((id, name, avatar, text) => {
-      console.log("didmount")
-      console.log(id)
-      console.log(name)
-      console.log(text)
+    firebaseSDK.getChatList((chatKey, name, text) => {
 
-      let newChatListing = this.generateChatListing(id, name, avatar, text);
+      let newChatListing = this.generateChatListing(chatKey, name, text);
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));

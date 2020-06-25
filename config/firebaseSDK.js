@@ -202,22 +202,12 @@ class FirebaseSDK {
     return firebase.database().ref("chats");
   }
 
-  chatRef = (chatId) => {
-<<<<<<< HEAD
-    return firebase.database().ref("chats/" + chatId)
-  }
-=======
-    return firebase.database().ref("messages/" + chatId);
-  };
->>>>>>> 21ab47ba77eea9dba136fae200032717517032ab
-
   parseChatList = (snapshot, callback) => {
     const { key: _id } = snapshot;
 
     let myId = _id.split("_")[0];
     let otherId = _id.split("_")[1];
 
-<<<<<<< HEAD
     if(myId !== this.uid && otherId !== this.uid) {
       return;
     }
@@ -237,30 +227,20 @@ class FirebaseSDK {
       const name = user.name
       const id = user.id
 
-      callback(id, name, "", text)
+      callback(_id, name, text)
     })
 
   };
 
   getChatList = (callback) => this.chatListRef
       .on("child_added", (snapshot) => {
-        let id = this.parseChatList(snapshot, callback);
+        this.parseChatList(snapshot, callback);
       });
-=======
-    if (id1 === this.uid) {
-      return id2;
-    } else if (id2 == this.uid) {
-      return id1;
-    } else {
-      return "";
-    }
-  };
 
-  getChatList = (callback) =>
-    this.chatListRef.on("child_added", (snapshot) =>
-      callback(this.parseChatList(snapshot))
-    );
->>>>>>> 21ab47ba77eea9dba136fae200032717517032ab
+  chatRef = (chatId) => {
+    console.log(chatId)
+    return firebase.database().ref("chats/" + chatId)
+  }
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -279,12 +259,31 @@ class FirebaseSDK {
   };
 
   getChat = (chatId, callback) =>
-    this.chatRef(chatId).on("child_added", (snapshot) =>
-      callback(this.parseChat(snapshot))
-    );
+    this.chatRef(chatId).on("child_added", (snapshot) => {
+      console.log(snapshot);
+      callback(this.parseChat(snapshot));
+    });
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
+  }
+
+  getSendMessageRef = (chatKey) => {
+    let sendMessage = (messages) => {
+      for (let i = 0; i < messages.length; i++) {
+        const { text, user } = messages[i];
+        const message = {
+          text,
+          user,
+          timestamp: this.timestamp,
+        };
+        console.log(message)
+        this.chatRef(chatKey).push(message);
+        // this.append(message);
+      }
+    }
+    
+    return sendMessage
   }
 
   // send the message to the Backend
@@ -296,11 +295,13 @@ class FirebaseSDK {
         user,
         timestamp: this.timestamp,
       };
+
+      console.log(message);
       this.append(message);
     }
   };
 
-  append = (message) => this.chatListRef.push(message);
+  // append = (message) => this.chatListRef.push(message);
 
   // close the connection to the Backend
   closeConnection() {
