@@ -4,12 +4,6 @@ import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import firebaseSDK from "../config/firebaseSDK";
 
-// export default class Chat extends React.Component {
-//   render() {
-//     return <GiftedChat />;
-//   }
-// }
-
 type Props = {
   name?: string,
 };
@@ -46,7 +40,7 @@ export default class Chat extends React.Component<Props> {
   }
 
   componentDidMount() {
-    firebaseSDK.getChatList((message) =>
+    firebaseSDK.getChat((message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))

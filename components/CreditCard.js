@@ -89,7 +89,7 @@ export default class CreditCard extends Component {
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-        {/* <TextInput returnKeyType={"go"} /> */}
+        <TextInput returnKeyType={"go"} />
         <Button
           title="Submit"
           style={styles.buttonText}

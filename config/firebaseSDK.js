@@ -215,16 +215,29 @@ class FirebaseSDK {
   }
 
   parseChatList = (snapshot) => {
-    const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
     console.log(_id);
 
     let id1 = _id.split("_")[0];
     let id2 = _id.split("_")[1];
 
-    if (id1 == this.uid || id2 == this.uid) {
-      console.log("true");
+    if(id1 === this.uid) {
+      return id2
+    } else if (id2 == this.uid) {
+      return id1
+    } else {
+      return ""
     }
+
+  };
+
+  getChatList = (callback) =>
+    this.messageRef
+      .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
+
+  parseChat = (snapshot) => {
+    const { timestamp: numberStamp, text, user } = snapshot.val();
+    const { key: _id } = snapshot;
 
     const timestamp = new Date(numberStamp);
     const message = {
@@ -236,10 +249,16 @@ class FirebaseSDK {
     return message;
   };
 
+<<<<<<< Updated upstream
   getChatList = (callback) =>
     this.messageRef.on("child_added", (snapshot) =>
       callback(this.parseChatList(snapshot))
     );
+=======
+  getChat = (callback) =>
+    this.messageRef.ref("uid_string_goes_here")
+      .onon("child_added", (snapshot) => callback(this.parseChat(snapshot)));
+>>>>>>> Stashed changes
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;

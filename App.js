@@ -11,7 +11,11 @@ import ProductListing from "./components/ProductListing";
 import ProfilePage from "./components/ProfilePage";
 import Signup from "./components/Signup";
 import CreditCard from "./components/CreditCard";
+<<<<<<< Updated upstream
 import Logout from "./components/Logout";
+=======
+import Chat from "./components/Chat"
+>>>>>>> Stashed changes
 
 console.disableYellowBox = true;
 
@@ -37,6 +41,15 @@ function CreditCardStack() {
       <Stack.Screen name="Add Credit Card Details" component={CreditCard} />
     </Stack.Navigator>
   );
+}
+
+function ChatStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Chats" component={ChatList} />
+      <Stack.Screen name="Chat" component={Chat} />
+    </Stack.Navigator>
+  )
 }
 
 const Tab = createBottomTabNavigator();
@@ -68,7 +81,7 @@ function TabNavigator() {
       }}
     >
       <Tab.Screen name="Products" component={ProductListing} />
-      <Tab.Screen name="Chats" component={ChatList} />
+      <Tab.Screen name="Chats" component={ChatStack} />
       <Tab.Screen name="Profile" component={ProfilePage} />
       <Tab.Screen name="Logout" component={Logout} />
     </Tab.Navigator>
