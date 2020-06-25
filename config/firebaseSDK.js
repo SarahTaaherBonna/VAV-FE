@@ -202,6 +202,7 @@ class FirebaseSDK {
     return firebase.database().ref("chats");
   }
 
+
   get userInfoRef() {
     return firebase.database().ref("users")
   }

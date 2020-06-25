@@ -63,8 +63,8 @@ function TabNavigator() {
             iconName = "home";
           } else if (route.name === "Chats") {
             iconName = "comment-dots";
-          } else if (route.name === "Payment") {
-            iconName = "file-invoice-dollar";
+          } else if (route.name === "Card") {
+            iconName = "credit-card";
           } else if (route.name === "Profile") {
             iconName = "user-alt";
           } else if (route.name === "Logout") {
@@ -82,7 +82,7 @@ function TabNavigator() {
     >
       <Tab.Screen name="Products" component={ProductListing} />
       <Tab.Screen name="Chats" component={ChatStack} />
-      <Tab.Screen name="Payment" component={Payment} />
+      <Tab.Screen name="Card" component={CreditCard} initialParams={{isStart: false}}/>
       <Tab.Screen name="Profile" component={ProfilePage} />
       <Tab.Screen name="Logout" component={Logout} />
     </Tab.Navigator>
