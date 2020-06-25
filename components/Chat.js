@@ -4,11 +4,8 @@ import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 import firebaseSDK from "../config/firebaseSDK";
 
-type Props = {
-  name?: string,
-};
 
-export default class Chat extends React.Component<Props> {
+export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: (navigation.state.params || {}).name || "Chat!",
   });
