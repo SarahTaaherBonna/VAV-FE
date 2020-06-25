@@ -18,14 +18,11 @@ import {
 
 import firebaseSDK from "../config/firebaseSDK";
 
-// TODO: allow users to update profile
 export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
     password: "",
-    // oldpassword: "",
-    // newpassword: "",
     avatar: "",
   };
 
@@ -35,9 +32,7 @@ export default class ProfilePage extends React.Component {
     var userEmail = dataObtainedFromFirebase.split(",")[1];
     this.setState({ name: username });
     this.setState({ email: userEmail });
-    // this.state.name = username;
-    // this.state.email = userEmail;
-    console.log("----------------------------------");
+    console.log("-------------------IN PROFILE PAGE---------------");
     console.log(this.state.name);
     console.log(this.state.email);
   }
@@ -48,15 +43,11 @@ export default class ProfilePage extends React.Component {
         name: this.state.name,
         email: this.state.email,
         password: this.state.password,
-        // oldpassword: this.state.oldpassword,
-        // newpassword: this.state.newpassword,
       };
       console.log("=====================================");
       console.log(this.state.name);
       console.log(this.state.email);
       console.log(this.state.password);
-      // console.log(this.state.oldpassword);
-      // console.log(this.state.newpassword);
       await firebaseSDK.updateAccount(user);
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
@@ -68,8 +59,6 @@ export default class ProfilePage extends React.Component {
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  // onChangeTextOldPassword = (oldpassword) => this.setState({ oldpassword });
-  // onChangeTextNewPassword = (newpassword) => this.setState({ newpassword });
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
 

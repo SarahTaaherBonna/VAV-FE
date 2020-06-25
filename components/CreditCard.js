@@ -1,12 +1,11 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Button, Alert, Keyboard } from "react-native";
+import axios from "axios";
 import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput } from "react-native-credit-card-input";
 import { TextInput } from "react-native-gesture-handler";
 
-// TODO: send Token for authentication to backend team
-// TODO: send credit card details
 const s = StyleSheet.create({
   container: {
     backgroundColor: "#F5F5F5",
@@ -28,14 +27,25 @@ export default class CreditCard extends Component {
     cardNumber: "",
     expiryDate: "",
     cardcvc: "",
+    useremail: "",
+    useruid: "",
   };
+
+  async componentDidMount() {
+    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
+    var userEmail = dataObtainedFromFirebase.split(",")[1];
+    var userUID = dataObtainedFromFirebase.split(",")[2];
+    this.setState({ useremail: userEmail });
+    this.setState({ useruid: userUID });
+  }
 
   _onChange = (form) => {
     /* eslint no-console: 0 */
     // console.log(form);
     if (form.valid == true) {
       this.state.cardName = form.values.name;
-      this.state.cardNumber = form.values.number;
+      var usercardNumber = form.values.number.replace(/\s/g, "");
+      this.state.cardNumber = usercardNumber;
       this.state.cardcvc = form.values.cvc;
       this.state.expiryDate = form.values.expiry;
     }
@@ -47,23 +57,37 @@ export default class CreditCard extends Component {
   };
 
   onPressSubmit = async () => {
-    console.log(this.state.cardName);
     try {
-      const tokenObject = firebaseSDK.getToken();
-      // console.log(Object.values(token));
-      // console.log(typeof token);
-      var token = Object.values(tokenObject);
-      var dataToSend =
-        this.state.cardName +
-        "," +
-        this.state.cardNumber +
-        "," +
-        this.state.cardcvc +
-        "," +
-        this.state.expiryDate;
-
-      console.log(token);
-      console.log(dataToSend);
+      var data = {
+        email: this.state.useremail,
+        card_number: this.state.cardNumber,
+        full_name: this.state.cardName,
+        expiry_date: this.state.expiryDate,
+        ccv: this.state.cardcvc,
+        uid: this.state.useruid,
+      };
+      firebase
+        .auth()
+        .currentUser.getIdToken(/* forceRefresh */ true)
+        .then(function (idToken) {
+          console.log(
+            "------------IN CREDIT CARD PAGE ON SUBMIT-----------------"
+          );
+          console.log("DATA: " + Object.values(data));
+          axios
+            .post("https://khanhphungntu.ml/save_card/", data, {
+              headers: { Authorization: idToken },
+            })
+            .then((res) => {
+              console.log("==========Response===============");
+              console.log(res.data);
+            });
+        })
+        .catch(function (error) {
+          // Handle error
+          console.log("*************ERROR***********");
+          console.log(error);
+        });
       this.props.navigation.navigate("Home", {
         screen: "ProductListing",
       });
@@ -89,11 +113,11 @@ export default class CreditCard extends Component {
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-        <TextInput returnKeyType={"go"} />
         <Button
           title="Submit"
           style={styles.buttonText}
-          onPress={this.onPressSubmit}
+          // onPress={this.onPressSubmit}
+          onPress={this.onPressSubmit.bind(this)}
         />
       </View>
     );
