@@ -202,6 +202,10 @@ class FirebaseSDK {
     return firebase.database().ref("chats");
   }
 
+  get userInfoRef() {
+    return firebase.database().ref("users")
+  }
+
   parseChatList = (snapshot, callback) => {
     const { key: _id } = snapshot;
 
@@ -222,12 +226,29 @@ class FirebaseSDK {
 
     ref.orderByChild('timestamp').limitToLast(1).once("value", (data) => {
       const key = Object.keys(data.val())[0]
+      const { text } = data.val()[key];
 
-      const { text, user } = data.val()[key];
-      const name = user.name
-      const id = user.id
+      let nameRef = this.userInfoRef.once("value", (data) => {
+        let name = data.val()[otherId];
+        console.log(name);
+        callback(_id, name, text)
+      })
 
-      callback(_id, name, text)
+      // ref.orderByChild('timestamp').limitToLast(20).once("value", (data) => {
+      //   for (let k in Object.keys(data.val())) {
+      //     const { user } = data.val()[key];
+      //     if (user.id == otherId) {
+      //       callback(_id, user.name, text)
+      //     }
+      //   }
+      //   // callback(_id, "name", text)
+
+      // })
+
+      // const { text, user } = data.val()[key];
+      // const name = user.name
+
+      // callback(_id, name, text)
     })
 
   };
@@ -262,7 +283,6 @@ class FirebaseSDK {
       callback(this.parseChat(snapshot));
     });
   }
-
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
