@@ -45,6 +45,7 @@ export default class Signup extends React.Component {
 
     this.props.navigation.navigate("Add Credit Card Details", {
       screen: "CreditCard",
+      isAdding: true,
     });
   };
 

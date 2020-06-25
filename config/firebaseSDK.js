@@ -203,13 +203,8 @@ class FirebaseSDK {
   }
 
   chatRef = (chatId) => {
-<<<<<<< HEAD
     return firebase.database().ref("chats/" + chatId)
   }
-=======
-    return firebase.database().ref("messages/" + chatId);
-  };
->>>>>>> 21ab47ba77eea9dba136fae200032717517032ab
 
   parseChatList = (snapshot, callback) => {
     const { key: _id } = snapshot;
@@ -217,7 +212,6 @@ class FirebaseSDK {
     let myId = _id.split("_")[0];
     let otherId = _id.split("_")[1];
 
-<<<<<<< HEAD
     if(myId !== this.uid && otherId !== this.uid) {
       return;
     }
@@ -246,21 +240,6 @@ class FirebaseSDK {
       .on("child_added", (snapshot) => {
         let id = this.parseChatList(snapshot, callback);
       });
-=======
-    if (id1 === this.uid) {
-      return id2;
-    } else if (id2 == this.uid) {
-      return id1;
-    } else {
-      return "";
-    }
-  };
-
-  getChatList = (callback) =>
-    this.chatListRef.on("child_added", (snapshot) =>
-      callback(this.parseChatList(snapshot))
-    );
->>>>>>> 21ab47ba77eea9dba136fae200032717517032ab
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
