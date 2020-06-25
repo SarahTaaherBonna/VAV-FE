@@ -11,13 +11,13 @@ const s = StyleSheet.create({
     backgroundColor: "#F5F5F5",
     marginTop: 60,
   },
-  cardView:{
+  cardView: {
     backgroundColor: "#F5F5F5",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     height: "100%"
-  },  
+  },
   label: {
     color: "black",
     fontSize: 12,
@@ -53,14 +53,17 @@ export default class CreditCard extends Component {
         .auth()
         .currentUser.getIdToken(true);
 
-      const response = await axios.get("https://khanhphungntu.ml/view_card/" + userUID, {
-        headers: { Authorization: idToken },
-      });
-
-      this.setState({ cardName: response.data.card_details.full_name });
-      this.setState({ cardNumber: response.data.card_details.card_number });
-      this.setState({ expiryDate: response.data.card_details.expiry_date });
-      this.setState({ cardcvc: response.data.card_details.ccv });
+      try {
+        const response = await axios.get("https://khanhphungntu.ml/view_card/" + userUID, {
+          headers: { Authorization: idToken },
+        });
+        this.setState({ cardName: response.data.card_details.full_name });
+        this.setState({ cardNumber: response.data.card_details.card_number });
+        this.setState({ expiryDate: response.data.card_details.expiry_date });
+        this.setState({ cardcvc: response.data.card_details.ccv });
+      } catch (error) {
+        console.log(error);
+      }
     }
     this.setState({ useremail: userEmail });
     this.setState({ useruid: userUID });
@@ -94,28 +97,17 @@ export default class CreditCard extends Component {
         ccv: this.state.cardcvc,
         uid: this.state.useruid,
       };
-      firebase
-        .auth()
-        .currentUser.getIdToken(/* forceRefresh */ true)
-        .then(function (idToken) {
-          console.log(
-            "------------IN CREDIT CARD PAGE ON SUBMIT-----------------"
-          );
-          console.log("DATA: " + Object.values(data));
-          axios
-            .post("https://khanhphungntu.ml/save_card/", data, {
-              headers: { Authorization: idToken },
-            })
-            .then((res) => {
-              console.log("==========Response===============");
-              console.log(res.data);
-            });
+      const idToken = await firebase.auth().currentUser.getIdToken(true);
+      try {
+        const response = await axios.post("https://khanhphungntu.ml/save_card/", data, {
+          headers: { Authorization: idToken },
         })
-        .catch(function (error) {
-          // Handle error
-          console.log("*************ERROR***********");
-          console.log(error);
-        });
+      }
+      catch (error) {
+        console.log("*************ERROR***********");
+        console.log(error);
+      }
+
       this.props.navigation.navigate("Home", {
         screen: "ProductListing",
       });
@@ -125,12 +117,12 @@ export default class CreditCard extends Component {
     }
   };
 
-  toggleCardView = () =>{
-    if(this.state.cardView === "front"){
-      this.setState({cardView : "cvc"})
+  toggleCardView = () => {
+    if (this.state.cardView === "front") {
+      this.setState({ cardView: "cvc" })
     }
-    else{
-      this.setState({cardView: "front"})
+    else {
+      this.setState({ cardView: "front" })
     }
   }
 
@@ -139,16 +131,16 @@ export default class CreditCard extends Component {
       return <></>
     }
 
-    if (!this.props.isStart) {
+    if (!this.props.isStart && this.state.cardNumber!=="") {
       return (
         <View style={s.cardView}>
           <TouchableOpacity onPress={this.toggleCardView}>
-          <CardView brand="visa"
-            focused={this.state.cardView}
-            name={this.state.cardName}
-            number={this.state.cardNumber}
-            expiry={this.state.expiryDate}
-            cvc={this.state.cardcvc} />
+            <CardView brand="visa"
+              focused={this.state.cardView}
+              name={this.state.cardName}
+              number={this.state.cardNumber}
+              expiry={this.state.expiryDate}
+              cvc={this.state.cardcvc} />
           </TouchableOpacity>
         </View>
       )
