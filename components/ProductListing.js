@@ -6,8 +6,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ChatList from "./ChatList";
 import ProfilePage from "./ProfilePage";
 
-// TODO: create ChatList for user
-
 export default class ProductListing extends Component {
   state = {
     productName: "",

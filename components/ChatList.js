@@ -23,7 +23,6 @@ export default class ChatList extends Component {
           height: 90,
           padding: 20,
           borderBottomWidth: 1,
-          // onPress: {onPressListing(id, name, avatar)},
         }}>
 
             {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />

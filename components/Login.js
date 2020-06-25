@@ -34,7 +34,7 @@ export default class Login extends React.Component {
   };
 
   navigateToSignup = () => {
-    console.log("Sign up");
+    console.log("Navigating to Sign up");
 
     this.props.navigation.navigate("Sign Up", {
       screen: "Signup",
@@ -56,13 +56,20 @@ export default class Login extends React.Component {
 
   render() {
     return (
+      <View style={{ height: 667, backgroundColor: "#FFFFFF" }}>
+        <Image
+          style={styles.logo}
+          source={require("../../ChatAppV2/assets/logo_replacement.png")}
+        />
 
-      <View style={{height:667,backgroundColor:"#FFFFFF"}}> 
-
-        <Image style={styles.logo} source={require("../../ChatAppV2/assets/logo_replacement.png")}/>
-
-        <View style={{marginTop:20,height:600,borderRadius:30,backgroundColor:"#16267D"}}> 
-
+        <View
+          style={{
+            marginTop: 20,
+            height: 600,
+            borderRadius: 30,
+            backgroundColor: "#16267D",
+          }}
+        >
           <Text style={styles.labeluser}>EMAIL ADDRESS</Text>
           <TextInput
             style={styles.inputuser}
