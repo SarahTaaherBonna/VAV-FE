@@ -11,6 +11,7 @@ import ProductListing from "./components/ProductListing";
 import ProfilePage from "./components/ProfilePage";
 import Signup from "./components/Signup";
 import CreditCard from "./components/CreditCard";
+import Logout from "./components/Logout";
 
 console.disableYellowBox = true;
 
@@ -53,6 +54,8 @@ function TabNavigator() {
             iconName = "ios-chatbubbles";
           } else if (route.name === "Profile") {
             iconName = "md-person";
+          } else if (route.name === "Logout") {
+            iconName = "ios-log-out";
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -66,6 +69,7 @@ function TabNavigator() {
       <Tab.Screen name="Products" component={ProductListing} />
       <Tab.Screen name="Chats" component={ChatList} />
       <Tab.Screen name="Profile" component={ProfilePage} />
+      <Tab.Screen name="Logout" component={Logout} />
     </Tab.Navigator>
   );
 }

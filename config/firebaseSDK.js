@@ -43,9 +43,6 @@ class FirebaseSDK {
               console.log(
                 "Updated displayName successfully. name:" + user.name
               );
-              alert(
-                "User " + user.name + " was created successfully. Please login."
-              );
             },
             function (error) {
               console.warn("Error update displayName.");
@@ -82,11 +79,9 @@ class FirebaseSDK {
       email = user.email;
       // photoUrl = user.photoURL;
       // emailVerified = user.emailVerified;
-      uid = user.uid; // The user's ID, unique to the Firebase project. Do NOT use
-      // this value to authenticate with your backend server, if
-      // you have one. Use User.getToken() instead.
+      uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
     }
-    dataToSend = name + "," + email;
+    var dataToSend = name + "," + email;
     console.log(dataToSend);
     return dataToSend;
     // return name, email, uid;
@@ -95,7 +90,7 @@ class FirebaseSDK {
   // TODO: update account
   updateAccount = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    if (currentUser.name != newUser.name) {
+    if (newUser.name != currentUser.name) {
       currentUser
         .updateProfile({
           displayName: newUser.name,
@@ -104,14 +99,14 @@ class FirebaseSDK {
         .then(function () {
           // Update successful.
           // Alert.alert("Update success");
-          console.log("Password update passed");
+          console.log("Name update passed");
         })
         .catch(function (error) {
           // An error happened.
-          Alert.alert("Name update failed.");
+          console.log("Name update failed.");
         });
     }
-    if (currentUser.email != newUser.email) {
+    if (newUser.email != currentUser.email) {
       currentUser
         .updateEmail(newUser.email)
         .then(function () {
@@ -121,24 +116,47 @@ class FirebaseSDK {
         })
         .catch(function (error) {
           // An error happened.
-          Alert.alert("Email update failed.");
+          console.log("Email update failed.");
         });
     }
-    if (
-      newUser.oldpassword != newUser.newpassword &&
-      newUser.newpassword != ""
-    ) {
+    if (newUser.password != "") {
       currentUser
-        .updatePassword(newUser.newpassword)
+        .updatePassword(newUser.password)
         .then(function () {
           // Update successful.
           console.log("Password update passed");
         })
         .catch(function (error) {
           // An error happened.
-          Alert.alert("Password update failed.");
+          console.log("Password update failed.");
         });
     }
+    // if (newUser.newpassword != "" && newUser.oldpassword != "") {
+    //   currentUser
+    //     .updatePassword(newUser.newpassword)
+    //     .then(function () {
+    //       // Update successful.
+    //       console.log("Password update passed");
+    //     })
+    //     .catch(function (error) {
+    //       // An error happened.
+    //       Alert.alert("Password update failed.");
+    //     });
+    // }
+  };
+
+  logout = () => {
+    firebase
+      .auth()
+      .signOut()
+      .then(function () {
+        // Sign-out successful.
+        Alert.alert("You have logged out successfully.");
+      })
+      .catch(function (error) {
+        // An error happened.
+        console.log("Logout failed");
+      });
   };
 
   // Avatar code - to be fixed
@@ -199,13 +217,13 @@ class FirebaseSDK {
   parseChatList = (snapshot) => {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
-    console.log(_id)
+    console.log(_id);
 
     let id1 = _id.split("_")[0];
     let id2 = _id.split("_")[1];
 
-    if(id1 == this.uid || id2 == this.uid) {
-      console.log("true")
+    if (id1 == this.uid || id2 == this.uid) {
+      console.log("true");
     }
 
     const timestamp = new Date(numberStamp);
@@ -219,8 +237,9 @@ class FirebaseSDK {
   };
 
   getChatList = (callback) =>
-    this.messageRef
-      .on("child_added", (snapshot) => callback(this.parseChatList(snapshot)));
+    this.messageRef.on("child_added", (snapshot) =>
+      callback(this.parseChatList(snapshot))
+    );
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;

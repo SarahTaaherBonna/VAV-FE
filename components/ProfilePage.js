@@ -21,17 +21,20 @@ export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
-    oldpassword: "",
-    newpassword: "",
+    password: "",
+    // oldpassword: "",
+    // newpassword: "",
     avatar: "",
   };
 
-  componentDidMount() {
-    var dataObtainedFromFirebase = firebaseSDK.getAccountDetails();
+  async componentDidMount() {
+    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
     var username = dataObtainedFromFirebase.split(",")[0];
     var userEmail = dataObtainedFromFirebase.split(",")[1];
-    this.state.name = username;
-    this.state.email = userEmail;
+    this.setState({ name: username });
+    this.setState({ email: userEmail });
+    // this.state.name = username;
+    // this.state.email = userEmail;
     console.log("----------------------------------");
     console.log(this.state.name);
     console.log(this.state.email);
@@ -42,14 +45,16 @@ export default class ProfilePage extends React.Component {
       const user = {
         name: this.state.name,
         email: this.state.email,
-        oldpassword: this.state.oldpassword,
-        newpassword: this.state.newpassword,
+        password: this.state.password,
+        // oldpassword: this.state.oldpassword,
+        // newpassword: this.state.newpassword,
       };
       console.log("=====================================");
       console.log(this.state.name);
       console.log(this.state.email);
-      console.log(this.state.oldpassword);
-      console.log(this.state.newpassword);
+      console.log(this.state.password);
+      // console.log(this.state.oldpassword);
+      // console.log(this.state.newpassword);
       await firebaseSDK.updateAccount(user);
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
@@ -61,13 +66,15 @@ export default class ProfilePage extends React.Component {
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  onChangeTextOldPassword = (oldpassword) => this.setState({ oldpassword });
-  onChangeTextNewPassword = (newpassword) => this.setState({ newpassword });
+  // onChangeTextOldPassword = (oldpassword) => this.setState({ oldpassword });
+  // onChangeTextNewPassword = (newpassword) => this.setState({ newpassword });
+  onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
 
   render() {
     return (
       <View>
+        <Text style={styles.title}>Please fill in the following fields.</Text>
         <Text style={styles.title}>Name:</Text>
         <TextInput
           style={styles.nameInput}
@@ -80,7 +87,15 @@ export default class ProfilePage extends React.Component {
           onChangeText={this.onChangeTextEmail}
           value={this.state.email}
         />
-        <Text style={styles.title}>Old Password:</Text>
+        <Text style={styles.title}>Password:</Text>
+        <TextInput
+          style={styles.nameInput}
+          secureTextEntry={true}
+          autoCorrect={false}
+          onChangeText={this.onChangeTextPassword}
+          // value={this.state.password}
+        />
+        {/* <Text style={styles.title}>Old Password:</Text>
         <TextInput
           style={styles.nameInput}
           secureTextEntry={true}
@@ -96,14 +111,14 @@ export default class ProfilePage extends React.Component {
           autoCorrect={false}
           onChangeText={this.onChangeTextNewPassword}
           value={this.state.newpassword}
-        />
+        /> */}
 
         <Button
           title="Update Profile"
           style={styles.buttonText}
           onPress={this.onPressUpdate}
         />
-        <TextInput returnKeyType={"go"} />
+        {/* <TextInput returnKeyType={"go"} /> */}
         <Button
           title="Update Avatar"
           style={styles.buttonText}
