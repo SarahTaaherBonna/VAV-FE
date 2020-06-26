@@ -15,16 +15,14 @@ export default class Chat extends React.Component {
     title: "Chat!",
   });
 
-  state = {
-    messages: [],
-    merchantname: "",
-    buyername: "",
-  };
-
-  async componentDidMount() {
+  async UNSAFE_componentWillMount() {
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
+    console.log(dataObtainedFromFirebase);
     var userUID = dataObtainedFromFirebase.split(",")[2];
     var username = dataObtainedFromFirebase.split(",")[0];
+    this.setState({ merchantname: username });
+    // console.log("++++++++In Chat Page+++++++++++++");
+    // console.log("Merchant Name: " + this.state.merchantname);
     var user1 = this.chatKey.split("_")[0];
     var user2 = this.chatKey.split("_")[1];
     if (userUID == user1) {
@@ -33,19 +31,26 @@ export default class Chat extends React.Component {
       var buyerUID = user1;
     }
 
-    const response = await firebaseSDK.getNameFromUid(
-      buyerUID,
-      this.getBuyername
-    );
+    await firebaseSDK.getNameFromUid(buyerUID, (name) => {
+      this.setState({ buyername: name });
+      // console.log("Buyer Name: " + this.state.buyername);
+    });
 
-    this.setState({ merchantname: username });
-    this.setState({ buyername: response });
-    console.log("++++++++In Chat Page+++++++++++++");
-    console.log(this.state.merchantname);
-    console.log(this.state.buyername);
+    if (this.state.productprice != "" && this.state.productname != "") {
+      this.setState({ productname: productname });
+      this.setState({ productprice: productprice });
+    }
+
+    console.log(this.state);
   }
 
-  getBuyername = () => {};
+  state = {
+    messages: [],
+    merchantname: "",
+    buyername: "",
+    productname: "",
+    productprice: "",
+  };
 
   getCurrentUserDetails() {
     const userDetails = firebaseSDK.getAccountDetails();
@@ -67,13 +72,18 @@ export default class Chat extends React.Component {
     return this.props.route.params.chatKey;
   }
 
-  get productName() {
-    return this.props.route.params.productName;
-  }
-
-  get productPrice() {
-    return this.props.route.params.productPrice;
-  }
+  // callback function
+  onReceivePaymentDetails = (
+    merchantname,
+    buyername,
+    productname,
+    productprice
+  ) => {
+    this.setState({ merchantname: merchantname });
+    this.setState({ buyername: buyername });
+    this.setState({ productname: productname });
+    this.setState({ productprice: productprice });
+  };
 
   onPressGeneratePaymentRequest = () => {
     this.props.navigation.navigate("Payment", {
@@ -81,6 +91,7 @@ export default class Chat extends React.Component {
       merchantname: this.state.merchantname,
       buyername: this.state.buyername,
       chatKey: this.chatKey,
+      callback: this.onReceivePaymentDetails,
     });
   };
 
@@ -90,6 +101,22 @@ export default class Chat extends React.Component {
         messages={this.state.messages}
         onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
         user={this.getCurrentUserDetails()}
+        wrapperStyle={{
+          right: {
+            backgroundColor: "#16267D",
+          },
+          left: {
+            backgroundColor: "#F7B600",
+          },
+        }}
+        textStyle={{
+          right: {
+            Color: "#F7B600",
+          },
+          left: {
+            Color: "#16267D",
+          },
+        }}
       />
     );
     return (
@@ -101,7 +128,6 @@ export default class Chat extends React.Component {
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
-    return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
   }
 
   componentDidMount() {

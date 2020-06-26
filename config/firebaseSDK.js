@@ -83,7 +83,8 @@ class FirebaseSDK {
       uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
     }
     var dataToSend = name + "," + email + "," + uid;
-    console.log(dataToSend);
+    // console.log("%%%%%%%%%%%%IN FIREBASESDK%%%%%%%%%%%%%%%%%%%%");
+    // console.log(dataToSend);
     return dataToSend;
   };
 

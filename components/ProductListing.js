@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Alert, Text, Image } from "react-native";
-import { Card, ListItem, Button, Icon, Header } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Header} from "react-native-elements";
 import firebase from "firebase";
 import FlatButton from "../components/Button";
 import axios from 'axios';
@@ -43,16 +43,20 @@ export default class ProductListing extends Component {
 
   render() {
     return (
-      <View>
+      <View style={{
+        flex: 1,
+        flexWrap: 'wrap',
+        flexDirection: 'row',}}>
 
         <Card
           image={require("../assets/Camera.png")}
           containerStyle={{
-            marginTop:100,
+            marginTop:50,
             width: 160,
             height: 230,
             paddingRight: 10,
             borderRadius:8,
+            backgroundColor:"F7B600",
             borderColor:"#16267D",
             borderWidth:2
           }}
@@ -64,8 +68,7 @@ export default class ProductListing extends Component {
         <Card
           image={require("../assets/Camera.png")}
           containerStyle={{
-            marginTop:100,
-            marginRight:240,
+            marginTop:50,
             width: 160,
             height: 230,
             paddingRight: 10,
@@ -77,23 +80,6 @@ export default class ProductListing extends Component {
           <Text style={styles.titleText}>Blue-Yellow Camera 2</Text>
           <Text style={styles.price}>$10</Text>
         </Card>
-      
-      <Card
-        image={require("../assets/Camera.png")}
-        containerStyle={{
-          marginTop:50,
-          width: 160,
-          height: 180,
-          paddingRight: 10,
-          borderRadius:8,
-          borderColor:"#16267D",
-          borderWidth:2
-        }}
-      >
-        
-        <Text style={styles.titleText}>Blue-Yellow Camera</Text>
-        <Text style={styles.price}>$10</Text>
-      </Card>
 
       </View>
     );

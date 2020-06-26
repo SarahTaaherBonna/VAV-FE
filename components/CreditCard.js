@@ -14,7 +14,7 @@ const s = StyleSheet.create({
     paddingTop:60,
   },
   cardView: {
-    backgroundColor: "#F5F5F5",
+    backgroundColor: "#16267D",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
