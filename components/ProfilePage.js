@@ -13,7 +13,7 @@ import {
   Button,
   TouchableOpacity,
   Alert,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
@@ -64,26 +64,25 @@ export default class ProfilePage extends React.Component {
 
   render() {
     return (
-      <View>        
-        <View 
-          style={
-            {
-             marginTop:90,
-             alignSelf:'center',
-             height:500,
-             width:350,
-             borderRadius:30,
-             backgroundColor:"#16267D"}
-            }>
-            
-            <View style={{marginTop:80}}>
+      <View>
+        <View
+          style={{
+            marginTop: 90,
+            alignSelf: "center",
+            height: 500,
+            width: 350,
+            borderRadius: 30,
+            backgroundColor: "#16267D",
+          }}
+        >
+          <View style={{ marginTop: 80 }}>
             <Button
-            title="UPLOAD AVATAR"
-            alignSelf="center"
-            style={styles.buttonText}
-            onPress={this.onImageUpload}
+              title="UPLOAD AVATAR"
+              alignSelf="center"
+              style={styles.buttonText}
+              onPress={this.onImageUpload}
             />
-            </View>
+          </View>
 
           <Text style={styles.labeluser}>NAME</Text>
           <TextInput
@@ -111,76 +110,75 @@ export default class ProfilePage extends React.Component {
         </View>
 
         <View
-        style={
-            {
-            marginTop:20,
-            height:140,
-            width:140,
-            alignSelf:'center',
-            borderRadius:70,
-            position:"absolute",
-            flex:1
-            }
-          }>
-        <ImageBackground
-          style={styles.logo} source={require("../../ChatAppV2/assets/person.png")}>
-        </ImageBackground>
+          style={{
+            marginTop: 20,
+            height: 140,
+            width: 140,
+            alignSelf: "center",
+            borderRadius: 70,
+            position: "absolute",
+            flex: 1,
+          }}
+        >
+          <ImageBackground
+            style={styles.logo}
+            source={require("../../ChatAppV2/assets/person.png")}
+          ></ImageBackground>
         </View>
 
-        <View style={{alignSelf:"center",marginTop:560,position:"absolute"}}>
-          <FlatButton text="UPDATE" onPress={this.onPressCreate}/>
-          </View>
+        <View
+          style={{ alignSelf: "center", marginTop: 560, position: "absolute" }}
+        >
+          <FlatButton text="UPDATE" onPress={this.onPressUpdate} />
+        </View>
       </View>
-
     );
   }
 }
-      
 
 const offset = 16;
 const styles = StyleSheet.create({
   logo: {
-    flex:1,
+    flex: 1,
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    position:"absolute"
-  }, 
+    position: "absolute",
+  },
 
   buttonText: {
     marginLeft: offset,
     fontSize: 20,
-    color:"#FFFFFF"
+    color: "#FFFFFF",
   },
 
   labeluser: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 40,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF",
   },
 
   labeluser2: {
-    fontWeight:'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 30,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF",
   },
 
   inputuser: {
-    alignSelf:"center",
-    paddingHorizontal:15,
-    width:300,
-    height:50,
-    borderColor:"#43519D",
-    backgroundColor:"#283786",
-    borderRadius:8,
-    color:"#F7B600"
+    alignSelf: "center",
+    paddingHorizontal: 15,
+    width: 300,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600",
   },
 });
-

@@ -4,16 +4,33 @@ import {
   KeyboardAvoidingView,
   SafeAreaView,
   View,
+  Text,
+  StyleSheet,
 } from "react-native";
-import { Header, Button } from "react-native-elements";
+import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
+import { Header, Button, Avatar } from "react-native-elements";
 // @flow
-import { GiftedChat } from "react-native-gifted-chat";
+import {
+  GiftedChat,
+  MessageText,
+  SystemMessage,
+  Message,
+  Bubble,
+} from "react-native-gifted-chat";
 import firebaseSDK from "../config/firebaseSDK";
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => ({
     title: "Chat!",
   });
+
+  state = {
+    messages: [],
+    merchantname: "",
+    buyername: "",
+    productname: "",
+    productprice: "",
+  };
 
   async UNSAFE_componentWillMount() {
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
@@ -35,22 +52,7 @@ export default class Chat extends React.Component {
       this.setState({ buyername: name });
       // console.log("Buyer Name: " + this.state.buyername);
     });
-
-    if (this.state.productprice != "" && this.state.productname != "") {
-      this.setState({ productname: productname });
-      this.setState({ productprice: productprice });
-    }
-
-    console.log(this.state);
   }
-
-  state = {
-    messages: [],
-    merchantname: "",
-    buyername: "",
-    productname: "",
-    productprice: "",
-  };
 
   getCurrentUserDetails() {
     const userDetails = firebaseSDK.getAccountDetails();
@@ -72,6 +74,11 @@ export default class Chat extends React.Component {
     return this.props.route.params.chatKey;
   }
 
+  onSlideRight = () => {
+    //perform Action on slide success.
+    console.log("Payment Success!");
+  };
+
   // callback function
   onReceivePaymentDetails = (
     merchantname,
@@ -83,6 +90,11 @@ export default class Chat extends React.Component {
     this.setState({ buyername: buyername });
     this.setState({ productname: productname });
     this.setState({ productprice: productprice });
+    console.log("!!!!!!!!!!!!!!!!!!!!!!NEW STATE!!!!!!!!!!!!!!");
+    console.log(productname);
+    console.log(productprice);
+    console.log(this.state.productname);
+    console.log(this.state.productprice);
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -91,8 +103,49 @@ export default class Chat extends React.Component {
       merchantname: this.state.merchantname,
       buyername: this.state.buyername,
       chatKey: this.chatKey,
-      callback: this.onReceivePaymentDetails,
+      callback: this.onReceivePaymentDetails.bind(this),
     });
+  };
+
+  renderCustomViewPayment = () => {
+    if (this.state.productname != "" && this.state.productprice != "") {
+      const messageToSend =
+        "Buyer Name: " +
+        this.state.buyername +
+        "\nMerchant Name: " +
+        this.state.merchantname +
+        "\nProduct Name: " +
+        this.state.productname +
+        "\nProduct Price: " +
+        this.state.productprice;
+      return (
+        <View>
+          <Text>{messageToSend}</Text>
+          <RNSlidingButton
+            style={{
+              width: 240,
+            }}
+            height={35}
+            onSlidingSuccess={this.onSlideRight}
+            slideDirection={SlideDirection.RIGHT}
+          >
+            <View>
+              {/* <Text numberOfLines={1} style={styles.titleText}>
+                >>>>>>>>>>
+              </Text> */}
+              <Avatar
+                size="small"
+                rounded
+                source={{
+                  uri:
+                    "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                }}
+              />
+            </View>
+          </RNSlidingButton>
+        </View>
+      );
+    }
   };
 
   render() {
@@ -101,22 +154,29 @@ export default class Chat extends React.Component {
         messages={this.state.messages}
         onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
         user={this.getCurrentUserDetails()}
-        wrapperStyle={{
-          right: {
-            backgroundColor: "#16267D",
-          },
-          left: {
-            backgroundColor: "#F7B600",
-          },
-        }}
-        textStyle={{
-          right: {
-            Color: "#F7B600",
-          },
-          left: {
-            Color: "#16267D",
-          },
-        }}
+        renderCustomView={this.renderCustomViewPayment}
+        isTyping={true}
+        renderUsernameOnMessage={true}
+        showAvatarForEveryMessage={true}
+        showUserAvatar={true}
+        isLoadingEarlier={true}
+        isCustomViewBottom={false}
+        // wrapperStyle={{
+        //   right: {
+        //     backgroundColor: "#16267D",
+        //   },
+        //   left: {
+        //     backgroundColor: "#F7B600",
+        //   },
+        // }}
+        // textStyle={{
+        //   right: {
+        //     Color: "#F7B600",
+        //   },
+        //   left: {
+        //     Color: "#16267D",
+        //   },
+        // }}
       />
     );
     return (
@@ -142,3 +202,12 @@ export default class Chat extends React.Component {
     firebaseSDK.closeConnection();
   }
 }
+
+const styles = StyleSheet.create({
+  titleText: {
+    fontSize: 35,
+    fontWeight: "bold",
+    textAlign: "center",
+    color: "#F7B600",
+  },
+});

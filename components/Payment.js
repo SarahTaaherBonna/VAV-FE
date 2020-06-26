@@ -24,24 +24,26 @@ export default class Payment extends React.Component {
     callback: this.props.route.params.callback,
   };
 
-  onPressGeneratePaymentRequest = async () => {
+  onPressGeneratePaymentRequest = () => {
     console.log("^^^^^^^^^^^^^^^IN PAYMENT PAGE^^^^^^^^^^^^^^^^^^^^^");
     console.log("Buyer Name: " + this.state.buyerName);
     console.log("Merchant Name: " + this.state.merchantName);
     console.log("Product Name: " + this.state.productName);
     console.log("Product Price: " + this.state.productPrice);
-    callback(
+
+    this.props.route.params.callback(
       this.state.merchantName,
       this.state.buyerName,
       this.state.productName,
       this.state.productPrice
     );
+
     this.props.navigation.navigate("Chat", {
-      chatKey: this.state.chatKey,
-      buyername: this.state.buyerName,
       merchantname: this.state.merchantName,
+      buyername: this.state.buyerName,
       productname: this.state.productName,
       productprice: this.state.productPrice,
+      chatKey: this.state.chatKey,
     });
   };
 
