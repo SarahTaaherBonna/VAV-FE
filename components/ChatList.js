@@ -21,27 +21,33 @@ export default class ChatList extends Component {
         style={{
           flexDirection: "row",
           height: 90,
-          padding: 20,
-          borderBottomWidth: 1,
+          width:340,
+          padding:10,
+          backgroundColor:"#16267D",
+          borderRadius:15,
+          borderBottomLeftRadius:100,
+          borderTopLeftRadius:100, 
+          margin:15
         }}>
 
-            {/* <View style={{ backgroundColor: "blue", flex: 0.3 }} />
-            <View style={{ backgroundColor: "white", flex: 0.5 }} /> */}
-            {/* Standard Avatar */}
+            
             <Avatar
+              size="large"
               rounded
               source={{
                 uri:
                   "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
               }}
+              containerStyle={{backgroundColor:"#F7B600",padding:5}}
             />
             <View
             style={{
               flex: 1,
               flexDirection: 'column',
+              padding:10
             }}>
               <Text style={styles.titleText}>{name}</Text>
-              <Text style={styles.Text}>{text}</Text>
+              <Text style={styles.messageText}>{text}</Text>
             </View>
         </View>
       </TouchableOpacity>
@@ -73,9 +79,16 @@ export default class ChatList extends Component {
 
 const styles = StyleSheet.create({
   titleText: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
     paddingLeft: 15,
+    color:"white"
+  },
+  messageText: {
+    fontSize: 14,
+    paddingLeft: 15,
+    color:"white",
+    marginTop:5
   },
 
   contentContainer: {

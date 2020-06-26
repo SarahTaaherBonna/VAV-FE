@@ -1,5 +1,5 @@
 import React from "react";
-import { Platform, KeyboardAvoidingView, SafeAreaView } from "react-native";
+import { Platform, KeyboardAvoidingView, SafeAreaView, View} from "react-native";
 // @flow
 import { GiftedChat } from "react-native-gifted-chat";
 import firebaseSDK from "../config/firebaseSDK";
@@ -36,14 +36,28 @@ export default class Chat extends React.Component {
 
   render() {
     const chat = (
+
       <GiftedChat
         messages={this.state.messages}
         onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
         user={this.getUserDetails()}
+        wrapperStyle={{
+          right: {
+          backgroundColor: '#16267D'},
+          left: {
+          backgroundColor:'#F7B600'}
+        }}
+        textStyle={{
+          right: {
+          Color: '#F7B600'},
+          left: {
+          Color:'#16267D'}
+        }}
       />
+      
     );
 
-    return <SafeAreaView style={{ flex: 1 }}>{chat}</SafeAreaView>;
+    return <SafeAreaView style={{flex: 1 }}>{chat}</SafeAreaView>;
   }
 
   componentDidMount() {
