@@ -1,7 +1,6 @@
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";
-import ImageEditor from "@react-native-community/image-editor";
+import { AntDesign } from '@expo/vector-icons';
 import FlatButton from "../components/Button";
 import {
   Image,
@@ -12,31 +11,45 @@ import {
   Button,
   TouchableOpacity,
   Alert,
-  ImageBackground,
+  ScrollView,
   KeyboardAvoidingView,
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
+import { acc } from "react-native-reanimated";
 
 export default class Signup extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.pickImage = this.pickImage.bind(this);
+  }
   state = {
     name: "",
     email: "",
     password: "",
     avatar: "",
+    image: null,
+    setImage: false
   };
 
   onPressCreate = async () => {
+
     try {
       const user = {
         name: this.state.name,
         email: this.state.email,
         password: this.state.password,
       };
-      await firebaseSDK.createAccount(user);
+      let account = await firebaseSDK.createAccount(user);
+
+      if (account != false && this.state.image) {
+        await  firebaseSDK.uploadImage(this.state.image, account.uid)
+      }
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
+
     this.props.navigation.navigate("Add Credit Card Details", {
       screen: "CreditCard",
     });
@@ -46,128 +59,82 @@ export default class Signup extends React.Component {
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
 
-  //   // Need to fix avatar upload
-  //   onImageUpload = async () => {
-  //     const { status: cameraRollPerm } = await Permissions.askAsync(
-  //       Permissions.CAMERA_ROLL
-  //     );
-  //     try {
-  //       // only if user allows permission to camera roll
-  //       if (cameraRollPerm === "granted") {
-  //         // let pickerResult = await ImagePicker.launchImageLibraryAsync({
-  //         //   allowsEditing: true,
-  //         //   aspect: [4, 3],
-  //         // });
-  //         let pickerResult = await ImagePicker.launchImageLibraryAsync();
-  //         console.log(
-  //           "ready to upload... pickerResult json:" + JSON.stringify(pickerResult)
-  //         );
+  async useEffect() {
+    if (Constants.platform.ios) {
+      const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  }
 
-  //         // var wantedMaxSize = 150;
-  //         // var rawheight = pickerResult.height;
-  //         // var rawwidth = pickerResult.width;
-  //         // var ratio = rawwidth / rawheight;
-  //         // var wantedwidth = wantedMaxSize;
-  //         // var wantedheight = wantedMaxSize / ratio;
-  //         // // check vertical or horizontal
-  //         // if (rawheight > rawwidth) {
-  //         //   wantedwidth = wantedMaxSize * ratio;
-  //         //   wantedheight = wantedMaxSize;
-  //         // }
-  //         // let resizedUri = await new Promise((resolve, reject) => {
-  //         //   ImageEditor.cropImage(
-  //         //     pickerResult.uri,
-  //         //     {
-  //         //       offset: { x: 0, y: 0 },
-  //         //       size: { width: pickerResult.width, height: pickerResult.height },
-  //         //       displaySize: { width: wantedwidth, height: wantedheight },
-  //         //       resizeMode: "contain",
-  //         //     },
-  //         //     (uri) => resolve(uri),
-  //         //     () => reject()
-  //         //   );
-  //         // });
-  //         // let uploadUrl = await firebaseSDK.uploadImage(resizedUri);
-  //         let uploadUrl = await firebaseSDK.uploadImage(pickerResult);
-  //         this.setState({ avatar: uploadUrl });
-  //         await firebaseSDK.updateAvatar(uploadUrl);
-  //       }
-  //     } catch (err) {
-  //       console.log("onImageUpload error:" + err.message);
-  //       alert("Upload image error:" + err.message);
-  //     }
-  //   };
+  async pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri, setImage: true });
+    }
+  };
 
   render() {
     return (
-      <View>        
-        <View 
-          style={
-            {
-             marginTop:130,
-             alignSelf:'center',
-             height:500,
-             width:350,
-             borderRadius:30,
-             backgroundColor:"#16267D"}
+      <ScrollView style={{ maxHeight: "100%" }}>
+        <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+          <View
+            style={
+              {
+                marginTop: 130,
+                alignSelf: 'center',
+                height: 480,
+                width: 350,
+                borderRadius: 30,
+                backgroundColor: "#16267D",
+                paddingTop: 70
+              }
             }>
-            
-            <View style={{marginTop:80}}>
-            <Button
-            title="UPLOAD AVATAR"
-            alignSelf="center"
-            style={styles.buttonText}
-            onPress={this.onImageUpload}
+
+            <Image style={styles.logo} source={this.state.setImage ? { uri: this.state.image } : require('../assets/person.png')} />
+
+            <AntDesign onPress={() => { this.pickImage() }} style={styles.buttonText} name="camera" size={24} color="black" />
+
+            <Text style={styles.labeluser}>NAME</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter name"
+              onChangeText={this.onChangeTextName}
+              value={this.state.name}
             />
-            </View>
-
-          <Text style={styles.labeluser}>NAME</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter name"
-            onChangeText={this.onChangeTextName}
-            value={this.state.name}
-          />
-          <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter email"
-            onChangeText={this.onChangeTextEmail}
-            value={this.state.email}
-          />
-          <Text style={styles.labeluser2}>PASSWORD</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter password"
-            secureTextEntry={true}
-            autoCorrect={false}
-            onChangeText={this.onChangeTextPassword}
-            value={this.state.password}
-          />
-        </View>
-
-        <View
-        style={
-            {
-            marginTop:60,
-            height:140,
-            width:140,
-            alignSelf:'center',
-            borderRadius:70,
-            position:"absolute",
-            flex:1
-            }
-          }>
-        <ImageBackground
-          style={styles.logo} source={require("../../ChatAppV2/assets/person.png")}>
-        </ImageBackground>
-        </View>
-
-        <View style={{alignSelf:"center",marginTop:600,position:"absolute"}}>
-          <FlatButton text="SIGN-UP" onPress={this.onPressCreate}/>
+            <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter email"
+              onChangeText={this.onChangeTextEmail}
+              value={this.state.email}
+            />
+            <Text style={styles.labeluser2}>PASSWORD</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter password"
+              secureTextEntry={true}
+              autoCorrect={false}
+              onChangeText={this.onChangeTextPassword}
+              value={this.state.password}
+            />
           </View>
-      </View>
 
+          <View style={{ alignSelf: "center", top: -25 }}>
+            <FlatButton text="SIGN-UP" onPress={this.onPressCreate} />
+          </View>
+
+        </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -175,46 +142,54 @@ export default class Signup extends React.Component {
 const offset = 16;
 const styles = StyleSheet.create({
   logo: {
-    flex:1,
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    position:"absolute"
-  }, 
+    top: -70,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 1,
+    borderColor: "#16267D",
+    position: "absolute",
+    alignSelf: "center"
+  },
 
   buttonText: {
-    marginLeft: offset,
-    fontSize: 20,
-    color:"#FFFFFF"
+    color: "#FFFFFF",
+    alignSelf: 'center',
+    backgroundColor: "#F7B600",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    top: -30,
+    left: 50
   },
 
   labeluser: {
-    fontWeight:'bold',
-    marginTop: 30,
+    fontWeight: 'bold',
     marginLeft: 40,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF"
   },
 
   labeluser2: {
-    fontWeight:'bold',
+    fontWeight: 'bold',
     marginTop: 30,
     marginLeft: 30,
-    marginBottom:5,
-    fontSize:16,
-    color:"#FFFFFF"
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF"
   },
 
   inputuser: {
-    alignSelf:"center",
-    paddingHorizontal:15,
-    width:300,
-    height:50,
-    borderColor:"#43519D",
-    backgroundColor:"#283786",
-    borderRadius:8,
-    color:"#F7B600"
+    alignSelf: "center",
+    paddingHorizontal: 15,
+    width: 300,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600"
   },
 });

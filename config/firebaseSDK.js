@@ -26,16 +26,16 @@ class FirebaseSDK {
   };
 
   createAccount = async (user) => {
-    firebase
+    return firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(
         function () {
           console.log(
             "created user successfully. User email:" +
-              user.email +
-              " name:" +
-              user.name
+            user.email +
+            " name:" +
+            user.name
           );
           var userf = firebase.auth().currentUser;
           userf.updateProfile({ displayName: user.name }).then(
@@ -48,13 +48,17 @@ class FirebaseSDK {
               console.warn("Error update displayName.");
             }
           );
+
+          return userf;
         },
         function (error) {
-          console.error(
+          console.log(
             "got error:" + typeof error + " string:" + error.message
           );
           alert("Create account failed. Error: " + error.message);
+          return false
         }
+        
       );
   };
 
@@ -161,31 +165,34 @@ class FirebaseSDK {
 
   // Avatar code - to be fixed
 
-  //   uploadImage = async (uri, imageName) => {
-  //     const response = await fetch(uri);
-  //     const blob = await response.blob();
+  uploadImage = async (uri, uid) => {
+    console.log("got image to upload. uri:" + uri);
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      var split = uri.split('.')
+      const ext = split[split.length - 1]
+      const fileName = 'avatar' + "." + ext
+      var ref = firebase
+        .storage()
+        .ref()
+        .child("images/" + uid + "/" + fileName);
 
-  //     var ref = firebase
-  //       .storage()
-  //       .ref()
-  //       .child("images/" + imageName);
-  //     return ref.put(blob);
-  //   };
-  //   uploadImage = async (uri) => {
-  //     console.log("got image to upload. uri:" + uri);
-  //     try {
-  //       const response = await fetch(uri);
-  //       const blob = await response.blob();
-  //       //   const ref = firebase.storage().ref("avatar").child(uuid.v4());
-  //       var ref = firebase
-  //         .storage()
-  //         .ref()
-  //         .child("images/" + imageName);
-  //       return ref.put(blob);
-  //     } catch (err) {
-  //       console.log("uploadImage try/catch error: " + err.message);
-  //     }
-  //   };
+      ref.put(blob)
+        .on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
+
+          if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
+            console.log("success!")
+          }
+
+        }, (err) => {
+          console.log(err);
+          Alert.alert("Error", "Image upload errors!")
+        })
+    } catch (err) {
+      console.log("uploadImage try/catch error: " + err.message);
+    }
+  };
 
   //   updateAvatar = (url) => {
   //     var userf = firebase.auth().currentUser;
@@ -225,7 +232,7 @@ class FirebaseSDK {
     let id1 = _id.split("_")[0];
     let id2 = _id.split("_")[1];
 
-    if(id1 === this.uid) {
+    if (id1 === this.uid) {
       return id2
     } else if (id2 == this.uid) {
       return id1
