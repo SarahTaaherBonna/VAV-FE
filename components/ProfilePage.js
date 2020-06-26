@@ -106,8 +106,10 @@ export default class ProfilePage extends React.Component {
             }>
 
             <Image style={styles.logo} source={this.state.setImage ? { uri: this.state.image } : require('../assets/person.png')} />
-
-            <AntDesign onPress={() => { this.pickImage() }} style={styles.buttonText} name="camera" size={24} color="black" />
+            
+            <View style={styles.buttonText}>
+            <AntDesign onPress={() => { this.pickImage() }}  style={{alignSelf:'center'}}name="camera" size={24} color="white" />
+            </View>
 
             <Text style={styles.labeluser}>NAME</Text>
             <TextInput
@@ -164,11 +166,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7B600",
     width: 50,
     height: 50,
-    borderRadius: 25,
+    borderRadius:25,
     textAlign: 'center',
     textAlignVertical: 'center',
     top: -30,
-    left: 50
+    left: 50,
+    padding:10
   },
 
   labeluser: {
