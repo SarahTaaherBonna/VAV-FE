@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import ChatList from "./ChatList";
 import ProfilePage from "./ProfilePage";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const resizeComponent=(value,percentage)=> {
   return value - (value * (percentage/100));
@@ -74,8 +75,37 @@ export default class ProductListing extends Component {
             return(
               <Card1 key={i}>
                 <Image source={item.image} style={styles.image}/>
+                
+                
+                <TouchableOpacity>
+                  <View 
+                    style={{
+                    width:50,
+                    height:50,
+                    borderRadius:15,
+                    backgroundColor:"#ffc524",
+                    alignSelf:'center',
+                    marginTop:10,
+                    marginLeft:110
+                    }}>
+                      
+                  <Image
+                  source={require('../../ChatAppV2/assets/money.png')}
+                  style={{
+                    width:5,
+                    height:10,
+                    margin:10,
+                    resizeMode:'contain',
+                    padding:15,
+                    alignSelf:'center'
+                  }}>
+                  </Image>
+                  </View>
+                </TouchableOpacity>
+
                 <Text style={styles.title}>{item.name}</Text>
                 <Text style={styles.title2}>{item.price}</Text>
+
               </Card1>
             );
           })
@@ -115,18 +145,7 @@ class Card1 extends Component{
 }
 
 var styles = StyleSheet.create({
-  titleText: {
-    marginBottom: 5,
-    fontWeight: "bold",
-    textAlign: "left",
-    fontSize:13,
-    color:"#16267D"
-  },
-  price: {
-    textAlign:"left",
-    color:"#16267D"
-  },
-
+  
   container: {
     flex:1,
     flexDirection:'row',
@@ -163,16 +182,19 @@ var styles = StyleSheet.create({
   title:{
     fontSize:16,
     fontWeight:'bold',
-    marginTop:5,
+    marginTop:170,
     marginLeft:5,
     color:"#FFFFFF",
-    padding:5
+    padding:5,
+    position:'absolute'
   },
 
   title2:{
     fontSize:14,
+    marginTop:200,
     marginLeft:5,
     color:"#FFFFFF",
     padding:5,
+    position:'absolute'
   }
 });
