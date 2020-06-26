@@ -16,7 +16,6 @@ import {
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
-import { acc } from "react-native-reanimated";
 
 export default class Signup extends React.Component {
 
@@ -52,6 +51,7 @@ export default class Signup extends React.Component {
 
     this.props.navigation.navigate("Add Credit Card Details", {
       screen: "CreditCard",
+      isAdding: true,
     });
   };
 
@@ -75,8 +75,6 @@ export default class Signup extends React.Component {
       aspect: [1, 1],
       quality: 1,
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri, setImage: true });

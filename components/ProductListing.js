@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, View, Alert, Text, Image } from "react-native";
-import { Card, ListItem, Button, Icon, Header } from "react-native-elements";
+import { Card, ListItem, Button, Icon, Header} from "react-native-elements";
+import firebase from "firebase";
+import FlatButton from "../components/Button";
+import axios from 'axios';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import ChatList from "./ChatList";
 import ProfilePage from "./ProfilePage";
-
-// TODO: create ChatList for user
 
 export default class ProductListing extends Component {
   state = {
@@ -16,21 +17,71 @@ export default class ProductListing extends Component {
     productImage: "",
   };
 
+  functionCall = () =>{
+    console.log("hereeeee");
+    firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+      console.log(idToken)
+      const data = {
+        email: "khanh26688@gmail.com",
+        card_number: "4957030420210462", 
+        full_name: "Khanh",
+        expiry_date: "10/20",
+        ccv: "022",
+        uid: "Yo6m5z2panXU4jDAtTuzoeTE3hH3"
+      }
+      axios.get(`http://127.0.0.1:8000/`, data, { headers: { Authorization: idToken }})
+      .then(res => {
+        console.log(res.data);
+
+      });
+    }).catch(function(error) {
+      // Handle error
+      console.log("err");
+      console.log(error);
+    });
+  }
+
   render() {
     return (
-      <>
+      <View style={{
+        flex: 1,
+        flexWrap: 'wrap',
+        flexDirection: 'row',}}>
+
         <Card
           image={require("../assets/Camera.png")}
           containerStyle={{
+            marginTop:50,
             width: 160,
             height: 230,
             paddingRight: 10,
+            borderRadius:8,
+            backgroundColor:"F7B600",
+            borderColor:"#16267D",
+            borderWidth:2
           }}
         >
-          <Text style={styles.titleText}>Blue-Yellow Camera</Text>
+          <Text onPress={this.functionCall} style={styles.titleText}>Blue-Yellow Camera</Text>
           <Text style={styles.price}>$10</Text>
         </Card>
-      </>
+
+        <Card
+          image={require("../assets/Camera.png")}
+          containerStyle={{
+            marginTop:50,
+            width: 160,
+            height: 230,
+            paddingRight: 10,
+            borderRadius:8,
+            borderColor:"#16267D",
+            borderWidth:2
+          }}
+        >
+          <Text style={styles.titleText}>Blue-Yellow Camera 2</Text>
+          <Text style={styles.price}>$10</Text>
+        </Card>
+
+      </View>
     );
   }
 }
@@ -39,7 +90,12 @@ var styles = StyleSheet.create({
   titleText: {
     marginBottom: 10,
     fontWeight: "bold",
-    textAlign: "center",
+    textAlign: "left",
+    fontSize:13,
+    color:"#16267D"
   },
-  price: {},
+  price: {
+    textAlign: "left",
+    color:"#16267D"
+  },
 });

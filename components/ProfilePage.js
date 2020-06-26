@@ -2,7 +2,8 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ImageEditor from "@react-native-community/image-editor";
-import { Avatar, Header } from "react-native-elements";
+import { AntDesign } from '@expo/vector-icons';
+import FlatButton from "../components/Button";
 import {
   Image,
   StyleSheet,
@@ -10,22 +11,27 @@ import {
   TextInput,
   View,
   Button,
-  TouchableOpacity,
-  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
+  ImageBackground
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
 
-// TODO: allow users to update profile
 export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
     password: "",
-    // oldpassword: "",
-    // newpassword: "",
-    avatar: "",
+    image: "",
+    setImage: false,
+    updateImage: false
   };
+
+  constructor(props) {
+    super(props);
+    this.onPressUpdate = this.onPressUpdate.bind(this);
+  }
 
   async componentDidMount() {
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
@@ -33,11 +39,11 @@ export default class ProfilePage extends React.Component {
     var userEmail = dataObtainedFromFirebase.split(",")[1];
     this.setState({ name: username });
     this.setState({ email: userEmail });
-    // this.state.name = username;
-    // this.state.email = userEmail;
-    console.log("----------------------------------");
-    console.log(this.state.name);
-    console.log(this.state.email);
+    console.log("-------------------IN PROFILE PAGE---------------");
+    let imgAvatar = await firebaseSDK.getAvatar();
+    if (imgAvatar) {
+      this.setState({ image: imgAvatar, setImage: true })
+    }
   }
 
   onPressUpdate = async () => {
@@ -46,16 +52,16 @@ export default class ProfilePage extends React.Component {
         name: this.state.name,
         email: this.state.email,
         password: this.state.password,
-        // oldpassword: this.state.oldpassword,
-        // newpassword: this.state.newpassword,
       };
       console.log("=====================================");
       console.log(this.state.name);
       console.log(this.state.email);
       console.log(this.state.password);
-      // console.log(this.state.oldpassword);
-      // console.log(this.state.newpassword);
       await firebaseSDK.updateAccount(user);
+      if (this.state.image && this.state.updateImage){
+        await  firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid)
+      }
+
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
     }
@@ -66,86 +72,131 @@ export default class ProfilePage extends React.Component {
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  // onChangeTextOldPassword = (oldpassword) => this.setState({ oldpassword });
-  // onChangeTextNewPassword = (newpassword) => this.setState({ newpassword });
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
+  
+  async pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri, setImage: true, updateImage: true });
+    }
+  };
 
   render() {
     return (
-      <View>
-        <Text style={styles.title}>Please fill in the following fields.</Text>
-        <Text style={styles.title}>Name:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextName}
-          value={this.state.name}
-        />
-        <Text style={styles.title}>Email:</Text>
-        <TextInput
-          style={styles.nameInput}
-          onChangeText={this.onChangeTextEmail}
-          value={this.state.email}
-        />
-        <Text style={styles.title}>Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextPassword}
-          // value={this.state.password}
-        />
-        {/* <Text style={styles.title}>Old Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextOldPassword}
-          value={this.state.oldpassword}
-        />
+      <ScrollView style={{ maxHeight: "100%" }}>
+        <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+          <View
+            style={
+              {
+                marginTop: 130,
+                alignSelf: 'center',
+                height: 480,
+                width: 350,
+                borderRadius: 30,
+                backgroundColor: "#16267D",
+                paddingTop: 70
+              }
+            }>
 
-        <Text style={styles.title}>New Password:</Text>
-        <TextInput
-          style={styles.nameInput}
-          secureTextEntry={true}
-          autoCorrect={false}
-          onChangeText={this.onChangeTextNewPassword}
-          value={this.state.newpassword}
-        /> */}
+            <Image style={styles.logo} source={this.state.setImage ? { uri: this.state.image } : require('../assets/person.png')} />
 
-        <Button
-          title="Update Profile"
-          style={styles.buttonText}
-          onPress={this.onPressUpdate}
-        />
-        {/* <TextInput returnKeyType={"go"} /> */}
-        <Button
-          title="Update Avatar"
-          style={styles.buttonText}
-          onPress={this.onImageUpload}
-        />
-      </View>
+            <AntDesign onPress={() => { this.pickImage() }} style={styles.buttonText} name="camera" size={24} color="black" />
+
+            <Text style={styles.labeluser}>NAME</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter name"
+              onChangeText={this.onChangeTextName}
+              value={this.state.name}
+            />
+            <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter email"
+              onChangeText={this.onChangeTextEmail}
+              value={this.state.email}
+            />
+            <Text style={styles.labeluser2}>PASSWORD</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter password"
+              secureTextEntry={true}
+              autoCorrect={false}
+              onChangeText={this.onChangeTextPassword}
+              value={this.state.password}
+            />
+          </View>
+
+          <View style={{ alignSelf: "center", top: -25 }}>
+            <FlatButton text="UPDATE" onPress={() => {this.onPressUpdate()}} />
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
+
     );
   }
 }
 
+
 const offset = 16;
 const styles = StyleSheet.create({
-  title: {
-    marginTop: offset,
-    marginLeft: offset,
-    fontSize: offset,
-  },
-  nameInput: {
-    height: offset * 2,
-    margin: offset,
-    paddingHorizontal: offset,
-    borderColor: "#111111",
+  logo: {
+    top: -70,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
     borderWidth: 1,
-    fontSize: offset,
+    borderColor: "#16267D",
+    position: "absolute",
+    alignSelf: "center"
   },
+
   buttonText: {
-    marginLeft: offset,
-    fontSize: 42,
+    color: "#FFFFFF",
+    alignSelf: 'center',
+    backgroundColor: "#F7B600",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    top: -30,
+    left: 50
+  },
+
+  labeluser: {
+    fontWeight: 'bold',
+    marginLeft: 40,
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF"
+  },
+
+  labeluser2: {
+    fontWeight: 'bold',
+    marginTop: 30,
+    marginLeft: 30,
+    marginBottom: 5,
+    fontSize: 16,
+    color: "#FFFFFF"
+  },
+
+  inputuser: {
+    alignSelf: "center",
+    paddingHorizontal: 15,
+    width: 300,
+    height: 50,
+    borderColor: "#43519D",
+    backgroundColor: "#283786",
+    borderRadius: 8,
+    color: "#F7B600"
   },
 });
+
