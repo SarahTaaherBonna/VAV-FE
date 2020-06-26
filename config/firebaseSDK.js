@@ -206,6 +206,14 @@ class FirebaseSDK {
     return firebase.database().ref("users");
   }
 
+  getNameFromUid = (uid) => {
+    this.userInfoRef.once("value", (data) => {
+      let name = data.val()[uid];
+      // callback(name);
+      return name;
+    });
+  };
+
   parseChatList = (snapshot, callback) => {
     const { key: _id } = snapshot;
 
@@ -231,9 +239,7 @@ class FirebaseSDK {
         const key = Object.keys(data.val())[0];
         const { text } = data.val()[key];
 
-        let nameRef = this.userInfoRef.once("value", (data) => {
-          let name = data.val()[otherId];
-          console.log(name);
+        this.getNameFromUid(otherId, (name) => {
           callback(_id, name, text);
         });
       });

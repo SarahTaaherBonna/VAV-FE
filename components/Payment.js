@@ -20,6 +20,7 @@ export default class Payment extends React.Component {
     merchantName: "",
     productName: "",
     productPrice: "SGD",
+    chatKey: this.props.route.params.chatKey,
   };
 
   onPressGeneratePaymentRequest = async () => {
@@ -27,6 +28,9 @@ export default class Payment extends React.Component {
     console.log("Merchant Name: " + this.state.merchantName);
     console.log("Product Name: " + this.state.productName);
     console.log("Product Price: " + this.state.productPrice);
+    this.props.navigation.navigate("Chat", {
+      chatKey: chatKey,
+    });
   };
 
   onChangeTextBuyerName = (buyerName) => this.setState({ buyerName });

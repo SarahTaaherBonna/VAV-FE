@@ -18,15 +18,28 @@ export default class Chat extends React.Component {
   state = {
     messages: [],
     merchantname: "",
+    buyername: "",
   };
 
   async componentDidMount() {
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
+    var userUID = dataObtainedFromFirebase.split(",")[2];
     var username = dataObtainedFromFirebase.split(",")[0];
-    // var userUID = dataObtainedFromFirebase.split(",")[2];
+    var user1 = this.chatKey.split("_")[0];
+    var user2 = this.chatKey.split("_")[1];
+    if (userUID == user1) {
+      var buyerUID = user2;
+    } else {
+      var buyerUID = user1;
+    }
+
+    const response = await firebaseSDK.getNameFromUid(buyerUID);
+
     this.setState({ merchantname: username });
+    this.setState({ buyername: response });
     console.log("++++++++In Chat Page+++++++++++++");
     console.log(this.state.merchantname);
+    console.log(this.state.buyername);
   }
 
   getCurrentUserDetails() {
@@ -52,7 +65,9 @@ export default class Chat extends React.Component {
   onPressGeneratePaymentRequest = () => {
     this.props.navigation.navigate("Payment", {
       screen: "Payment",
-      merchantName: this.state.merchantname,
+      merchantname: this.state.merchantname,
+      buyername: this.state.buyername,
+      chatKey: this.chatKey,
     });
   };
 

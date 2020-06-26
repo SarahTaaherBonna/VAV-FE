@@ -5,14 +5,16 @@ import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput } from "react-native-credit-card-input";
 import { TextInput } from "react-native-gesture-handler";
+import FlatButton from "../components/Button";
 
 const s = StyleSheet.create({
   container: {
-    backgroundColor: "#F5F5F5",
-    marginTop: 60,
+    height:667,
+    backgroundColor: "#16267D",
+    paddingTop:60,
   },
   label: {
-    color: "black",
+    color: "#FFFFFF",
     fontSize: 12,
   },
   input: {
@@ -108,17 +110,16 @@ export default class CreditCard extends Component {
           inputStyle={s.input}
           validColor={"black"}
           invalidColor={"red"}
-          placeholderColor={"darkgray"}
+          placeholderColor={"gray"}
           allowScroll={true}
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-        <Button
-          title="Submit"
-          style={styles.buttonText}
-          // onPress={this.onPressSubmit}
-          onPress={this.onPressSubmit.bind(this)}
-        />
+
+        <View style={{marginTop:25}}>
+        <FlatButton text="SUBMIT" onPress={this.onPressSubmit.bind(this) } />
+        </View>
+
       </View>
     );
   }
