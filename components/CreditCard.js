@@ -170,7 +170,7 @@ export default class CreditCard extends Component {
           requiresCVC
           labelStyle={s.label}
           inputStyle={s.input}
-          validColor={"black"}
+          validColor={"white"}
           invalidColor={"red"}
           placeholderColor={"gray"}
           allowScroll={true}

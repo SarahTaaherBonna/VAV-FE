@@ -41,17 +41,12 @@ export default class Chat extends React.Component {
         messages={this.state.messages}
         onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
         user={this.getUserDetails()}
+        
         wrapperStyle={{
           right: {
-          backgroundColor: '#16267D'},
+          backgroundColor: "#16267D"},
           left: {
-          backgroundColor:'#F7B600'}
-        }}
-        textStyle={{
-          right: {
-          Color: '#F7B600'},
-          left: {
-          Color:'#16267D'}
+          backgroundColor:"#F7B600"}
         }}
       />
       
