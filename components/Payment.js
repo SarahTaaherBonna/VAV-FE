@@ -16,8 +16,8 @@ import firebaseSDK from "../config/firebaseSDK";
 
 export default class Payment extends React.Component {
   state = {
-    buyerName: "",
-    merchantName: "",
+    buyerName: this.props.route.params.buyername,
+    merchantName: this.props.route.params.merchantname,
     productName: "",
     productPrice: "SGD",
     chatKey: this.props.route.params.chatKey,
@@ -28,8 +28,11 @@ export default class Payment extends React.Component {
     console.log("Merchant Name: " + this.state.merchantName);
     console.log("Product Name: " + this.state.productName);
     console.log("Product Price: " + this.state.productPrice);
+
     this.props.navigation.navigate("Chat", {
       chatKey: chatKey,
+      productname: this.state.productName,
+      productprice: this.state.productPrice,
     });
   };
 
@@ -47,6 +50,7 @@ export default class Payment extends React.Component {
           placeholder="Please enter buyer's name"
           autoCorrect={false}
           onChangeText={this.onChangeTextBuyerName}
+          value={this.state.buyerName}
         />
         <Text style={styles.title}>Merchant's Name:</Text>
         <TextInput
@@ -54,6 +58,7 @@ export default class Payment extends React.Component {
           placeholder="Please enter merchant's name"
           autoCorrect={false}
           onChangeText={this.onChangeTextMerchantName}
+          value={this.state.merchantName}
         />
         <Text style={styles.title}>Product:</Text>
         <TextInput

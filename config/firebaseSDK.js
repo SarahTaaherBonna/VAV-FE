@@ -206,11 +206,10 @@ class FirebaseSDK {
     return firebase.database().ref("users");
   }
 
-  getNameFromUid = (uid) => {
+  getNameFromUid = (uid, callback) => {
     this.userInfoRef.once("value", (data) => {
       let name = data.val()[uid];
-      // callback(name);
-      return name;
+      callback(name);
     });
   };
 

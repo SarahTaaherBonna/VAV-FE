@@ -33,7 +33,10 @@ export default class Chat extends React.Component {
       var buyerUID = user1;
     }
 
-    const response = await firebaseSDK.getNameFromUid(buyerUID);
+    const response = await firebaseSDK.getNameFromUid(
+      buyerUID,
+      this.getBuyername
+    );
 
     this.setState({ merchantname: username });
     this.setState({ buyername: response });
@@ -41,6 +44,8 @@ export default class Chat extends React.Component {
     console.log(this.state.merchantname);
     console.log(this.state.buyername);
   }
+
+  getBuyername = () => {};
 
   getCurrentUserDetails() {
     const userDetails = firebaseSDK.getAccountDetails();
@@ -60,6 +65,14 @@ export default class Chat extends React.Component {
 
   get chatKey() {
     return this.props.route.params.chatKey;
+  }
+
+  get productName() {
+    return this.props.route.params.productName;
+  }
+
+  get productPrice() {
+    return this.props.route.params.productPrice;
   }
 
   onPressGeneratePaymentRequest = () => {
