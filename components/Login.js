@@ -9,7 +9,9 @@ import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
 
 const windowWidth = Dimensions.get('window').width;
+console.log(windowWidth);
 const windowHeight = Dimensions.get('window').height;
+console.log(windowWidth);
 
 const resizeWidth=(w)=> {
   return value=w*(windowWidth/375);

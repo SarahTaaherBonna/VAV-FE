@@ -6,6 +6,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Image
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
@@ -128,9 +129,48 @@ export default class Chat extends React.Component {
         this.state.productname +
         "\nPrice: " +
         this.state.productprice;
+
+        if(props.currentMessage.user.id==firebaseSDK.getCurrentUserUid()) {
+        return (
+          <View>
+            <Text style={styles.PaymentText}>Transaction Details</Text>
+            <RNSlidingButton
+              style={{
+                width: 248,
+              }}
+              height={35}
+              onSlidingSuccess={this.onSlideRight}
+              slideDirection={SlideDirection.RIGHT}
+            >
+              <Image source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+              
+              style={{
+                flex:1,
+                position:'absolute',
+                width:248,
+              }}>
+
+              </Image>
+              <View>
+                <Avatar
+                  size="small"
+                  rounded
+                  source={{
+                    uri:
+                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                  }}
+                />
+              </View>
+            </RNSlidingButton>
+          </View>
+        );
+    }
+
+    else {
+
       return (
         <View>
-          <Text style={styles.PaymentText}>Transaction Details</Text>
+          <Text style={styles.PaymentText2}>Transaction Details</Text>
           <RNSlidingButton
             style={{
               width: 248,
@@ -139,6 +179,15 @@ export default class Chat extends React.Component {
             onSlidingSuccess={this.onSlideRight}
             slideDirection={SlideDirection.RIGHT}
           >
+            <Image source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+            
+            style={{
+              flex:1,
+              position:'absolute',
+              width:248,
+            }}>
+
+            </Image>
             <View>
               <Avatar
                 size="small"
@@ -153,6 +202,7 @@ export default class Chat extends React.Component {
         </View>
       );
     }
+  }
   };
 
   render() {
@@ -179,10 +229,14 @@ export default class Chat extends React.Component {
       />
     );
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1}}>
+
+        <Image style={styles.logo} source= {require("../../ChatAppV2/assets/P2PLogo.png")} />
+
         <Button
-          title="Generate Payment Request"
+          title="  LAUNCH         PING2PAY"
           onPress={this.onPressGeneratePaymentRequest}
+          buttonStyle={styles.PaymentButton}
         />
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
@@ -209,9 +263,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#F7B600",
   },
+
   PaymentText: {
     fontSize: 18,
-    color: "#FFF",
+    color: "#FFFFFF",
     textAlign: "center",
+  },
+
+  PaymentText2: {
+    fontSize: 18,
+    color: "#000000",
+    textAlign: "center",
+  },
+
+  PaymentButton: {
+   backgroundColor:"#16267D",
+  },
+
+  logo: {
+    marginTop:5,
+    width: 30,
+    height: 30,
+    borderRadius: 80, 
+    position: "absolute",
+    alignSelf: "center",
+    zIndex:10
   },
 });
