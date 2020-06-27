@@ -53,15 +53,15 @@ export default class Chat extends React.Component {
     };
   }
 
-  onSlideRightGenerator = (invoice_id) => {
+  onSlideRightGenerator = (invoice_id, message_id) => {
     // add in props
     let onSlideRight = async () => {
       //perform Action on slide success.
 
       //invoice_id is available here
+      console.log(message_id)
       console.log(invoice_id);
 
-      // add props.currentMessage.isPaid = true
       var makePaymentAPI =
         "https://khanhphungntu.ml/make_payment/" +
         invoice_id.toString();
@@ -77,10 +77,12 @@ export default class Chat extends React.Component {
           }
         );
         console.log(response.data);
+
+        firebaseSDK.markIsPaid(this.state.chatKey, message_id)
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-        // props.currentMessage.isPaid = true
+        
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -168,6 +170,7 @@ export default class Chat extends React.Component {
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
 
     if (props.currentMessage.isPayment == true) {
+      let message_id = props.currentMessage._id
       let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2]
 
       // if it is right side (blue colour) merchant
@@ -187,7 +190,7 @@ export default class Chat extends React.Component {
                 width: 248,
               }}
               height={35}
-              onSlidingSuccess={this.onSlideRightGenerator(invoice_id)}
+              onSlidingSuccess={this.onSlideRightGenerator(invoice_id, message_id)}
               slideDirection={SlideDirection.RIGHT}
             >
               <Image
