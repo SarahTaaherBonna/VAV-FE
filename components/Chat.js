@@ -83,10 +83,7 @@ export default class Chat extends React.Component {
   };
 
   // callback function
-  onReceivePaymentDetails = async (
-    productname,
-    productprice,
-  ) => {
+  onReceivePaymentDetails = async (productname, productprice) => {
     this.setState({ productname: productname });
     this.setState({ productprice: productprice });
 
@@ -163,7 +160,7 @@ export default class Chat extends React.Component {
         "\nPrice: " +
         this.state.productprice;
 
-        if(props.currentMessage.user.id==firebaseSDK.getCurrentUserUid()) {
+        if(props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
           return (
             <View>
               <Text style={styles.PaymentText}>Transaction Details</Text>

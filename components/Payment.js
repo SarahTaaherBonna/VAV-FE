@@ -34,16 +34,11 @@ export default class Payment extends React.Component {
     console.log("Product Price: " + this.state.productPrice);
 
     this.props.route.params.callback(
-      this.state.merchantName,
-      this.state.buyerName,
       this.state.productName,
       this.state.productPrice
     );
 
-    this.props.navigation.navigate("Chat", {
-      productname: this.state.productName,
-      productprice: this.state.productPrice,
-    });
+    this.props.navigation.navigate("Chat");
   };
 
   onChangeTextBuyerName = (buyerName) => this.setState({ buyerName });
