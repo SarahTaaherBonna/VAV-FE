@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert, Keyboard, TouchableOpacity, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  Button,
+  Alert,
+  Keyboard,
+  TouchableOpacity,
+  ActivityIndicator,
+} from "react-native";
 import axios from "axios";
 import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
@@ -9,19 +17,19 @@ import { Text } from "native-base";
 
 const s = StyleSheet.create({
   container: {
-    height:667,
+    height: 667,
     backgroundColor: "#16267D",
-    paddingTop:60,
+    paddingTop: 60,
   },
   cardView: {
     backgroundColor: "#16267D",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    height: "100%"
+    height: "100%",
   },
-  padding:{
-    height: 50
+  padding: {
+    height: 50,
   },
   label: {
     color: "#FFFFFF",
@@ -29,7 +37,7 @@ const s = StyleSheet.create({
   },
   input: {
     fontSize: 16,
-    color: "black",
+    color: "white",
   },
 });
 
@@ -50,18 +58,19 @@ export default class CreditCard extends Component {
     var userEmail = dataObtainedFromFirebase.split(",")[1];
     var userUID = dataObtainedFromFirebase.split(",")[2];
     const navigation = this.props.route.params;
-    const isStart = navigation.isStart
+    const isStart = navigation.isStart;
 
     if (!isStart) {
       // set the credit card details
-      const idToken = await firebase
-        .auth()
-        .currentUser.getIdToken(true);
+      const idToken = await firebase.auth().currentUser.getIdToken(true);
 
       try {
-        const response = await axios.get("https://khanhphungntu.ml/view_card/" + userUID, {
-          headers: { Authorization: idToken },
-        });
+        const response = await axios.get(
+          "https://khanhphungntu.ml/view_card/" + userUID,
+          {
+            headers: { Authorization: idToken },
+          }
+        );
         this.setState({ cardName: response.data.card_details.full_name });
         this.setState({ cardNumber: response.data.card_details.card_number });
         this.setState({ expiryDate: response.data.card_details.expiry_date });
@@ -72,7 +81,7 @@ export default class CreditCard extends Component {
     }
     this.setState({ useremail: userEmail });
     this.setState({ useruid: userUID });
-    this.setState({ isLoaded: true })
+    this.setState({ isLoaded: true });
   }
 
   _onChange = (form) => {
@@ -104,11 +113,14 @@ export default class CreditCard extends Component {
       };
       const idToken = await firebase.auth().currentUser.getIdToken(true);
       try {
-        const response = await axios.post("https://khanhphungntu.ml/save_card/", data, {
-          headers: { Authorization: idToken },
-        })
-      }
-      catch (error) {
+        const response = await axios.post(
+          "https://khanhphungntu.ml/save_card/",
+          data,
+          {
+            headers: { Authorization: idToken },
+          }
+        );
+      } catch (error) {
         console.log("*************ERROR***********");
         console.log(error);
       }
@@ -117,7 +129,7 @@ export default class CreditCard extends Component {
         screen: "ProductListing",
       });
       Keyboard.dismiss();
-      if(!this.props.isStart){
+      if (!this.props.isStart) {
         this.forceUpdate();
       }
     } catch ({ message }) {
@@ -127,40 +139,39 @@ export default class CreditCard extends Component {
 
   toggleCardView = () => {
     if (this.state.cardView === "front") {
-      this.setState({ cardView: "cvc" })
+      this.setState({ cardView: "cvc" });
+    } else {
+      this.setState({ cardView: "front" });
     }
-    else {
-      this.setState({ cardView: "front" })
-    }
-  }
+  };
 
-  renderActivityIndicator = () =>{
-    if(!this.state.isLoaded){
-      return <ActivityIndicator size="large" color="#F7B600" />
-    } 
-    return <View style={s.padding} />
-  }
+  renderActivityIndicator = () => {
+    if (!this.state.isLoaded) {
+      return <ActivityIndicator size="large" color="#F7B600" />;
+    }
+    return <View style={s.padding} />;
+  };
 
   render() {
     if (!this.state.isLoaded) {
-      return <View style={s.cardView}>
-        {this.renderActivityIndicator()}
-      </View>
+      return <View style={s.cardView}>{this.renderActivityIndicator()}</View>;
     }
 
-    if (!this.props.isStart && this.state.cardNumber!=="") {
+    if (!this.props.isStart && this.state.cardNumber !== "") {
       return (
         <View style={s.cardView}>
           <TouchableOpacity onPress={this.toggleCardView}>
-            <CardView brand="visa"
+            <CardView
+              brand="visa"
               focused={this.state.cardView}
               name={this.state.cardName}
               number={this.state.cardNumber}
               expiry={this.state.expiryDate}
-              cvc={this.state.cardcvc} />
+              cvc={this.state.cardcvc}
+            />
           </TouchableOpacity>
         </View>
-      )
+      );
     }
 
     return (
@@ -178,8 +189,8 @@ export default class CreditCard extends Component {
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-        <View style={{marginTop:25}}>
-        <FlatButton text="SUBMIT" onPress={this.onPressSubmit.bind(this) } />
+        <View style={{ marginTop: 25 }}>
+          <FlatButton text="SUBMIT" onPress={this.onPressSubmit.bind(this)} />
         </View>
       </View>
     );

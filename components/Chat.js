@@ -6,7 +6,8 @@ import {
   View,
   Text,
   StyleSheet,
-  Image
+  Image,
+  Alert,
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
@@ -18,6 +19,8 @@ import {
   Message,
   Bubble,
 } from "react-native-gifted-chat";
+import axios from "axios";
+import firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 
 export default class Chat extends React.Component {
@@ -31,6 +34,9 @@ export default class Chat extends React.Component {
     buyername: "",
     productname: "",
     productprice: "",
+    merchantuid: "",
+    buyeruid: "",
+    invoiceid: "",
   };
 
   async UNSAFE_componentWillMount() {
@@ -39,6 +45,7 @@ export default class Chat extends React.Component {
     var userUID = dataObtainedFromFirebase.split(",")[2];
     var username = dataObtainedFromFirebase.split(",")[0];
     this.setState({ merchantname: username });
+    this.setState({ merchantuid: userUID });
     // console.log("++++++++In Chat Page+++++++++++++");
     // console.log("Merchant Name: " + this.state.merchantname);
     var user1 = this.chatKey.split("_")[0];
@@ -49,6 +56,9 @@ export default class Chat extends React.Component {
       var buyerUID = user1;
     }
 
+    this.setState({ buyeruid: buyerUID });
+    console.log(this.state.merchantuid);
+    console.log(this.state.buyeruid);
     await firebaseSDK.getNameFromUid(buyerUID, (name) => {
       this.setState({ buyername: name });
       // console.log("Buyer Name: " + this.state.buyername);
@@ -75,25 +85,82 @@ export default class Chat extends React.Component {
     return this.props.route.params.chatKey;
   }
 
-  onSlideRight = () => {
+  // add in props
+  onSlideRight = async () => {
     //perform Action on slide success.
-    console.log("Payment Success!");
+
+    // add props.currentMessage.isPaid = true
+    var makePaymentAPI =
+      "https://khanhphungntu.ml/make_payment/" +
+      this.state.invoiceid.toString();
+    const idToken = await firebase.auth().currentUser.getIdToken(true);
+
+    try {
+      const response = await axios.post(
+        makePaymentAPI,
+        {},
+        {
+          headers: { Authorization: idToken },
+        }
+      );
+      console.log(response.data);
+      Alert.alert(
+        "Payment Successful!\nTransaction ID: " + response.data.transaction_id
+      );
+      // props.currentMessage.isPaid = true
+    } catch (error) {
+      console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
+      console.log(error);
+    }
   };
 
   // callback function
-  onReceivePaymentDetails = (
+  onReceivePaymentDetails = async (
     merchantname,
     buyername,
     productname,
-    productprice
+    productprice,
+    invoiceid
   ) => {
     this.setState({ merchantname: merchantname });
     this.setState({ buyername: buyername });
     this.setState({ productname: productname });
     this.setState({ productprice: productprice });
 
+    var price = productprice.split(" ")[1];
+    var priceFloat = parseFloat(price);
+    var currency = productprice.split(" ")[0];
+
+    var data = {
+      seller_id: this.state.merchantuid,
+      buyer_id: this.state.buyeruid,
+      currency: currency,
+      amount: priceFloat,
+      description: productname,
+    };
+
+    console.log(data);
+
+    const idToken = await firebase.auth().currentUser.getIdToken(true);
+    try {
+      const response = await axios.post(
+        "https://khanhphungntu.ml/create_invoice/",
+        data,
+        {
+          headers: { Authorization: idToken },
+        }
+      );
+      console.log(response.data);
+      this.setState({ invoiceid: response.data.invoice_id });
+    } catch (error) {
+      console.log("*************ERROR!!!!!!!!!!!!!!");
+      console.log(error);
+    }
+
     let MessageToSend =
-      "Merchant: " +
+      "Invoice ID: " +
+      this.state.invoiceid +
+      "\nMerchant: " +
       merchantname +
       "\nBuyer: " +
       buyername +
@@ -118,7 +185,10 @@ export default class Chat extends React.Component {
     });
   };
 
-  renderCustomViewPayment = (props) => {
+  renderCustomViewPayment = async (props) => {
+    // const currentUserDetails = await firebaseSDK.getAccountDetails();
+    // var currentUserUID = currentUserDetails.split(",")[2];
+    // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
     if (props.currentMessage.isPayment == true) {
       const messageToSend =
         "Buyer: " +
@@ -202,10 +272,17 @@ export default class Chat extends React.Component {
         </View>
       );
     }
-  }
+    // else if (props.currentMessage.isPaid == true) {
+    //   return (
+    //     <View>
+    //       <Text style={styles.PaymentText}>Transaction Details</Text>
+    //       </View>
+    //   )
+    // }
   };
+}
 
-  render() {
+  render() { 
     const chat = (
       <GiftedChat
         messages={this.state.messages}
