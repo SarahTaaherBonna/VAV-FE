@@ -148,70 +148,70 @@ export default class Chat extends React.Component {
 
   getCurrentUserUid = () => {
     var user = firebase.auth().currentUser;
-
     if (user != null) {
       return user.uid;
     }
   };
 
   renderCustomViewPayment = (props) => {
-    var currentUserUID = this.getCurrentUserUid();
-    // console.log("Current User UID: " + currentUserUID);
-    // console.log("Buyer UID: " + this.state.buyeruid);
+    // const currentUserDetails = await firebaseSDK.getAccountDetails();
+    // var currentUserUID = currentUserDetails.split(",")[2];
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
-    if (
-      props.currentMessage.isPayment == true
-      // &&
-      // currentUserUID == this.state.buyeruid
-    ) {
-      return (
-        <View>
-          <Text style={styles.PaymentText2}>Transaction Details</Text>
-          <RNSlidingButton
-            style={{
-              width: 248,
-            }}
-            height={35}
-            onSlidingSuccess={this.onSlideRight}
-            slideDirection={SlideDirection.RIGHT}
-          >
-            <Image
-              source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+    if (props.currentMessage.isPayment == true) {
+      const messageToSend =
+        "Buyer: " +
+        this.state.buyername +
+        "\nMerchant: " +
+        this.state.merchantname +
+        "\nProduct: " +
+        this.state.productname +
+        "\nPrice: " +
+        this.state.productprice;
+
+      // if it is right side (blue colour) merchant
+      if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+        return (
+          <View>
+            <Text style={styles.PaymentText}>Transaction Details</Text>
+          </View>
+        );
+      } else {
+        // buyer
+        return (
+          <View>
+            <Text style={styles.PaymentText2}>Transaction Details</Text>
+            <RNSlidingButton
               style={{
-                flex: 1,
-                position: "absolute",
                 width: 248,
               }}
-            ></Image>
-
-            <View>
-              <Avatar
-                size="small"
-                rounded
-                source={{
-                  uri:
-                    "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+              height={35}
+              onSlidingSuccess={this.onSlideRight}
+              slideDirection={SlideDirection.RIGHT}
+            >
+              <Image
+                source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+                style={{
+                  flex: 1,
+                  position: "absolute",
+                  width: 248,
                 }}
-              />
-            </View>
-          </RNSlidingButton>
-        </View>
-      );
+              ></Image>
+
+              <View>
+                <Avatar
+                  size="small"
+                  rounded
+                  source={{
+                    uri:
+                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                  }}
+                />
+              </View>
+            </RNSlidingButton>
+          </View>
+        );
+      }
     }
-    // else if (currentUserUID != this.state.buyeruid) {
-    //   return (
-    //     <View>
-    //       <Text style={styles.PaymentText}>Transaction Details</Text>
-    //     </View>
-    //   );
-    // }
-    // else if (props.currentMessage.isPaid == true) {
-    //   return (
-    //     <View>
-    //       <Text style={styles.PaymentText}>Transaction Details</Text>
-    //       </View>
-    //   )
-    // }
   };
 
   render() {
