@@ -53,35 +53,44 @@ export default class Chat extends React.Component {
     };
   }
 
-  // add in props
-  onSlideRight = async () => {
-    //perform Action on slide success.
+  onSlideRightGenerator = (invoice_id) => {
+    // add in props
+    let onSlideRight = async () => {
+      //perform Action on slide success.
 
-    // add props.currentMessage.isPaid = true
-    var makePaymentAPI =
-      "https://khanhphungntu.ml/make_payment/" +
-      this.state.invoiceid.toString();
+      //invoice_id is available here
+      console.log(invoice_id);
 
-    const idToken = await firebase.auth().currentUser.getIdToken(true);
+      // add props.currentMessage.isPaid = true
+      var makePaymentAPI =
+        "https://khanhphungntu.ml/make_payment/" +
+        invoice_id.toString();
 
-    try {
-      const response = await axios.post(
-        makePaymentAPI,
-        {},
-        {
-          headers: { Authorization: idToken },
-        }
-      );
-      console.log(response.data);
-      Alert.alert(
-        "Payment Successful!\nTransaction ID: " + response.data.transaction_id
-      );
-      // props.currentMessage.isPaid = true
-    } catch (error) {
-      console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
-      console.log(error);
-    }
-  };
+      const idToken = await firebase.auth().currentUser.getIdToken(true);
+
+      try {
+        const response = await axios.post(
+          makePaymentAPI,
+          {},
+          {
+            headers: { Authorization: idToken },
+          }
+        );
+        console.log(response.data);
+        Alert.alert(
+          "Payment Successful!\nTransaction ID: " + response.data.transaction_id
+        );
+        // props.currentMessage.isPaid = true
+      } catch (error) {
+        console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
+        console.log(error);
+      }
+    };
+
+    return onSlideRight
+  }
+
+
 
   // callback function
   onReceivePaymentDetails = async (productname, productprice) => {
@@ -157,16 +166,9 @@ export default class Chat extends React.Component {
     // const currentUserDetails = await firebaseSDK.getAccountDetails();
     // var currentUserUID = currentUserDetails.split(",")[2];
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
+
     if (props.currentMessage.isPayment == true) {
-      const messageToSend =
-        "Buyer: " +
-        this.state.buyername +
-        "\nMerchant: " +
-        this.state.merchantname +
-        "\nProduct: " +
-        this.state.productname +
-        "\nPrice: " +
-        this.state.productprice;
+      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2]
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -185,7 +187,7 @@ export default class Chat extends React.Component {
                 width: 248,
               }}
               height={35}
-              onSlidingSuccess={this.onSlideRight}
+              onSlidingSuccess={this.onSlideRightGenerator(invoice_id)}
               slideDirection={SlideDirection.RIGHT}
             >
               <Image
