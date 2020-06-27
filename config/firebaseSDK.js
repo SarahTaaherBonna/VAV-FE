@@ -25,8 +25,8 @@ class FirebaseSDK {
       .then(success_callback, failed_callback);
   };
 
-  createAccount = async (user, callback) => {
-    firebase
+  createAccount = async (user) => {
+    return firebase
       .auth()
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(
@@ -48,15 +48,15 @@ class FirebaseSDK {
               console.warn("Error update displayName.");
             }
           );
+
+          return userf;
         },
         function (error) {
-          console.error(
-            "got error:" + typeof error + " string:" + error.message
-          );
+          console.log("got error:" + typeof error + " string:" + error.message);
           alert("Create account failed. Error: " + error.message);
+          return false;
         }
-      )
-      .then(callback);
+      );
   };
 
   // TODO: get Token for authentication to be sent to backend team
@@ -150,50 +150,59 @@ class FirebaseSDK {
 
   // Avatar code - to be fixed
 
-  //   uploadImage = async (uri, imageName) => {
-  //     const response = await fetch(uri);
-  //     const blob = await response.blob();
+  uploadImage = async (uri, uid) => {
+    console.log("got image to upload. uri:" + uri);
+    try {
+      const response = await fetch(uri);
+      const blob = await response.blob();
+      var split = uri.split(".");
+      const ext = split[split.length - 1];
+      const fileName = "avatar" + "." + ext;
+      var ref = firebase
+        .storage()
+        .ref()
+        .child("images/" + uid + "/" + fileName);
 
-  //     var ref = firebase
-  //       .storage()
-  //       .ref()
-  //       .child("images/" + imageName);
-  //     return ref.put(blob);
-  //   };
-  //   uploadImage = async (uri) => {
-  //     console.log("got image to upload. uri:" + uri);
-  //     try {
-  //       const response = await fetch(uri);
-  //       const blob = await response.blob();
-  //       //   const ref = firebase.storage().ref("avatar").child(uuid.v4());
-  //       var ref = firebase
-  //         .storage()
-  //         .ref()
-  //         .child("images/" + imageName);
-  //       return ref.put(blob);
-  //     } catch (err) {
-  //       console.log("uploadImage try/catch error: " + err.message);
-  //     }
-  //   };
+      ref.put(blob).on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {
+          if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
+            console.log("success!");
+          }
+        },
+        (err) => {
+          console.log(err);
+          Alert.alert("Error", "Image upload errors!");
+        }
+      );
+    } catch (err) {
+      console.log("uploadImage try/catch error: " + err.message);
+    }
+  };
 
-  //   updateAvatar = (url) => {
-  //     var userf = firebase.auth().currentUser;
-  //     if (userf != null) {
-  //       userf.updateProfile({ avatar: url }).then(
-  //         function () {
-  //           console.log("Updated avatar successfully. url:" + url);
-  //           alert("Avatar image is saved successfully.");
-  //         },
-  //         function (error) {
-  //           console.warn("Error update avatar.");
-  //           alert("Error update avatar. Error:" + error.message);
-  //         }
-  //       );
-  //     } else {
-  //       console.log("can't update avatar, user is not login.");
-  //       alert("Unable to update avatar. You must login first.");
-  //     }
-  //   };
+  getAvatar = async () => {
+    try {
+      let uid = firebase.auth().currentUser.uid;
+      var storage = firebase.storage();
+      var pathReference = storage.ref("images/" + uid);
+      var listRef = await pathReference.listAll();
+      var img = null;
+      listRef.items.forEach((item) => {
+        let split = item.name.split(".");
+        if (split[0] == "avatar") {
+          img = item.name;
+          return;
+        }
+      });
+
+      if (img) {
+        return await pathReference.child(img).getDownloadURL();
+      }
+    } catch (err) {
+      console.log("uploadImage try/catch error: " + err.message);
+      return null;
+    }
+  };
 
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
@@ -290,14 +299,26 @@ class FirebaseSDK {
           text,
           user,
           timestamp: this.timestamp,
+          isPayment: false,
         };
         console.log(message);
         this.chatRef(chatKey).push(message);
         // this.append(message);
       }
     };
-
     return sendMessage;
+  };
+
+  sendPaymentMessage = (chatKey, incomingMessage) => {
+    const { text, user } = incomingMessage;
+    const message = {
+      text,
+      user,
+      timestamp: this.timestamp,
+      isPayment: true,
+    };
+    // console.log(message);
+    this.chatRef(chatKey).push(message);
   };
 
   // close the connection to the Backend

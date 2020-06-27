@@ -90,11 +90,21 @@ export default class Chat extends React.Component {
     this.setState({ buyername: buyername });
     this.setState({ productname: productname });
     this.setState({ productprice: productprice });
-    console.log("!!!!!!!!!!!!!!!!!!!!!!NEW STATE!!!!!!!!!!!!!!");
-    console.log(productname);
-    console.log(productprice);
-    console.log(this.state.productname);
-    console.log(this.state.productprice);
+
+    let MessageToSend =
+      "Merchant: " +
+      merchantname +
+      "\nBuyer: " +
+      buyername +
+      "\nProduct: " +
+      productname +
+      "\nPrice: " +
+      productprice;
+
+    firebaseSDK.sendPaymentMessage(this.chatKey, {
+      user: this.getCurrentUserDetails(),
+      text: MessageToSend,
+    });
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -107,32 +117,29 @@ export default class Chat extends React.Component {
     });
   };
 
-  renderCustomViewPayment = () => {
-    if (this.state.productname != "" && this.state.productprice != "") {
+  renderCustomViewPayment = (props) => {
+    if (props.currentMessage.isPayment == true) {
       const messageToSend =
-        "Buyer Name: " +
+        "Buyer: " +
         this.state.buyername +
-        "\nMerchant Name: " +
+        "\nMerchant: " +
         this.state.merchantname +
-        "\nProduct Name: " +
+        "\nProduct: " +
         this.state.productname +
-        "\nProduct Price: " +
+        "\nPrice: " +
         this.state.productprice;
       return (
         <View>
-          <Text>{messageToSend}</Text>
+          <Text style={styles.PaymentText}>Transaction Details</Text>
           <RNSlidingButton
             style={{
-              width: 240,
+              width: 248,
             }}
             height={35}
             onSlidingSuccess={this.onSlideRight}
             slideDirection={SlideDirection.RIGHT}
           >
             <View>
-              {/* <Text numberOfLines={1} style={styles.titleText}>
-                >>>>>>>>>>
-              </Text> */}
               <Avatar
                 size="small"
                 rounded
@@ -161,22 +168,14 @@ export default class Chat extends React.Component {
         showUserAvatar={true}
         isLoadingEarlier={true}
         isCustomViewBottom={false}
-        // wrapperStyle={{
-        //   right: {
-        //     backgroundColor: "#16267D",
-        //   },
-        //   left: {
-        //     backgroundColor: "#F7B600",
-        //   },
-        // }}
-        // textStyle={{
-        //   right: {
-        //     Color: "#F7B600",
-        //   },
-        //   left: {
-        //     Color: "#16267D",
-        //   },
-        // }}
+        wrapperStyle={{
+          right: {
+            backgroundColor: "#16267D",
+          },
+          left: {
+            backgroundColor: "#F7B600",
+          },
+        }}
       />
     );
     return (
@@ -209,5 +208,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     color: "#F7B600",
+  },
+  PaymentText: {
+    fontSize: 18,
+    color: "#FFF",
+    textAlign: "center",
   },
 });

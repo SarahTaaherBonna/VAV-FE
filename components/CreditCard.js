@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { StyleSheet, View, Button, Alert, Keyboard, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Button, Alert, Keyboard, TouchableOpacity, ActivityIndicator } from "react-native";
 import axios from "axios";
 import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput, CardView } from "react-native-credit-card-input";
-import { TextInput } from "react-native-gesture-handler";
 import FlatButton from "../components/Button";
 
 const s = StyleSheet.create({
@@ -19,6 +18,9 @@ const s = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: "100%"
+  },
+  padding:{
+    height: 50
   },
   label: {
     color: "#FFFFFF",
@@ -114,6 +116,9 @@ export default class CreditCard extends Component {
         screen: "ProductListing",
       });
       Keyboard.dismiss();
+      if(!this.props.isStart){
+        this.forceUpdate();
+      }
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
@@ -128,9 +133,18 @@ export default class CreditCard extends Component {
     }
   }
 
+  renderActivityIndicator = () =>{
+    if(!this.state.isLoaded){
+      return <ActivityIndicator size="large" color="#F7B600" />
+    } 
+    return <View style={s.padding} />
+  }
+
   render() {
     if (!this.state.isLoaded) {
-      return <></>
+      return <View style={s.cardView}>
+        {this.renderActivityIndicator()}
+      </View>
     }
 
     if (!this.props.isStart && this.state.cardNumber!=="") {
@@ -156,18 +170,16 @@ export default class CreditCard extends Component {
           requiresCVC
           labelStyle={s.label}
           inputStyle={s.input}
-          validColor={"black"}
+          validColor={"white"}
           invalidColor={"red"}
           placeholderColor={"gray"}
           allowScroll={true}
           // onFocus={this._onFocus}
           onChange={this._onChange}
         />
-
         <View style={{marginTop:25}}>
         <FlatButton text="SUBMIT" onPress={this.onPressSubmit.bind(this) } />
         </View>
-
       </View>
     );
   }

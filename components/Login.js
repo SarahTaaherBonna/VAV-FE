@@ -1,5 +1,8 @@
 import React from "react";
-import { StyleSheet, Text, TextInput, View, Button, Image } from "react-native";
+import {
+  StyleSheet, Text, TextInput, View, Button, Image, ScrollView,
+  KeyboardAvoidingView,
+} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Avatar, Header } from "react-native-elements";
 import firebaseSDK from "../config/firebaseSDK";
@@ -56,49 +59,53 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={{ height: 667, backgroundColor: "#FFFFFF" }}>
+      <View style={{ backgroundColor: "#FFFFFF" }}>
         <Image
           style={styles.logo}
           source={require("../../ChatAppV2/assets/logo_replacement.png")}
         />
+        <ScrollView>
+          <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+            <View
+              style={{
+                marginTop: 20,
+                height: 600,
+                borderRadius: 30,
+                paddingHorizontal: "6%",
+                backgroundColor: "#16267D",
+              }}
+            >
+              <Text style={styles.labeluser}>EMAIL ADDRESS</Text>
+              <TextInput
+                style={styles.inputuser}
+                placeholder="Please enter email"
+                autoCorrect={false}
+                onChangeText={this.onChangeTextEmail}
+                value={this.state.email}
+              />
+              <Text style={styles.labeluser2}>PASSWORD</Text>
+              <TextInput
+                style={styles.inputuser2}
+                placeholder="Please enter password"
+                secureTextEntry={true}
+                autoCorrect={false}
+                onChangeText={this.onChangeTextPassword}
+                value={this.state.password}
+              />
 
-        <View
-          style={{
-            marginTop: 20,
-            height: 600,
-            borderRadius: 30,
-            backgroundColor: "#16267D",
-          }}
-        >
-          <Text style={styles.labeluser}>EMAIL ADDRESS</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter email"
-            autoCorrect={false}
-            onChangeText={this.onChangeTextEmail}
-            value={this.state.email}
-          />
-          <Text style={styles.labeluser2}>PASSWORD</Text>
-          <TextInput
-            style={styles.inputuser2}
-            placeholder="Please enter password"
-            secureTextEntry={true}
-            autoCorrect={false}
-            onChangeText={this.onChangeTextPassword}
-            value={this.state.password}
-          />
+              <TextInput returnKeyType={"go"} />
 
-          <TextInput returnKeyType={"go"} />
+              <FlatButton text="LOGIN" onPress={this.onPressLogin} />
 
-          <FlatButton text="LOGIN" onPress={this.onPressLogin} />
+              <FlatButton text="SIGN-UP" onPress={this.navigateToSignup} />
 
-          <FlatButton text="SIGN-UP" onPress={this.navigateToSignup} />
-
-          <Text style={styles.nameInput}>
-            {" "}
+              <Text style={styles.nameInput}>
+                {" "}
             Create a new acccount if you are a new user{" "}
-          </Text>
-        </View>
+              </Text>
+            </View>
+          </KeyboardAvoidingView>
+        </ScrollView>
       </View>
     );
   }
@@ -131,7 +138,6 @@ const styles = StyleSheet.create({
   labeluser: {
     fontWeight: "bold",
     marginTop: 30,
-    marginLeft: 16,
     fontSize: 18,
     color: "#FFFFFF",
   },
@@ -139,18 +145,15 @@ const styles = StyleSheet.create({
   labeluser2: {
     fontWeight: "bold",
     marginTop: 15,
-    marginLeft: 16,
     fontSize: 18,
     color: "#FFFFFF",
   },
 
   inputuser: {
-    marginLeft: 10,
-    marginRight: 10,
     marginBottom: 10,
     marginTop: 5,
     paddingHorizontal: 16,
-    width: 345,
+    width: "100%",
     height: 50,
     borderColor: "#43519D",
     backgroundColor: "#283786",
@@ -159,12 +162,10 @@ const styles = StyleSheet.create({
   },
 
   inputuser2: {
-    marginLeft: 10,
-    marginRight: 10,
     marginBottom: 20,
     marginTop: 5,
     paddingHorizontal: 16,
-    width: 345,
+    width: "100%",
     height: 50,
     borderColor: "#43519D",
     backgroundColor: "#283786",

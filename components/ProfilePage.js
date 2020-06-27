@@ -2,7 +2,7 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ImageEditor from "@react-native-community/image-editor";
-import { Avatar, Header } from "react-native-elements";
+import { AntDesign } from "@expo/vector-icons";
 import FlatButton from "../components/Button";
 import {
   Image,
@@ -11,8 +11,8 @@ import {
   TextInput,
   View,
   Button,
-  TouchableOpacity,
-  Alert,
+  ScrollView,
+  KeyboardAvoidingView,
   ImageBackground,
 } from "react-native";
 
@@ -23,8 +23,15 @@ export default class ProfilePage extends React.Component {
     name: "",
     email: "",
     password: "",
-    avatar: "",
+    image: "",
+    setImage: false,
+    updateImage: false,
   };
+
+  constructor(props) {
+    super(props);
+    this.onPressUpdate = this.onPressUpdate.bind(this);
+  }
 
   async componentDidMount() {
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
@@ -33,8 +40,10 @@ export default class ProfilePage extends React.Component {
     this.setState({ name: username });
     this.setState({ email: userEmail });
     console.log("-------------------IN PROFILE PAGE---------------");
-    console.log(this.state.name);
-    console.log(this.state.email);
+    let imgAvatar = await firebaseSDK.getAvatar();
+    if (imgAvatar) {
+      this.setState({ image: imgAvatar, setImage: true });
+    }
   }
 
   onPressUpdate = async () => {
@@ -49,6 +58,9 @@ export default class ProfilePage extends React.Component {
       console.log(this.state.email);
       console.log(this.state.password);
       await firebaseSDK.updateAccount(user);
+      if (this.state.image && this.state.updateImage) {
+        await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
+      }
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
     }
@@ -62,76 +74,92 @@ export default class ProfilePage extends React.Component {
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
 
+  async pickImage() {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      this.setState({ image: result.uri, setImage: true, updateImage: true });
+    }
+  }
+
   render() {
     return (
-      <View>
-        <View
-          style={{
-            marginTop: 90,
-            alignSelf: "center",
-            height: 500,
-            width: 350,
-            borderRadius: 30,
-            backgroundColor: "#16267D",
-          }}
+      <ScrollView style={{ maxHeight: "100%" }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
         >
-          <View style={{ marginTop: 80 }}>
-            <Button
-              title="UPLOAD AVATAR"
-              alignSelf="center"
-              style={styles.buttonText}
-              onPress={this.onImageUpload}
+          <View
+            style={{
+              marginTop: 130,
+              alignSelf: "center",
+              height: 480,
+              width: 350,
+              borderRadius: 30,
+              backgroundColor: "#16267D",
+              paddingTop: 70,
+            }}
+          >
+            <Image
+              style={styles.logo}
+              source={
+                this.state.setImage
+                  ? { uri: this.state.image }
+                  : require("../assets/person.png")
+              }
+            />
+
+            <View style={styles.buttonText}>
+              <AntDesign
+                onPress={() => {
+                  this.pickImage();
+                }}
+                style={{ alignSelf: "center" }}
+                name="camera"
+                size={24}
+                color="white"
+              />
+            </View>
+
+            <Text style={styles.labeluser}>NAME</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter name"
+              onChangeText={this.onChangeTextName}
+              value={this.state.name}
+            />
+            <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter email"
+              onChangeText={this.onChangeTextEmail}
+              value={this.state.email}
+            />
+            <Text style={styles.labeluser2}>PASSWORD</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Please enter password"
+              secureTextEntry={true}
+              autoCorrect={false}
+              onChangeText={this.onChangeTextPassword}
+              value={this.state.password}
             />
           </View>
 
-          <Text style={styles.labeluser}>NAME</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter name"
-            onChangeText={this.onChangeTextName}
-            value={this.state.name}
-          />
-          <Text style={styles.labeluser2}>EMAIL ADDRESS</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter email"
-            onChangeText={this.onChangeTextEmail}
-            value={this.state.email}
-          />
-          <Text style={styles.labeluser2}>PASSWORD</Text>
-          <TextInput
-            style={styles.inputuser}
-            placeholder="Please enter password"
-            secureTextEntry={true}
-            autoCorrect={false}
-            onChangeText={this.onChangeTextPassword}
-            value={this.state.password}
-          />
-        </View>
-
-        <View
-          style={{
-            marginTop: 20,
-            height: 140,
-            width: 140,
-            alignSelf: "center",
-            borderRadius: 70,
-            position: "absolute",
-            flex: 1,
-          }}
-        >
-          <ImageBackground
-            style={styles.logo}
-            source={require("../../ChatAppV2/assets/person.png")}
-          ></ImageBackground>
-        </View>
-
-        <View
-          style={{ alignSelf: "center", marginTop: 560, position: "absolute" }}
-        >
-          <FlatButton text="UPDATE" onPress={this.onPressUpdate} />
-        </View>
-      </View>
+          <View style={{ alignSelf: "center", top: -25 }}>
+            <FlatButton
+              text="UPDATE"
+              onPress={() => {
+                this.onPressUpdate();
+              }}
+            />
+          </View>
+        </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
@@ -139,23 +167,32 @@ export default class ProfilePage extends React.Component {
 const offset = 16;
 const styles = StyleSheet.create({
   logo: {
-    flex: 1,
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
+    top: -70,
+    width: 160,
+    height: 160,
+    borderRadius: 80,
+    borderWidth: 1,
+    borderColor: "#16267D",
     position: "absolute",
+    alignSelf: "center",
   },
 
   buttonText: {
-    marginLeft: offset,
-    fontSize: 20,
     color: "#FFFFFF",
+    alignSelf: "center",
+    backgroundColor: "#F7B600",
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    textAlign: "center",
+    textAlignVertical: "center",
+    top: -30,
+    left: 50,
+    padding: 10,
   },
 
   labeluser: {
     fontWeight: "bold",
-    marginTop: 30,
     marginLeft: 40,
     marginBottom: 5,
     fontSize: 16,
