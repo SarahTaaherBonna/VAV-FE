@@ -6,6 +6,7 @@ import {
   View,
   Text,
   StyleSheet,
+  Image,
   Alert,
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
@@ -148,21 +149,81 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
+<<<<<<< HEAD
     // const currentUserDetails = await firebaseSDK.getAccountDetails();
     // var currentUserUID = currentUserDetails.split(",")[2];
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
+=======
+>>>>>>> 3bb74fc1d6773ff14e2a35d01e9dc1fd37533387
     if (props.currentMessage.isPayment == true) {
+      const messageToSend =
+        "Buyer: " +
+        this.state.buyername +
+        "\nMerchant: " +
+        this.state.merchantname +
+        "\nProduct: " +
+        this.state.productname +
+        "\nPrice: " +
+        this.state.productprice;
+
+        if(props.currentMessage.user.id==firebaseSDK.getCurrentUserUid()) {
+          return (
+            <View>
+              <Text style={styles.PaymentText}>Transaction Details</Text>
+                <RNSlidingButton
+                  style={{
+                    width: 248,
+                  }}
+                  height={35}
+                  onSlidingSuccess={this.onSlideRight}
+                  slideDirection={SlideDirection.RIGHT}
+                >
+                <Image 
+                  source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+                  style={{
+                  flex:1,
+                  position:'absolute',
+                  width:248,
+                }}>
+                </Image>
+
+                <View>
+                  <Avatar
+                    size="small"
+                    rounded
+                    source={{
+                      uri:
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                    }}
+                  />
+                </View>
+
+              </RNSlidingButton>
+            </View>
+      );
+    }
+
+    else{
       return (
         <View>
-          <Text style={styles.PaymentText}>Transaction Details</Text>
-          <RNSlidingButton
-            style={{
-              width: 248,
-            }}
-            height={35}
-            onSlidingSuccess={this.onSlideRight}
-            slideDirection={SlideDirection.RIGHT}
-          >
+          <Text style={styles.PaymentText2}>Transaction Details</Text>
+            <RNSlidingButton
+              style={{
+                width: 248,
+              }}
+              height={35}
+              onSlidingSuccess={this.onSlideRight}
+              slideDirection={SlideDirection.RIGHT}
+            >
+            <Image 
+              source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+              style={{
+              flex:1,
+              position:'absolute',
+              width:248,
+            }}>
+            </Image>
+
             <View>
               <Avatar
                 size="small"
@@ -173,20 +234,15 @@ export default class Chat extends React.Component {
                 }}
               />
             </View>
+
           </RNSlidingButton>
         </View>
-      );
-    }
-    // else if (props.currentMessage.isPaid == true) {
-    //   return (
-    //     <View>
-    //       <Text style={styles.PaymentText}>Transaction Details</Text>
-    //       </View>
-    //   )
-    // }
+        );
+      }
+     }
   };
 
-  render() {
+  render() { 
     const chat = (
       <GiftedChat
         messages={this.state.messages}
@@ -210,15 +266,20 @@ export default class Chat extends React.Component {
       />
     );
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1}}>
+
+        <Image style={styles.logo} source= {require("../../ChatAppV2/assets/P2PLogo.png")} />
+
         <Button
-          title="Generate Payment Request"
+          title="  LAUNCH         PING2PAY"
           onPress={this.onPressGeneratePaymentRequest}
+          buttonStyle={styles.PaymentButton}
         />
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
   }
+
 
   componentDidMount() {
     firebaseSDK.getChat(this.state.chatKey, (message) =>
@@ -240,9 +301,30 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#F7B600",
   },
+
   PaymentText: {
     fontSize: 18,
-    color: "#FFF",
+    color: "#FFFFFF",
     textAlign: "center",
+  },
+
+  PaymentText2: {
+    fontSize: 18,
+    color: "#000000",
+    textAlign: "center",
+  },
+
+  PaymentButton: {
+   backgroundColor:"#16267D",
+  },
+
+  logo: {
+    marginTop:5,
+    width: 30,
+    height: 30,
+    borderRadius: 80, 
+    position: "absolute",
+    alignSelf: "center",
+    zIndex:10
   },
 });

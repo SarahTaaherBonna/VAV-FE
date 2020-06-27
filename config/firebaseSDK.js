@@ -188,6 +188,14 @@ class FirebaseSDK {
     }
   };
 
+  getCurrentUserUid = () => {
+    var user = firebase.auth().currentUser;
+    
+    if (user != null) {
+      return user.uid
+    }
+  }
+
   getAvatar = async () => {
     try {
       let uid = firebase.auth().currentUser.uid;

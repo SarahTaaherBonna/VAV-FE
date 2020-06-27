@@ -132,7 +132,7 @@ export default class ProductListing extends Component {
                       }}
                     >
                       <Image
-                        source={require("../../ChatAppV2/assets/money.png")}
+                        source={require("../../ChatAppV2/assets/P2PLogo.png")}
                         style={{
                           width: 5,
                           height: 10,

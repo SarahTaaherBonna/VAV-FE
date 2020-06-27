@@ -13,6 +13,7 @@ import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput, CardView } from "react-native-credit-card-input";
 import FlatButton from "../components/Button";
+import { Text } from "native-base";
 
 const s = StyleSheet.create({
   container: {
