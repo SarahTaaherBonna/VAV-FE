@@ -1,23 +1,30 @@
 import React from "react";
 import {
-  StyleSheet, Text, TextInput, View, Button, Image, ScrollView,
-  KeyboardAvoidingView,Dimensions
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  Image,
+  ScrollView,
+  KeyboardAvoidingView,
+  Dimensions,
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Avatar, Header } from "react-native-elements";
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
 
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
 
-const resizeWidth=(w)=> {
-  return value=w*(windowWidth/375);
-}
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
 
-const resizeHeight=(h)=> {
-  return value=h*(windowHeight/872);
-}
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
 
 // TODO: navigate to Chat List after login
 export default class Login extends React.Component {
@@ -26,9 +33,12 @@ export default class Login extends React.Component {
   };
 
   state = {
-    name: "User1",
-    email: "User1@gmail.com",
-    password: "password",
+    name: "Sarah Taaher Bonna",
+    email: "sarahtb25@gmail.com",
+    password: "Password",
+    // name: "User1",
+    // email: "User1@gmail.com",
+    // password: "password",
     avatar: "",
   };
 
@@ -76,7 +86,9 @@ export default class Login extends React.Component {
           source={require("../../ChatAppV2/assets/logo_replacement.png")}
         />
         <ScrollView>
-          <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS === "ios" ? "padding" : null}
+          >
             <View
               style={{
                 marginTop: 20,
@@ -112,7 +124,7 @@ export default class Login extends React.Component {
 
               <Text style={styles.nameInput}>
                 {" "}
-            Create a new acccount if you are a new user{" "}
+                Create a new acccount if you are a new user{" "}
               </Text>
             </View>
           </KeyboardAvoidingView>
@@ -158,8 +170,8 @@ const styles = StyleSheet.create({
   },
 
   inputuser: {
-    marginBottom:resizeHeight(10),
-    marginTop:resizeHeight(5),
+    marginBottom: resizeHeight(10),
+    marginTop: resizeHeight(5),
     paddingHorizontal: resizeWidth(16),
     width: "100%",
     height: resizeHeight(50),
@@ -180,5 +192,4 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     color: "#F7B600",
   },
-
 });

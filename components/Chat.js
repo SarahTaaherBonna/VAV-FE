@@ -84,16 +84,16 @@ export default class Chat extends React.Component {
     return this.props.route.params.chatKey;
   }
 
+  // add in props
   onSlideRight = async () => {
     //perform Action on slide success.
-    console.log("Invoice Id: " + this.state.invoiceid);
 
+    // add props.currentMessage.isPaid = true
     var makePaymentAPI =
       "https://khanhphungntu.ml/make_payment/" +
       this.state.invoiceid.toString();
-    console.log(makePaymentAPI);
     const idToken = await firebase.auth().currentUser.getIdToken(true);
-    console.log(idToken);
+
     try {
       const response = await axios.post(
         makePaymentAPI,
@@ -106,9 +106,9 @@ export default class Chat extends React.Component {
       Alert.alert(
         "Payment Successful!\nTransaction ID: " + response.data.transaction_id
       );
+      // props.currentMessage.isPaid = true
     } catch (error) {
       console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
-      // console.log(error.data);
       console.log(error);
     }
   };
@@ -129,21 +129,6 @@ export default class Chat extends React.Component {
     var price = productprice.split(" ")[1];
     var priceFloat = parseFloat(price);
     var currency = productprice.split(" ")[0];
-
-    let MessageToSend =
-      "Merchant: " +
-      merchantname +
-      "\nBuyer: " +
-      buyername +
-      "\nProduct: " +
-      productname +
-      "\nPrice: " +
-      productprice;
-
-    firebaseSDK.sendPaymentMessage(this.chatKey, {
-      user: this.getCurrentUserDetails(),
-      text: MessageToSend,
-    });
 
     var data = {
       seller_id: this.state.merchantuid,
@@ -170,6 +155,23 @@ export default class Chat extends React.Component {
       console.log("*************ERROR!!!!!!!!!!!!!!");
       console.log(error);
     }
+
+    let MessageToSend =
+      "Invoice ID: " +
+      this.state.invoiceid +
+      "\nMerchant: " +
+      merchantname +
+      "\nBuyer: " +
+      buyername +
+      "\nProduct: " +
+      productname +
+      "\nPrice: " +
+      productprice;
+
+    firebaseSDK.sendPaymentMessage(this.chatKey, {
+      user: this.getCurrentUserDetails(),
+      text: MessageToSend,
+    });
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -182,12 +184,13 @@ export default class Chat extends React.Component {
     });
   };
 
-  renderCustomViewPayment = (props) => {
+  renderCustomViewPayment = async (props) => {
+    // const currentUserDetails = await firebaseSDK.getAccountDetails();
+    // var currentUserUID = currentUserDetails.split(",")[2];
+    // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
     if (props.currentMessage.isPayment == true) {
-      var invoice_id = this.state.invoiceid;
       return (
         <View>
-          <Text style={styles.PaymentText}>Invoice ID: {invoice_id}</Text>
           <Text style={styles.PaymentText}>Transaction Details</Text>
           <RNSlidingButton
             style={{
@@ -211,6 +214,13 @@ export default class Chat extends React.Component {
         </View>
       );
     }
+    // else if (props.currentMessage.isPaid == true) {
+    //   return (
+    //     <View>
+    //       <Text style={styles.PaymentText}>Transaction Details</Text>
+    //       </View>
+    //   )
+    // }
   };
 
   render() {
