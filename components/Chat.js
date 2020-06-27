@@ -29,40 +29,12 @@ export default class Chat extends React.Component {
 
   state = {
     messages: [],
-    merchantname: "",
-    buyername: "",
-    productname: "",
-    productprice: "",
-    merchantuid: "",
-    buyeruid: "",
-    invoiceid: "",
+    chatKey: this.props.route.params.chatKey,
+    merchantname: this.props.route.params.merchantname,
+    buyername: this.props.route.params.buyername,
+    merchantuid: this.props.route.params.merchantuid,
+    buyeruid: this.props.route.params.buyeruid,
   };
-
-  async UNSAFE_componentWillMount() {
-    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
-    console.log(dataObtainedFromFirebase);
-    var userUID = dataObtainedFromFirebase.split(",")[2];
-    var username = dataObtainedFromFirebase.split(",")[0];
-    this.setState({ merchantname: username });
-    this.setState({ merchantuid: userUID });
-    // console.log("++++++++In Chat Page+++++++++++++");
-    // console.log("Merchant Name: " + this.state.merchantname);
-    var user1 = this.chatKey.split("_")[0];
-    var user2 = this.chatKey.split("_")[1];
-    if (userUID == user1) {
-      var buyerUID = user2;
-    } else {
-      var buyerUID = user1;
-    }
-
-    this.setState({ buyeruid: buyerUID });
-    console.log(this.state.merchantuid);
-    console.log(this.state.buyeruid);
-    await firebaseSDK.getNameFromUid(buyerUID, (name) => {
-      this.setState({ buyername: name });
-      // console.log("Buyer Name: " + this.state.buyername);
-    });
-  }
 
   getCurrentUserDetails() {
     const userDetails = firebaseSDK.getAccountDetails();
@@ -78,10 +50,6 @@ export default class Chat extends React.Component {
       id: id,
       _id: id,
     };
-  }
-
-  get chatKey() {
-    return this.props.route.params.chatKey;
   }
 
   // add in props
@@ -115,20 +83,15 @@ export default class Chat extends React.Component {
 
   // callback function
   onReceivePaymentDetails = async (
-    merchantname,
-    buyername,
     productname,
     productprice,
-    invoiceid
   ) => {
-    this.setState({ merchantname: merchantname });
-    this.setState({ buyername: buyername });
     this.setState({ productname: productname });
     this.setState({ productprice: productprice });
 
+    var currency = productprice.split(" ")[0];
     var price = productprice.split(" ")[1];
     var priceFloat = parseFloat(price);
-    var currency = productprice.split(" ")[0];
 
     var data = {
       seller_id: this.state.merchantuid,
@@ -160,15 +123,15 @@ export default class Chat extends React.Component {
       "Invoice ID: " +
       this.state.invoiceid +
       "\nMerchant: " +
-      merchantname +
+      this.state.merchantname +
       "\nBuyer: " +
-      buyername +
+      this.state.buyername +
       "\nProduct: " +
       productname +
       "\nPrice: " +
       productprice;
 
-    firebaseSDK.sendPaymentMessage(this.chatKey, {
+    firebaseSDK.sendPaymentMessage(this.state.chatKey, {
       user: this.getCurrentUserDetails(),
       text: MessageToSend,
     });
@@ -179,12 +142,12 @@ export default class Chat extends React.Component {
       screen: "Payment",
       merchantname: this.state.merchantname,
       buyername: this.state.buyername,
-      chatKey: this.chatKey,
+      chatKey: this.state.chatKey,
       callback: this.onReceivePaymentDetails.bind(this),
     });
   };
 
-  renderCustomViewPayment = async (props) => {
+  renderCustomViewPayment = (props) => {
     // const currentUserDetails = await firebaseSDK.getAccountDetails();
     // var currentUserUID = currentUserDetails.split(",")[2];
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
@@ -258,7 +221,7 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChat(this.chatKey, (message) =>
+    firebaseSDK.getChat(this.state.chatKey, (message) =>
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))

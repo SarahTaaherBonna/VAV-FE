@@ -20,11 +20,11 @@ export default class ChatList extends Component {
     chatListings: [],
   };
 
-  generateChatListing = (chatKey, name, text) => {
+  generateChatListing = (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
     const newChatListing = (
       <TouchableOpacity
         onPress={() => {
-          this.onPressListing(chatKey);
+          this.onPressListing(chatKey, merchantname, buyername, merchantuid, buyeruid);
         }}
       >
         <View
@@ -56,7 +56,7 @@ export default class ChatList extends Component {
               padding: 10,
             }}
           >
-            <Text style={styles.titleText}>{name}</Text>
+            <Text style={styles.titleText}>{buyername}</Text>
             <Text style={styles.messageText}>{text}</Text>
           </View>
         </View>
@@ -65,13 +65,13 @@ export default class ChatList extends Component {
     return newChatListing;
   };
 
-  onPressListing = (chatKey) => {
+  onPressListing = (chatKey, merchantname, buyername, merchantuid, buyeruid) => {
     this.props.navigation.navigate("Chat", {
       chatKey: chatKey,
-      merchantname: "",
-      buyername: "",
-      productname: "",
-      productprice: "",
+      merchantname: merchantname,
+      buyername: buyername,
+      merchantuid: merchantuid,
+      buyeruid: buyeruid,
     });
   };
 
@@ -80,8 +80,8 @@ export default class ChatList extends Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChatList((chatKey, name, text) => {
-      let newChatListing = this.generateChatListing(chatKey, name, text);
+    firebaseSDK.getChatList((chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
+      let newChatListing = this.generateChatListing(chatKey, merchantname, buyername, merchantuid, buyeruid, text);
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));

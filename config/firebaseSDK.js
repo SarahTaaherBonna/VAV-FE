@@ -88,6 +88,14 @@ class FirebaseSDK {
     return dataToSend;
   };
 
+  getCurrentUserDisplayName = () => {
+    var user = firebase.auth().currentUser;
+    
+    if (user != null) {
+      return user.displayName;
+    }
+  }
+
   // TODO: update account
   updateAccount = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
@@ -248,8 +256,9 @@ class FirebaseSDK {
         const key = Object.keys(data.val())[0];
         const { text } = data.val()[key];
 
-        this.getNameFromUid(otherId, (name) => {
-          callback(_id, name, text);
+        this.getNameFromUid(otherId, (buyername) => {
+          let merchantname = this.getCurrentUserDisplayName();
+          callback(_id, merchantname, buyername, myId, otherId, text);
         });
       });
   };
