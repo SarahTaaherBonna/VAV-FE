@@ -56,7 +56,7 @@ export default class Login extends React.Component {
   };
 
   loginSuccess = () => {
-    console.log("login successful, navigate to chat.");
+    console.log("login successful, navigate to Products.");
 
     this.props.navigation.navigate("Home", {});
   };

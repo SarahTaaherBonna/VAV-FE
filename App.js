@@ -82,7 +82,11 @@ function TabNavigator() {
     >
       <Tab.Screen name="Products" component={ProductListing} />
       <Tab.Screen name="Chats" component={ChatStack} />
-      <Tab.Screen name="Card" component={CreditCard} initialParams={{isStart: false}}/>
+      <Tab.Screen
+        name="Card"
+        component={CreditCard}
+        initialParams={{ isStart: false }}
+      />
       <Tab.Screen name="Profile" component={ProfilePage} />
       <Tab.Screen name="Logout" component={Logout} />
     </Tab.Navigator>
@@ -98,6 +102,7 @@ export default function App() {
         <Stack.Screen name="Login" component={LoginStack} />
         <Stack.Screen name="Sign Up" component={SignupStack} />
         <Stack.Screen name="Add Credit Card Details" component={CreditCard} />
+        <Stack.Screen name="Payment" component={Payment} />
         <Stack.Screen name="Home" component={TabNavigator} />
       </Stack.Navigator>
     </NavigationContainer>

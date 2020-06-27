@@ -16,17 +16,35 @@ import firebaseSDK from "../config/firebaseSDK";
 
 export default class Payment extends React.Component {
   state = {
-    buyerName: "",
-    merchantName: "",
+    buyerName: this.props.route.params.buyername,
+    merchantName: this.props.route.params.merchantname,
     productName: "",
-    productPrice: "SGD",
+    productPrice: "SGD ",
+    chatKey: this.props.route.params.chatKey,
+    callback: this.props.route.params.callback,
   };
 
-  onPressGeneratePaymentRequest = async () => {
+  onPressGeneratePaymentRequest = () => {
+    console.log("^^^^^^^^^^^^^^^IN PAYMENT PAGE^^^^^^^^^^^^^^^^^^^^^");
     console.log("Buyer Name: " + this.state.buyerName);
     console.log("Merchant Name: " + this.state.merchantName);
     console.log("Product Name: " + this.state.productName);
     console.log("Product Price: " + this.state.productPrice);
+
+    this.props.route.params.callback(
+      this.state.merchantName,
+      this.state.buyerName,
+      this.state.productName,
+      this.state.productPrice
+    );
+
+    this.props.navigation.navigate("Chat", {
+      merchantname: this.state.merchantName,
+      buyername: this.state.buyerName,
+      productname: this.state.productName,
+      productprice: this.state.productPrice,
+      chatKey: this.state.chatKey,
+    });
   };
 
   onChangeTextBuyerName = (buyerName) => this.setState({ buyerName });
@@ -43,6 +61,7 @@ export default class Payment extends React.Component {
           placeholder="Please enter buyer's name"
           autoCorrect={false}
           onChangeText={this.onChangeTextBuyerName}
+          value={this.state.buyerName}
         />
         <Text style={styles.title}>Merchant's Name:</Text>
         <TextInput
@@ -50,6 +69,7 @@ export default class Payment extends React.Component {
           placeholder="Please enter merchant's name"
           autoCorrect={false}
           onChangeText={this.onChangeTextMerchantName}
+          value={this.state.merchantName}
         />
         <Text style={styles.title}>Product:</Text>
         <TextInput

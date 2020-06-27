@@ -33,9 +33,9 @@ class FirebaseSDK {
         function () {
           console.log(
             "created user successfully. User email:" +
-            user.email +
-            " name:" +
-            user.name
+              user.email +
+              " name:" +
+              user.name
           );
           var userf = firebase.auth().currentUser;
           userf.updateProfile({ displayName: user.name }).then(
@@ -52,13 +52,10 @@ class FirebaseSDK {
           return userf;
         },
         function (error) {
-          console.log(
-            "got error:" + typeof error + " string:" + error.message
-          );
+          console.log("got error:" + typeof error + " string:" + error.message);
           alert("Create account failed. Error: " + error.message);
-          return false
+          return false;
         }
-        
       );
   };
 
@@ -86,7 +83,8 @@ class FirebaseSDK {
       uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
     }
     var dataToSend = name + "," + email + "," + uid;
-    console.log(dataToSend);
+    // console.log("%%%%%%%%%%%%IN FIREBASESDK%%%%%%%%%%%%%%%%%%%%");
+    // console.log(dataToSend);
     return dataToSend;
   };
 
@@ -157,25 +155,26 @@ class FirebaseSDK {
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
-      var split = uri.split('.')
-      const ext = split[split.length - 1]
-      const fileName = 'avatar' + "." + ext
+      var split = uri.split(".");
+      const ext = split[split.length - 1];
+      const fileName = "avatar" + "." + ext;
       var ref = firebase
         .storage()
         .ref()
         .child("images/" + uid + "/" + fileName);
 
-      ref.put(blob)
-        .on(firebase.storage.TaskEvent.STATE_CHANGED, (snapshot) => {
-
+      ref.put(blob).on(
+        firebase.storage.TaskEvent.STATE_CHANGED,
+        (snapshot) => {
           if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
-            console.log("success!")
+            console.log("success!");
           }
-
-        }, (err) => {
+        },
+        (err) => {
           console.log(err);
-          Alert.alert("Error", "Image upload errors!")
-        })
+          Alert.alert("Error", "Image upload errors!");
+        }
+      );
     } catch (err) {
       console.log("uploadImage try/catch error: " + err.message);
     }
@@ -185,24 +184,23 @@ class FirebaseSDK {
     try {
       let uid = firebase.auth().currentUser.uid;
       var storage = firebase.storage();
-      var pathReference = storage.ref('images/' + uid);
+      var pathReference = storage.ref("images/" + uid);
       var listRef = await pathReference.listAll();
-      var img = null
-      listRef.items.forEach(item => {
-        let split = item.name.split('.')
-        if (split[0] == 'avatar'){
+      var img = null;
+      listRef.items.forEach((item) => {
+        let split = item.name.split(".");
+        if (split[0] == "avatar") {
           img = item.name;
           return;
         }
-      })
+      });
 
-      if (img){
+      if (img) {
         return await pathReference.child(img).getDownloadURL();
       }
-    
     } catch (err) {
       console.log("uploadImage try/catch error: " + err.message);
-      return null
+      return null;
     }
   };
 
@@ -214,17 +212,16 @@ class FirebaseSDK {
     return firebase.database().ref("chats");
   }
 
-
   get userInfoRef() {
-    return firebase.database().ref("users")
+    return firebase.database().ref("users");
   }
 
   getNameFromUid = (uid, callback) => {
     this.userInfoRef.once("value", (data) => {
       let name = data.val()[uid];
       callback(name);
-    })
-  }
+    });
+  };
 
   parseChatList = (snapshot, callback) => {
     const { key: _id } = snapshot;
@@ -232,11 +229,11 @@ class FirebaseSDK {
     let myId = _id.split("_")[0];
     let otherId = _id.split("_")[1];
 
-    if(myId !== this.uid && otherId !== this.uid) {
+    if (myId !== this.uid && otherId !== this.uid) {
       return;
     }
 
-    if(myId !== this.uid) {
+    if (myId !== this.uid) {
       let temp = otherId;
       otherId = myId;
       myId = temp;
@@ -244,26 +241,27 @@ class FirebaseSDK {
 
     let ref = this.chatRef(_id);
 
-    ref.orderByChild('timestamp').limitToLast(1).once("value", (data) => {
-      const key = Object.keys(data.val())[0]
-      const { text } = data.val()[key];
+    ref
+      .orderByChild("timestamp")
+      .limitToLast(1)
+      .once("value", (data) => {
+        const key = Object.keys(data.val())[0];
+        const { text } = data.val()[key];
 
-      this.getNameFromUid(otherId, (name) => {
-        callback(_id, name, text)
-      })
-
-    })
-
+        this.getNameFromUid(otherId, (name) => {
+          callback(_id, name, text);
+        });
+      });
   };
 
-  getChatList = (callback) => this.chatListRef
-      .on("child_added", (snapshot) => {
-        this.parseChatList(snapshot, callback);
-  });
+  getChatList = (callback) =>
+    this.chatListRef.on("child_added", (snapshot) => {
+      this.parseChatList(snapshot, callback);
+    });
 
   chatRef = (chatId) => {
-    return firebase.database().ref("chats/" + chatId)
-  }
+    return firebase.database().ref("chats/" + chatId);
+  };
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -282,10 +280,12 @@ class FirebaseSDK {
   };
 
   getChat = (chatKey, callback) => {
-    this.chatRef(chatKey).orderByChild('timestamp').on("child_added", (snapshot) => {
-      callback(this.parseChat(snapshot));
-    });
-  }
+    this.chatRef(chatKey)
+      .orderByChild("timestamp")
+      .on("child_added", (snapshot) => {
+        callback(this.parseChat(snapshot));
+      });
+  };
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -299,15 +299,27 @@ class FirebaseSDK {
           text,
           user,
           timestamp: this.timestamp,
+          isPayment: false,
         };
-        console.log(message)
+        console.log(message);
         this.chatRef(chatKey).push(message);
         // this.append(message);
       }
-    }
-    
-    return sendMessage
-  }
+    };
+    return sendMessage;
+  };
+
+  sendPaymentMessage = (chatKey, incomingMessage) => {
+    const { text, user } = incomingMessage;
+    const message = {
+      text,
+      user,
+      timestamp: this.timestamp,
+      isPayment: true,
+    };
+    // console.log(message);
+    this.chatRef(chatKey).push(message);
+  };
 
   // close the connection to the Backend
   closeConnection() {

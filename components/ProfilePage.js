@@ -2,7 +2,7 @@ import React from "react";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
 import ImageEditor from "@react-native-community/image-editor";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import FlatButton from "../components/Button";
 import {
   Image,
@@ -13,7 +13,7 @@ import {
   Button,
   ScrollView,
   KeyboardAvoidingView,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 
 import firebaseSDK from "../config/firebaseSDK";
@@ -25,7 +25,7 @@ export default class ProfilePage extends React.Component {
     password: "",
     image: "",
     setImage: false,
-    updateImage: false
+    updateImage: false,
   };
 
   constructor(props) {
@@ -42,7 +42,7 @@ export default class ProfilePage extends React.Component {
     console.log("-------------------IN PROFILE PAGE---------------");
     let imgAvatar = await firebaseSDK.getAvatar();
     if (imgAvatar) {
-      this.setState({ image: imgAvatar, setImage: true })
+      this.setState({ image: imgAvatar, setImage: true });
     }
   }
 
@@ -58,10 +58,9 @@ export default class ProfilePage extends React.Component {
       console.log(this.state.email);
       console.log(this.state.password);
       await firebaseSDK.updateAccount(user);
-      if (this.state.image && this.state.updateImage){
-        await  firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid)
+      if (this.state.image && this.state.updateImage) {
+        await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
       }
-
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
     }
@@ -74,7 +73,7 @@ export default class ProfilePage extends React.Component {
   onChangeTextEmail = (email) => this.setState({ email });
   onChangeTextPassword = (password) => this.setState({ password });
   onChangeTextName = (name) => this.setState({ name });
-  
+
   async pickImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -86,29 +85,44 @@ export default class ProfilePage extends React.Component {
     if (!result.cancelled) {
       this.setState({ image: result.uri, setImage: true, updateImage: true });
     }
-  };
+  }
 
   render() {
     return (
       <ScrollView style={{ maxHeight: "100%" }}>
-        <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
           <View
-            style={
-              {
-                marginTop: 130,
-                alignSelf: 'center',
-                height: 480,
-                width: 350,
-                borderRadius: 30,
-                backgroundColor: "#16267D",
-                paddingTop: 70
+            style={{
+              marginTop: 130,
+              alignSelf: "center",
+              height: 480,
+              width: 350,
+              borderRadius: 30,
+              backgroundColor: "#16267D",
+              paddingTop: 70,
+            }}
+          >
+            <Image
+              style={styles.logo}
+              source={
+                this.state.setImage
+                  ? { uri: this.state.image }
+                  : require("../assets/person.png")
               }
-            }>
+            />
 
-            <Image style={styles.logo} source={this.state.setImage ? { uri: this.state.image } : require('../assets/person.png')} />
-            
             <View style={styles.buttonText}>
-            <AntDesign onPress={() => { this.pickImage() }}  style={{alignSelf:'center'}}name="camera" size={24} color="white" />
+              <AntDesign
+                onPress={() => {
+                  this.pickImage();
+                }}
+                style={{ alignSelf: "center" }}
+                name="camera"
+                size={24}
+                color="white"
+              />
             </View>
 
             <Text style={styles.labeluser}>NAME</Text>
@@ -137,15 +151,18 @@ export default class ProfilePage extends React.Component {
           </View>
 
           <View style={{ alignSelf: "center", top: -25 }}>
-            <FlatButton text="UPDATE" onPress={() => {this.onPressUpdate()}} />
+            <FlatButton
+              text="UPDATE"
+              onPress={() => {
+                this.onPressUpdate();
+              }}
+            />
           </View>
         </KeyboardAvoidingView>
       </ScrollView>
-
     );
   }
 }
-
 
 const offset = 16;
 const styles = StyleSheet.create({
@@ -157,38 +174,38 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#16267D",
     position: "absolute",
-    alignSelf: "center"
+    alignSelf: "center",
   },
 
   buttonText: {
     color: "#FFFFFF",
-    alignSelf: 'center',
+    alignSelf: "center",
     backgroundColor: "#F7B600",
     width: 50,
     height: 50,
-    borderRadius:25,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    borderRadius: 25,
+    textAlign: "center",
+    textAlignVertical: "center",
     top: -30,
     left: 50,
-    padding:10
+    padding: 10,
   },
 
   labeluser: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 40,
     marginBottom: 5,
     fontSize: 16,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
 
   labeluser2: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: 30,
     marginLeft: 30,
     marginBottom: 5,
     fontSize: 16,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
 
   inputuser: {
@@ -199,7 +216,6 @@ const styles = StyleSheet.create({
     borderColor: "#43519D",
     backgroundColor: "#283786",
     borderRadius: 8,
-    color: "#F7B600"
+    color: "#F7B600",
   },
 });
-
