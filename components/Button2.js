@@ -32,7 +32,8 @@ const styles = StyleSheet.create({
         height:resizeHeight(52),
         alignSelf:'center',
         backgroundColor: "#16267D",
-        zIndex:12
+        zIndex:12,
+        position:'absolute'
     },
 
     buttonText: {

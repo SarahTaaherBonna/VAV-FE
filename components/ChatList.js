@@ -42,14 +42,14 @@ export default class ChatList extends Component {
         <View
           style={{
             flexDirection: "row",
-            height: resizeHeight(100),
+            height: resizeHeight(150),
             width: resizeWidth(340),
-            padding: 10,
+            padding:10,
             backgroundColor: "#16267D",
             borderRadius: 15,
             borderBottomLeftRadius: 100,
             borderTopLeftRadius: 100,
-            margin: 15,
+            margin:10,
           }}
         >
           <Avatar
@@ -59,13 +59,13 @@ export default class ChatList extends Component {
               uri:
                 "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
             }}
-            containerStyle={{ backgroundColor: "#F7B600", padding: 5 }}
+            containerStyle={{ backgroundColor: "#F7B600", padding: 5, marginTop:resizeHeight(20), marginLeft:resizeWidth(10),}}
           />
           <View
             style={{
               flex: 1,
               flexDirection: "column",
-              padding: 10,
+              padding:5,
             }}
           >
             <Text style={styles.titleText}>{buyername}</Text>
@@ -105,12 +105,12 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 18,
     fontWeight: "bold",
-    paddingLeft: 15,
+    paddingLeft: resizeWidth(15),
     color: "white",
   },
   messageText: {
     fontSize: 14,
-    paddingLeft: 15,
+    paddingLeft: resizeWidth(15),
     color: "white",
     marginTop: resizeHeight(5),
   },
