@@ -41,11 +41,8 @@ export default class Payment extends React.Component {
     );
 
     this.props.navigation.navigate("Chat", {
-      merchantname: this.state.merchantName,
-      buyername: this.state.buyerName,
       productname: this.state.productName,
       productprice: this.state.productPrice,
-      chatKey: this.state.chatKey,
     });
   };
 
@@ -74,9 +71,7 @@ export default class Payment extends React.Component {
                 alignSelf:'center'
               }
             }>
-
         
-
         <Text style={styles.title}>BUYER'S NAME</Text>
         <TextInput
           style={styles.nameInput}
