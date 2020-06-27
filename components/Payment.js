@@ -81,6 +81,7 @@ export default class Payment extends React.Component {
         <TextInput
           style={styles.nameInput}
           placeholder="Please enter buyer's name"
+          placeholderTextColor='white'
           autoCorrect={false}
           onChangeText={this.onChangeTextBuyerName}
           value={this.state.buyerName}
@@ -89,6 +90,7 @@ export default class Payment extends React.Component {
         <TextInput
           style={styles.nameInput}
           placeholder="Please enter merchant's name"
+          placeholderTextColor='white'
           autoCorrect={false}
           onChangeText={this.onChangeTextMerchantName}
           value={this.state.merchantName}
@@ -97,6 +99,7 @@ export default class Payment extends React.Component {
         <TextInput
           style={styles.nameInput}
           placeholder="Please enter name of product"
+          placeholderTextColor='white'
           autoCorrect={false}
           onChangeText={this.onChangeTextProductName}
         />
@@ -104,6 +107,7 @@ export default class Payment extends React.Component {
         <TextInput
           style={styles.nameInput}
           placeholder="Please enter price of product"
+          placeholderTextColor='white'
           autoCorrect={false}
           onChangeText={this.onChangeTextProductPrice}
           value={this.state.productPrice}

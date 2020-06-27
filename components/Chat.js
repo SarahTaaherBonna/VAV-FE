@@ -149,12 +149,9 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
-<<<<<<< HEAD
     // const currentUserDetails = await firebaseSDK.getAccountDetails();
     // var currentUserUID = currentUserDetails.split(",")[2];
     // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
-=======
->>>>>>> 3bb74fc1d6773ff14e2a35d01e9dc1fd37533387
     if (props.currentMessage.isPayment == true) {
       const messageToSend =
         "Buyer: " +
@@ -275,6 +272,7 @@ export default class Chat extends React.Component {
           onPress={this.onPressGeneratePaymentRequest}
           buttonStyle={styles.PaymentButton}
         />
+        
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
