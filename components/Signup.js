@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 50,
     borderColor: "#43519D",
-    backgroundColor: "#f5b400",
+    backgroundColor: "#283786",
     borderRadius: 8,
     color: "#F7B600"
   },

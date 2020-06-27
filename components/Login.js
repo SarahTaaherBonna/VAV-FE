@@ -1,12 +1,23 @@
 import React from "react";
 import {
   StyleSheet, Text, TextInput, View, Button, Image, ScrollView,
-  KeyboardAvoidingView,
+  KeyboardAvoidingView,Dimensions
 } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Avatar, Header } from "react-native-elements";
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+
+const resizeWidth=(w)=> {
+  return value=w*(windowWidth/375);
+}
+
+const resizeHeight=(h)=> {
+  return value=h*(windowHeight/872);
+}
 
 // TODO: navigate to Chat List after login
 export default class Login extends React.Component {
@@ -113,48 +124,45 @@ export default class Login extends React.Component {
 
 const styles = StyleSheet.create({
   title: {
-    marginTop: 16,
-    marginLeft: 16,
+    marginTop: resizeHeight(16),
+    marginLeft: resizeWidth(16),
     fontSize: 16,
   },
+
   nameInput: {
     textAlign: "center",
-    marginBottom: 10,
+    marginBottom: resizeHeight(10),
     fontSize: 10,
     color: "#FFFFFF",
   },
-  buttonText: {
-    marginLeft: 16,
-    fontSize: 42,
-  },
 
   logo: {
-    marginTop: 10,
+    marginTop: resizeHeight(10),
     width: null,
     resizeMode: "contain",
-    height: 250,
+    height: resizeHeight(280),
   },
 
   labeluser: {
     fontWeight: "bold",
-    marginTop: 30,
+    marginTop: resizeHeight(30),
     fontSize: 18,
     color: "#FFFFFF",
   },
 
   labeluser2: {
     fontWeight: "bold",
-    marginTop: 15,
+    marginTop: resizeHeight(15),
     fontSize: 18,
     color: "#FFFFFF",
   },
 
   inputuser: {
-    marginBottom: 10,
-    marginTop: 5,
-    paddingHorizontal: 16,
+    marginBottom:resizeHeight(10),
+    marginTop:resizeHeight(5),
+    paddingHorizontal: resizeWidth(16),
     width: "100%",
-    height: 50,
+    height: resizeHeight(50),
     borderColor: "#43519D",
     backgroundColor: "#283786",
     borderRadius: 8,
@@ -162,32 +170,15 @@ const styles = StyleSheet.create({
   },
 
   inputuser2: {
-    marginBottom: 20,
-    marginTop: 5,
-    paddingHorizontal: 16,
+    marginBottom: resizeHeight(20),
+    marginTop: resizeHeight(5),
+    paddingHorizontal: resizeWidth(16),
     width: "100%",
-    height: 50,
+    height: resizeHeight(50),
     borderColor: "#43519D",
     backgroundColor: "#283786",
     borderRadius: 8,
     color: "#F7B600",
   },
 
-  buttons: {
-    margin: 16,
-    paddingHorizontal: 16,
-    width: 300,
-    height: 50,
-    borderColor: "#FFFFFF",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 8,
-  },
-
-  linearGradient: {
-    flex: 1,
-    paddingLeft: 15,
-    paddingRight: 15,
-    borderRadius: 5,
-    height: 667,
-  },
 });
