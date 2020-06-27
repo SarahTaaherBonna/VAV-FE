@@ -185,10 +185,7 @@ export default class Chat extends React.Component {
     });
   };
 
-  renderCustomViewPayment = async (props) => {
-    // const currentUserDetails = await firebaseSDK.getAccountDetails();
-    // var currentUserUID = currentUserDetails.split(",")[2];
-    // add props.currentMessage.isPaid == false && currentUserUID == this.state.buyeruid
+  renderCustomViewPayment = (props) => {
     if (props.currentMessage.isPayment == true) {
       const messageToSend =
         "Buyer: " +
@@ -201,9 +198,46 @@ export default class Chat extends React.Component {
         this.state.productprice;
 
         if(props.currentMessage.user.id==firebaseSDK.getCurrentUserUid()) {
-        return (
-          <View>
-            <Text style={styles.PaymentText}>Transaction Details</Text>
+          return (
+            <View>
+              <Text style={styles.PaymentText}>Transaction Details</Text>
+                <RNSlidingButton
+                  style={{
+                    width: 248,
+                  }}
+                  height={35}
+                  onSlidingSuccess={this.onSlideRight}
+                  slideDirection={SlideDirection.RIGHT}
+                >
+                <Image 
+                  source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+                  style={{
+                  flex:1,
+                  position:'absolute',
+                  width:248,
+                }}>
+                </Image>
+
+                <View>
+                  <Avatar
+                    size="small"
+                    rounded
+                    source={{
+                      uri:
+                        "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                    }}
+                  />
+                </View>
+
+              </RNSlidingButton>
+            </View>
+      );
+    }
+
+    else{
+      return (
+        <View>
+          <Text style={styles.PaymentText2}>Transaction Details</Text>
             <RNSlidingButton
               style={{
                 width: 248,
@@ -212,52 +246,15 @@ export default class Chat extends React.Component {
               onSlidingSuccess={this.onSlideRight}
               slideDirection={SlideDirection.RIGHT}
             >
-              <Image source={require("../../ChatAppV2/assets/SwipeGradient.png")}
-              
+            <Image 
+              source={require("../../ChatAppV2/assets/SwipeGradient.png")}
               style={{
-                flex:1,
-                position:'absolute',
-                width:248,
-              }}>
-
-              </Image>
-              <View>
-                <Avatar
-                  size="small"
-                  rounded
-                  source={{
-                    uri:
-                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-                  }}
-                />
-              </View>
-            </RNSlidingButton>
-          </View>
-        );
-    }
-
-    else {
-
-      return (
-        <View>
-          <Text style={styles.PaymentText2}>Transaction Details</Text>
-          <RNSlidingButton
-            style={{
-              width: 248,
-            }}
-            height={35}
-            onSlidingSuccess={this.onSlideRight}
-            slideDirection={SlideDirection.RIGHT}
-          >
-            <Image source={require("../../ChatAppV2/assets/SwipeGradient.png")}
-            
-            style={{
               flex:1,
               position:'absolute',
               width:248,
             }}>
-
             </Image>
+
             <View>
               <Avatar
                 size="small"
@@ -268,19 +265,13 @@ export default class Chat extends React.Component {
                 }}
               />
             </View>
+
           </RNSlidingButton>
         </View>
-      );
-    }
-    // else if (props.currentMessage.isPaid == true) {
-    //   return (
-    //     <View>
-    //       <Text style={styles.PaymentText}>Transaction Details</Text>
-    //       </View>
-    //   )
-    // }
+        );
+      }
+     }
   };
-}
 
   render() { 
     const chat = (
@@ -319,6 +310,7 @@ export default class Chat extends React.Component {
       </View>
     );
   }
+
 
   componentDidMount() {
     firebaseSDK.getChat(this.chatKey, (message) =>
