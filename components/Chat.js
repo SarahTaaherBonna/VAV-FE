@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Image,
   Alert,
+  Dimensions
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
@@ -22,6 +23,17 @@ import {
 import axios from "axios";
 import firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
+
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
 
 export default class Chat extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -184,9 +196,9 @@ export default class Chat extends React.Component {
             <Text style={styles.PaymentText2}>Transaction Details</Text>
             <RNSlidingButton
               style={{
-                width: 248,
+                width: resizeWidth(248),
               }}
-              height={35}
+              height={resizeHeight(35)}
               onSlidingSuccess={this.onSlideRightGenerator(invoice_id)}
               slideDirection={SlideDirection.RIGHT}
             >
@@ -195,7 +207,7 @@ export default class Chat extends React.Component {
                 style={{
                   flex: 1,
                   position: "absolute",
-                  width: 248,
+                  width: resizeWidth(248),
                 }}
               ></Image>
 
@@ -295,9 +307,9 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    marginTop: 5,
-    width: 30,
-    height: 30,
+    marginTop: resizeHeight(5),
+    width: resizeWidth(30),
+    height: resizeHeight(30),
     borderRadius: 80,
     position: "absolute",
     alignSelf: "center",

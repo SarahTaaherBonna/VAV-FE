@@ -14,7 +14,19 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ImageBackground,
+  Dimensions
 } from "react-native";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
+
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
 
 import firebaseSDK from "../config/firebaseSDK";
 
@@ -95,13 +107,13 @@ export default class ProfilePage extends React.Component {
         >
           <View
             style={{
-              marginTop: 130,
+              marginTop: resizeHeight(130),
               alignSelf: "center",
-              height: 480,
-              width: 350,
+              height: resizeHeight(480),
+              width: resizeWidth(350),
               borderRadius: 30,
               backgroundColor: "#16267D",
-              paddingTop: 70,
+              paddingTop: resizeHeight(70),
             }}
           >
             <Image
@@ -150,7 +162,7 @@ export default class ProfilePage extends React.Component {
             />
           </View>
 
-          <View style={{ alignSelf: "center", top: -25 }}>
+          <View style={{ alignSelf: "center", top: resizeHeight(-25) }}>
             <FlatButton
               text="UPDATE"
               onPress={() => {
@@ -167,9 +179,9 @@ export default class ProfilePage extends React.Component {
 const offset = 16;
 const styles = StyleSheet.create({
   logo: {
-    top: -70,
-    width: 160,
-    height: 160,
+    top: resizeHeight(-70),
+    width: resizeWidth(160),
+    height: resizeHeight(160),
     borderRadius: 80,
     borderWidth: 1,
     borderColor: "#16267D",
@@ -181,8 +193,8 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     alignSelf: "center",
     backgroundColor: "#F7B600",
-    width: 50,
-    height: 50,
+    width: resizeWidth(50),
+    height: resizeHeight(50),
     borderRadius: 25,
     textAlign: "center",
     textAlignVertical: "center",
@@ -193,26 +205,26 @@ const styles = StyleSheet.create({
 
   labeluser: {
     fontWeight: "bold",
-    marginLeft: 40,
-    marginBottom: 5,
+    marginLeft: resizeWidth(40),
+    marginBottom: resizeHeight(5),
     fontSize: 16,
     color: "#FFFFFF",
   },
 
   labeluser2: {
     fontWeight: "bold",
-    marginTop: 30,
-    marginLeft: 30,
-    marginBottom: 5,
+    marginTop: resizeHeight(30),
+    marginLeft: resizeWidth(30),
+    marginBottom: resizeHeight(5),
     fontSize: 16,
     color: "#FFFFFF",
   },
 
   inputuser: {
     alignSelf: "center",
-    paddingHorizontal: 15,
-    width: 300,
-    height: 50,
+    paddingHorizontal: resizeWidth(15),
+    width: resizeWidth(300),
+    height: resizeHeight(50),
     borderColor: "#43519D",
     backgroundColor: "#283786",
     borderRadius: 8,

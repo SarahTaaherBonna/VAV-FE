@@ -11,10 +11,22 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   ScrollView,
+  Dimensions
 } from "react-native";
 import FlatButton2 from "../components/Button2";
 
 import firebaseSDK from "../config/firebaseSDK";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
+
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
 
 export default class Payment extends React.Component {
   state = {
@@ -59,13 +71,13 @@ export default class Payment extends React.Component {
 
           <View
             style={{
-              marginTop: 110,
+              marginTop: resizeHeight(110),
               alignSelf: "center",
-              height: 480,
-              width: 350,
+              height: resizeHeight(520),
+              width: resizeWidth(350),
               borderRadius: 30,
               backgroundColor: "#F7B600",
-              paddingTop: 80,
+              paddingTop: resizeHeight(80),
               alignSelf: "center",
             }}
           >
@@ -122,8 +134,8 @@ const offset = 16;
 const styles = StyleSheet.create({
   logo: {
     margin: 30,
-    width: 150,
-    height: 150,
+    width: resizeWidth(150),
+    height: resizeHeight(150),
     borderRadius: 80,
     position: "absolute",
     alignSelf: "center",
@@ -132,18 +144,18 @@ const styles = StyleSheet.create({
 
   title: {
     fontWeight: "bold",
-    marginBottom: 5,
-    marginHorizontal: 15,
+    marginBottom: resizeHeight(5),
+    marginHorizontal: resizeWidth(15),
     fontSize: 16,
     color: "#FFFFFF",
   },
   nameInput: {
-    marginBottom: 10,
-    marginTop: 5,
-    paddingHorizontal: 10,
-    marginHorizontal: 15,
-    width: 320,
-    height: 50,
+    marginBottom: resizeHeight(15),
+    marginTop: resizeHeight(5),
+    paddingHorizontal: resizeWidth(10),
+    marginHorizontal: resizeWidth(15),
+    width: resizeWidth(320),
+    height: resizeHeight(50),
     borderColor: "#43519D",
     backgroundColor: "#FFC524",
     borderRadius: 8,

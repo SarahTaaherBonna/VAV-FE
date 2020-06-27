@@ -7,6 +7,7 @@ import {
   Keyboard,
   TouchableOpacity,
   ActivityIndicator,
+  Dimensions
 } from "react-native";
 import axios from "axios";
 import * as firebase from "firebase";
@@ -15,11 +16,23 @@ import { CreditCardInput, CardView } from "react-native-credit-card-input";
 import FlatButton from "../components/Button";
 import { Text } from "native-base";
 
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
+
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
+
+
 const s = StyleSheet.create({
   container: {
-    height: 667,
+    height: resizeHeight(667),
     backgroundColor: "#16267D",
-    paddingTop: 60,
+    paddingTop: resizeHeight(60),
   },
   cardView: {
     backgroundColor: "#16267D",
@@ -29,7 +42,7 @@ const s = StyleSheet.create({
     height: "100%",
   },
   padding: {
-    height: 50,
+    height: resizeHeight(50),
   },
   label: {
     color: "#FFFFFF",

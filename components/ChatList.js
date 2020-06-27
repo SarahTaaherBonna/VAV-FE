@@ -8,10 +8,22 @@ import {
   SafeAreaView,
   ScrollView,
   FlatView,
+  Dimensions
 } from "react-native";
 import { Avatar, Header } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
+
+const windowWidth = Dimensions.get("window").width;
+const windowHeight = Dimensions.get("window").height;
+
+const resizeWidth = (w) => {
+  return (value = w * (windowWidth / 375));
+};
+
+const resizeHeight = (h) => {
+  return (value = h * (windowHeight / 872));
+};
 
 // TODO: create ChatList for user
 
@@ -30,8 +42,8 @@ export default class ChatList extends Component {
         <View
           style={{
             flexDirection: "row",
-            height: 90,
-            width: 340,
+            height: resizeHeight(100),
+            width: resizeWidth(340),
             padding: 10,
             backgroundColor: "#16267D",
             borderRadius: 15,
@@ -100,10 +112,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     paddingLeft: 15,
     color: "white",
-    marginTop: 5,
+    marginTop: resizeHeight(5),
   },
 
   contentContainer: {
-    paddingVertical: 20,
+    paddingVertical: resizeHeight(20),
   },
 });
