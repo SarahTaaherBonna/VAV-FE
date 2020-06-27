@@ -251,6 +251,7 @@ export default class Chat extends React.Component {
           onPress={this.onPressGeneratePaymentRequest}
           buttonStyle={styles.PaymentButton}
         />
+        
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
