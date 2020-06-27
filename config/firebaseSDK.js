@@ -90,11 +90,11 @@ class FirebaseSDK {
 
   getCurrentUserDisplayName = () => {
     var user = firebase.auth().currentUser;
-    
+
     if (user != null) {
       return user.displayName;
     }
-  }
+  };
 
   // TODO: update account
   updateAccount = async (newUser) => {
@@ -190,11 +190,11 @@ class FirebaseSDK {
 
   getCurrentUserUid = () => {
     var user = firebase.auth().currentUser;
-    
+
     if (user != null) {
-      return user.uid
+      return user.uid;
     }
-  }
+  };
 
   getAvatar = async () => {
     try {
@@ -326,6 +326,19 @@ class FirebaseSDK {
     return sendMessage;
   };
 
+  sendReceiptMessage = (chatKey, incomingMessage) => {
+    const { text, user } = incomingMessage;
+    const message = {
+      text,
+      user,
+      timestamp: this.timestamp,
+      isPayment: true,
+      isPaid: true,
+    };
+    // console.log(message);
+    this.getChatRef(chatKey).push(message);
+  };
+
   sendPaymentMessage = (chatKey, incomingMessage) => {
     const { text, user } = incomingMessage;
     const message = {
@@ -341,10 +354,10 @@ class FirebaseSDK {
 
   markIsPaid = (chatKey, messageKey) => {
     let ref = this.getChatRef(chatKey);
-    ref.child(messageKey).update( {
-      isPaid: true
+    ref.child(messageKey).update({
+      isPaid: true,
     });
-  }
+  };
 
   // close the connection to the Backend
   closeConnection() {
