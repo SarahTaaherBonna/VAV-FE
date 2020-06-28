@@ -41,6 +41,7 @@ export default class Chat extends React.Component {
     merchantuid: this.props.route.params.merchantuid,
     buyeruid: this.props.route.params.buyeruid,
     uri: null,
+    showAlert: false,
   };
 
   getCurrentUserDetails() {
@@ -81,7 +82,6 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
-      const forceUpdate = useForceUpdate();
 
       try {
         const response = await axios.post(
@@ -121,9 +121,6 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-
-        //forceUpdate();
-
       
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
@@ -184,6 +181,9 @@ export default class Chat extends React.Component {
     } catch (error) {
       console.log("*************ERROR!!!!!!!!!!!!!!");
       console.log(error);
+      Alert.alert(
+        "Payment Successful!\nTransaction ID: " + response.data.transaction_id
+      );
     }
   };
 
@@ -332,7 +332,9 @@ export default class Chat extends React.Component {
           buttonStyle={styles.PaymentButton}
         />
 
-        <View style={{ flex: 1 }}>{chat}</View>
+        <View style={{ flex: 1 }}>
+          {chat}
+        </View>
       </View>
     );
   }
