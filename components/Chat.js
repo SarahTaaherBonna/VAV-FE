@@ -8,7 +8,7 @@ import {
   StyleSheet,
   Image,
   Alert,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
@@ -65,14 +65,23 @@ export default class Chat extends React.Component {
     };
   }
 
-  onSlideRightGenerator = (invoice_id, message_id) => {
+  onSlideRightGenerator = (invoice_id, message_id, message_text) => {
     // add in props
     let onSlideRight = async () => {
       //perform Action on slide success.
 
       //invoice_id is available here
-      // console.log(message_id);
-      // console.log(invoice_id);
+      console.log("Message ID: ");
+      console.log(message_id);
+      console.log("INVOICE ID: ");
+      console.log(invoice_id);
+      console.log("MESSAGE TEXT: ");
+      console.log(message_text);
+
+      var merchantName = message_text.split("\n")[1].split(":")[1];
+      var buyerName = message_text.split("\n")[2].split(":")[1];
+      var productName = message_text.split("\n")[3].split(":")[1];
+      var priceAmount = message_text.split("\n")[4].split(":")[1];
 
       var makePaymentAPI =
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
@@ -90,26 +99,29 @@ export default class Chat extends React.Component {
         console.log(response.data);
 
         await firebaseSDK.markIsPaid(this.state.chatKey, message_id);
-        console.log("marked paid")
+        console.log("marked paid");
 
         let ReceiptToSend =
           "Transaction ID: " +
           response.data.transaction_id +
+          "\nInvoice ID: " +
+          invoice_id +
           "\nMerchant: " +
-          this.state.merchantname +
+          merchantName +
           "\nBuyer: " +
-          this.state.buyername +
+          buyerName +
           "\nProduct: " +
-          productname +
+          productName +
           "\nPrice: " +
-          productprice;
+          priceAmount;
+
         console.log("Receipt: " + ReceiptToSend);
 
         await firebaseSDK.sendReceiptMessage(this.state.chatKey, {
           user: this.getCurrentUserDetails(),
           text: ReceiptToSend,
         });
-        console.log("added receipt")
+        console.log("added receipt");
 
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
@@ -195,31 +207,32 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
-
-    console.log("--start--")
+    console.log("--start--");
     console.log(props.currentMessage.isPayment);
     console.log(props.currentMessage.isPaid);
-    console.log("--end--")
+    console.log("--end--");
 
     if (
       props.currentMessage.isPayment == true &&
-      props.currentMessage.isPaid == false
+      (props.currentMessage.isPaid == false ||
+        props.currentMessage.isPaid == undefined)
     ) {
       let message_id = props.currentMessage._id;
+      let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
         return (
           <View>
-            <Text style={styles.PaymentText}>Transaction Details</Text>
+            <Text style={styles.PaymentText}>Invoice Details</Text>
           </View>
         );
       } else {
         // buyer
         return (
           <View>
-            <Text style={styles.PaymentText2}>Transaction Details</Text>
+            <Text style={styles.PaymentText2}>Invoice Details</Text>
             <RNSlidingButton
               style={{
                 width: resizeWidth(248),
@@ -227,7 +240,8 @@ export default class Chat extends React.Component {
               height={resizeHeight(35)}
               onSlidingSuccess={this.onSlideRightGenerator(
                 invoice_id,
-                message_id
+                message_id,
+                message_text
               )}
               slideDirection={SlideDirection.RIGHT}
             >
@@ -254,6 +268,23 @@ export default class Chat extends React.Component {
           </View>
         );
       }
+    }
+
+    if (
+      props.currentMessage.isPayment == true &&
+      props.currentMessage.isPaid == true
+    ) {
+      let message_id = props.currentMessage._id;
+      let message_text = props.currentMessage.text;
+      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
+
+      // // if it is right side (blue colour) merchant
+      // if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+      return (
+        <View>
+          <Text style={styles.PaymentText}>Transaction Details</Text>
+        </View>
+      );
     }
   };
 
@@ -302,7 +333,7 @@ export default class Chat extends React.Component {
     firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
-      }))
+      }));
     });
   }
 

@@ -324,6 +324,7 @@ class FirebaseSDK {
           user,
           timestamp: this.timestamp,
           isPayment: false,
+          isPaid: false,
         };
         this.getChatRef(chatKey).push(message);
         // this.append(message);
