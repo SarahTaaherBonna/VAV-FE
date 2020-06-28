@@ -44,7 +44,7 @@ export default class ChatList extends Component {
         <View
           style={{
             flexDirection: "row",
-            height: resizeHeight(150),
+            height: resizeHeight(90),
             width: resizeWidth(340),
             padding:10,
             backgroundColor: "#16267D",
@@ -55,13 +55,13 @@ export default class ChatList extends Component {
           }}
         >
           <Avatar
-            size="large"
+            size="medium"
             rounded
             source={{
               uri:
                 "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
             }}
-            containerStyle={{ backgroundColor: "#F7B600", padding: 5, marginTop:resizeHeight(20), marginLeft:resizeWidth(10),}}
+            containerStyle={{ backgroundColor: "#F7B600", padding: 4, marginTop:resizeHeight(8), marginLeft:resizeWidth(10),}}
           />
           <View
             style={{

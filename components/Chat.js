@@ -124,6 +124,10 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
+
+        //forceUpdate();
+
+      
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -282,9 +286,10 @@ export default class Chat extends React.Component {
                   style={{
                     height: 30,
                     width: 30,
-                    borderRadius: 50,
-                    resizeMode: "contain",
+                    borderRadius: 15,
+                    resizeMode: "center",
                     padding: 10,
+                    backgroundColor:'white'
                   }}
                 />
               </View>
