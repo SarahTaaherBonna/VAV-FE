@@ -242,6 +242,7 @@ class FirebaseSDK {
       return null;
     }
   }
+  
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }

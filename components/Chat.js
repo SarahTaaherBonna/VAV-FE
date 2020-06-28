@@ -8,9 +8,9 @@ import {
   Dimensions,
 } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
-import { Header, Button, Avatar } from "react-native-elements";
+import { Button } from "react-native-elements";
 // @flow
-import { GiftedChat, MessageText, Message } from "react-native-gifted-chat";
+import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
 import useForceUpdate from "use-force-update";
