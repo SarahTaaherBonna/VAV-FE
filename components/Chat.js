@@ -1,19 +1,12 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  Alert,
-  Dimensions,
-} from "react-native";
+import { View, Text, StyleSheet, Image, Alert, Dimensions } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
 // @flow
 import { GiftedChat, MessageText, Message } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
-import useForceUpdate from "use-force-update";
+// import useForceUpdate from "use-force-update";
 
 import firebaseSDK from "../config/firebaseSDK";
 
@@ -81,7 +74,7 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
-      const forceUpdate = useForceUpdate();
+      // const forceUpdate = useForceUpdate();
 
       try {
         const response = await axios.post(
@@ -121,10 +114,7 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-
-        //forceUpdate();
-
-      
+        // forceUpdate();
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -286,7 +276,7 @@ export default class Chat extends React.Component {
                     borderRadius: 15,
                     resizeMode: "center",
                     padding: 10,
-                    backgroundColor:'white'
+                    backgroundColor: "white",
                   }}
                 />
               </View>

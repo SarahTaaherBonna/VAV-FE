@@ -12,7 +12,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   ImageBackground,
-  Dimensions
+  Dimensions,
+  Alert,
 } from "react-native";
 
 const windowWidth = Dimensions.get("window").width;
@@ -34,6 +35,7 @@ export default class ProfilePage extends React.Component {
     email: "",
     password: "",
     image: "",
+    uid: "",
     setImage: false,
     updateImage: false,
   };
@@ -67,23 +69,26 @@ export default class ProfilePage extends React.Component {
       console.log(this.state.name);
       console.log(this.state.email);
       console.log(this.state.password);
-      await firebaseSDK.updateAccount(user);
+      // console.log(typeof this.state.password);
+      await firebaseSDK.updateUsername(user);
+      await firebaseSDK.updateEmail(user);
+      await firebaseSDK.updatePassword(user);
       if (this.state.image && this.state.updateImage) {
         await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
       }
 
-      console.log("updating name")
-      console.log(firebaseSDK.uid)
-      console.log(this.state.name)
+      console.log("updating name");
+      console.log(firebaseSDK.uid);
+      console.log(this.state.name);
       await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
-
+      Alert.alert("Profile updated successfully!");
+      this.props.navigation.navigate("Home", {
+        screen: "ProductListing",
+      });
     } catch ({ message }) {
-      console.log("Update account failed. Catch error:" + message);
+      console.log("Update account failed. Catch error: " + message);
+      Alert.alert("Profile Update failed. Please try again.");
     }
-
-    this.props.navigation.navigate("Home", {
-      screen: "ProductListing",
-    });
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
@@ -159,7 +164,7 @@ export default class ProfilePage extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter password"
-              secureTextEntry={true}
+              // secureTextEntry={true}
               autoCorrect={false}
               onChangeText={this.onChangeTextPassword}
               value={this.state.password}

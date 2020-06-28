@@ -31,8 +31,10 @@ export default class Login extends React.Component {
   };
 
   state = {
-    email: "user1@gmail.com",
-    password: "password",
+    name: "",
+    email: "",
+    password: "",
+    avatar: "",
   };
 
   onPressLogin = async () => {
