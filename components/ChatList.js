@@ -33,6 +33,8 @@ export default class ChatList extends Component {
   };
 
   generateChatListing = (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
+    let short_text=text.split("\n")[0]
+    console.log(short_text)
     const newChatListing = (
       <TouchableOpacity
         onPress={() => {
@@ -69,7 +71,7 @@ export default class ChatList extends Component {
             }}
           >
             <Text style={styles.titleText}>{buyername}</Text>
-            <Text style={styles.messageText}>{text}</Text>
+            <Text style={styles.messageText}>{short_text}</Text>
           </View>
         </View>
       </TouchableOpacity>
