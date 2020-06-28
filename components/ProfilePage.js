@@ -1,7 +1,5 @@
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
-import * as Permissions from "expo-permissions";
-import ImageEditor from "@react-native-community/image-editor";
 import { AntDesign } from "@expo/vector-icons";
 import FlatButton from "../components/Button";
 import {

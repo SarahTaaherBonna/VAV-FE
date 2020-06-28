@@ -4,14 +4,12 @@ import {
   Text,
   TextInput,
   View,
-  Button,
   Image,
   ScrollView,
   KeyboardAvoidingView,
   Dimensions,
 } from "react-native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { Avatar, Header } from "react-native-elements";
+
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
 
@@ -33,21 +31,14 @@ export default class Login extends React.Component {
   };
 
   state = {
-    name: "Sarah Taaher Bonna",
-    email: "sarahtb25@gmail.com",
-    password: "Password",
-    // name: "User1",
-    // email: "User1@gmail.com",
-    // password: "password",
-    avatar: "",
+    email: "user1@gmail.com",
+    password: "password",
   };
 
   onPressLogin = async () => {
     const user = {
-      name: this.state.name,
       email: this.state.email,
       password: this.state.password,
-      avatar: this.state.avatar,
     };
 
     const response = firebaseSDK.login(

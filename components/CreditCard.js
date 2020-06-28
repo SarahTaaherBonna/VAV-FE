@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
-  Button,
-  Alert,
   Keyboard,
   TouchableOpacity,
   ActivityIndicator,
@@ -14,7 +12,6 @@ import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput, CardView } from "react-native-credit-card-input";
 import FlatButton from "../components/Button";
-import { Text } from "native-base";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

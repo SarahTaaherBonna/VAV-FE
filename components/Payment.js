@@ -5,17 +5,11 @@ import {
   Text,
   TextInput,
   View,
-  Button,
-  TouchableOpacity,
-  Alert,
-  ImageBackground,
   KeyboardAvoidingView,
   ScrollView,
   Dimensions,
 } from "react-native";
 import FlatButton2 from "../components/Button2";
-
-import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;

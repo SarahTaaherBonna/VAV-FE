@@ -1,8 +1,5 @@
 import React from "react";
 import {
-  Platform,
-  KeyboardAvoidingView,
-  SafeAreaView,
   View,
   Text,
   StyleSheet,

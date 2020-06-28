@@ -2,15 +2,10 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
-  Button,
-  Alert,
   Text,
-  SafeAreaView,
-  ScrollView,
-  FlatView,
   Dimensions
 } from "react-native";
-import { Avatar, Header } from "react-native-elements";
+import { Avatar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
 

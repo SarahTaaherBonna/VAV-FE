@@ -2,20 +2,14 @@ import React, { Component } from "react";
 import {
   StyleSheet,
   View,
-  Alert,
   Text,
   Image,
   Dimensions,
   ScrollView,
 } from "react-native";
-import { Card, ListItem, Button, Icon, Header } from "react-native-elements";
 import firebase from "firebase";
-import FlatButton from "../components/Button";
 import axios from "axios";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import ChatList from "./ChatList";
-import ProfilePage from "./ProfilePage";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const resizeComponent = (value, percentage) => {

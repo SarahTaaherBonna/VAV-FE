@@ -8,9 +8,6 @@ import {
   Text,
   TextInput,
   View,
-  Button,
-  TouchableOpacity,
-  Alert,
   ScrollView,
   KeyboardAvoidingView,
   Dimensions
