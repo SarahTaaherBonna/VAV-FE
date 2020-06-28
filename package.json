@@ -44,6 +44,7 @@
     "react-navigation-stack": "^2.7.0",
     "react-navigation-tabs": "^2.8.13",
     "rn-sliding-button": "^1.1.5",
+    "use-force-update": "^1.0.7",
     "uuid": "^8.1.0"
   },
   "devDependencies": {

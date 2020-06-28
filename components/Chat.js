@@ -13,15 +13,11 @@ import {
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
 // @flow
-import {
-  GiftedChat,
-  MessageText,
-  SystemMessage,
-  Message,
-  Bubble,
-} from "react-native-gifted-chat";
+import { GiftedChat, MessageText, Message } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
+import useForceUpdate from "use-force-update";
+
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -47,7 +43,7 @@ export default class Chat extends React.Component {
     buyername: this.props.route.params.buyername,
     merchantuid: this.props.route.params.merchantuid,
     buyeruid: this.props.route.params.buyeruid,
-    uri: null
+    uri: null,
   };
 
   getCurrentUserDetails() {
@@ -88,6 +84,7 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
+      const forceUpdate = useForceUpdate();
 
       try {
         const response = await axios.post(
@@ -208,6 +205,7 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
+    // Transaction Record (Receipt)
     if (
       props.currentMessage.isPayment == true &&
       props.currentMessage.isPaid == true
@@ -276,7 +274,11 @@ export default class Chat extends React.Component {
                 <Avatar
                   size="small"
                   rounded
-                  source={this.state.uri ? {uri: this.state.uri}: require('../assets/person.png')}
+                  source={
+                    this.state.uri
+                      ? { uri: this.state.uri }
+                      : require("../assets/VisaLogo32by32.png")
+                  }
                 />
               </View>
             </RNSlidingButton>
@@ -327,10 +329,10 @@ export default class Chat extends React.Component {
     );
   }
 
-  async getAvatar(){
-    if (this.state.buyeruid == firebaseSDK.uid){
+  async getAvatar() {
+    if (this.state.buyeruid == firebaseSDK.uid) {
       let uri = await firebaseSDK.getChatAvatar(this.state.merchantuid);
-      this.setState({uri: uri})
+      this.setState({ uri: uri });
     }
   }
   componentDidMount() {
