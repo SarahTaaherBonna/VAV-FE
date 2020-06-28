@@ -73,7 +73,7 @@ export default class Payment extends React.Component {
             style={{
               marginTop: resizeHeight(110),
               alignSelf: "center",
-              height: resizeHeight(520),
+              height: resizeHeight(580),
               width: resizeWidth(350),
               borderRadius: 30,
               backgroundColor: "#F7B600",
