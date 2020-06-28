@@ -75,10 +75,7 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
-<<<<<<< HEAD
       // const forceUpdate = useForceUpdate();
-=======
->>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
 
       try {
         const response = await axios.post(
@@ -118,11 +115,7 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-<<<<<<< HEAD
         // forceUpdate();
-=======
-      
->>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -164,21 +157,21 @@ export default class Chat extends React.Component {
       console.log(response.data);
       this.setState({ invoiceid: response.data.invoice_id });
       let MessageToSend =
-      "Invoice ID: " +
-      response.data.invoice_id +
-      "\nMerchant: " +
-      this.state.merchantname +
-      "\nBuyer: " +
-      this.state.buyername +
-      "\nProduct: " +
-      productname +
-      "\nPrice: " +
-      productprice;
+        "Invoice ID: " +
+        response.data.invoice_id +
+        "\nMerchant: " +
+        this.state.merchantname +
+        "\nBuyer: " +
+        this.state.buyername +
+        "\nProduct: " +
+        productname +
+        "\nPrice: " +
+        productprice;
 
-    firebaseSDK.sendPaymentMessage(this.state.chatKey, {
-      user: this.getCurrentUserDetails(),
-      text: MessageToSend,
-    });
+      firebaseSDK.sendPaymentMessage(this.state.chatKey, {
+        user: this.getCurrentUserDetails(),
+        text: MessageToSend,
+      });
     } catch (error) {
       console.log("*************ERROR!!!!!!!!!!!!!!");
       console.log(error);
@@ -333,9 +326,7 @@ export default class Chat extends React.Component {
           buttonStyle={styles.PaymentButton}
         />
 
-        <View style={{ flex: 1 }}>
-          {chat}
-        </View>
+        <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
   }
