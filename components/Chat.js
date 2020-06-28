@@ -13,15 +13,11 @@ import {
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Header, Button, Avatar } from "react-native-elements";
 // @flow
-import {
-  GiftedChat,
-  MessageText,
-  SystemMessage,
-  Message,
-  Bubble,
-} from "react-native-gifted-chat";
+import { GiftedChat, MessageText, Message } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
+import useForceUpdate from "use-force-update";
+
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -47,6 +43,7 @@ export default class Chat extends React.Component {
     buyername: this.props.route.params.buyername,
     merchantuid: this.props.route.params.merchantuid,
     buyeruid: this.props.route.params.buyeruid,
+    uri: null,
   };
 
   getCurrentUserDetails() {
@@ -87,6 +84,7 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
+      const forceUpdate = useForceUpdate();
 
       try {
         const response = await axios.post(
@@ -207,10 +205,6 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
-    // console.log("--start--");
-    // console.log(props.currentMessage.isPayment);
-    // console.log(props.currentMessage.isPaid);
-    // console.log("--end--");
     // Transaction Record (Receipt)
     if (
       props.currentMessage.isPayment == true &&
@@ -277,12 +271,20 @@ export default class Chat extends React.Component {
               ></Image>
 
               <View>
-                <Avatar
-                  size="small"
-                  rounded
-                  source={{
-                    uri:
-                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
+                <Image
+                  // size="small"
+                  // rounded
+                  source={
+                    this.state.uri
+                      ? { uri: this.state.uri }
+                      : require("../assets/VisaLogo64by64.png")
+                  }
+                  style={{
+                    height: 30,
+                    width: 30,
+                    borderRadius: 50,
+                    resizeMode: "contain",
+                    padding: 10,
                   }}
                 />
               </View>
@@ -297,7 +299,7 @@ export default class Chat extends React.Component {
     const chat = (
       <GiftedChat
         messages={this.state.messages}
-        onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
+        onSend={firebaseSDK.getSendMessageRef(this.state.chatKey)}
         user={this.getCurrentUserDetails()}
         renderCustomView={this.renderCustomViewPayment}
         isTyping={true}
@@ -332,6 +334,13 @@ export default class Chat extends React.Component {
         <View style={{ flex: 1 }}>{chat}</View>
       </View>
     );
+  }
+
+  async getAvatar() {
+    if (this.state.buyeruid == firebaseSDK.uid) {
+      let uri = await firebaseSDK.getChatAvatar(this.state.merchantuid);
+      this.setState({ uri: uri });
+    }
   }
 
   componentDidMount() {

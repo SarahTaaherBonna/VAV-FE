@@ -220,6 +220,28 @@ class FirebaseSDK {
     }
   };
 
+  getChatAvatar  = async (uid) => {
+    try {
+      var storage = firebase.storage();
+      var pathReference = storage.ref("images/" + uid);
+      var listRef = await pathReference.listAll();
+      var img = null;
+      listRef.items.forEach((item) => {
+        let split = item.name.split(".");
+        if (split[0] == "avatar") {
+          img = item.name;
+          return;
+        }
+      });
+
+      if (img) {
+        return await pathReference.child(img).getDownloadURL();
+      }
+    } catch (err) {
+      console.log("uploadImage try/catch error: " + err.message);
+      return null;
+    }
+  }
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }
