@@ -196,11 +196,6 @@ export default class Chat extends React.Component {
 
   renderCustomViewPayment = (props) => {
 
-    console.log("--start--")
-    console.log(props.currentMessage.isPayment);
-    console.log(props.currentMessage.isPaid);
-    console.log("--end--")
-
     if (
       props.currentMessage.isPayment == true &&
       props.currentMessage.isPaid == false
