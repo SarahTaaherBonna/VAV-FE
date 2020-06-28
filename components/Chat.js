@@ -165,14 +165,9 @@ export default class Chat extends React.Component {
       );
       console.log(response.data);
       this.setState({ invoiceid: response.data.invoice_id });
-    } catch (error) {
-      console.log("*************ERROR!!!!!!!!!!!!!!");
-      console.log(error);
-    }
-
-    let MessageToSend =
+      let MessageToSend =
       "Invoice ID: " +
-      this.state.invoiceid +
+      response.data.invoice_id +
       "\nMerchant: " +
       this.state.merchantname +
       "\nBuyer: " +
@@ -186,6 +181,10 @@ export default class Chat extends React.Component {
       user: this.getCurrentUserDetails(),
       text: MessageToSend,
     });
+    } catch (error) {
+      console.log("*************ERROR!!!!!!!!!!!!!!");
+      console.log(error);
+    }
   };
 
   onPressGeneratePaymentRequest = () => {
