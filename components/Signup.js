@@ -57,6 +57,12 @@ export default class Signup extends React.Component {
       if (account != false && this.state.image) {
         await  firebaseSDK.uploadImage(this.state.image, account.uid)
       }
+
+      console.log("setting name")
+      console.log(account.uid)
+      console.log(this.state.name)
+      console.log("end of setting name")
+      firebaseSDK.updateName(account.uid, this.state.name);
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
     }
