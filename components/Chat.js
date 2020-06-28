@@ -71,8 +71,8 @@ export default class Chat extends React.Component {
       //perform Action on slide success.
 
       //invoice_id is available here
-      console.log(message_id);
-      console.log(invoice_id);
+      // console.log(message_id);
+      // console.log(invoice_id);
 
       var makePaymentAPI =
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
@@ -90,6 +90,8 @@ export default class Chat extends React.Component {
         console.log(response.data);
 
         await firebaseSDK.markIsPaid(this.state.chatKey, message_id);
+        console.log("marked paid")
+
         let ReceiptToSend =
           "Transaction ID: " +
           response.data.transaction_id +
@@ -107,6 +109,7 @@ export default class Chat extends React.Component {
           user: this.getCurrentUserDetails(),
           text: ReceiptToSend,
         });
+        console.log("added receipt")
 
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
@@ -192,6 +195,12 @@ export default class Chat extends React.Component {
   };
 
   renderCustomViewPayment = (props) => {
+
+    console.log("--start--")
+    console.log(props.currentMessage.isPayment);
+    console.log(props.currentMessage.isPaid);
+    console.log("--end--")
+
     if (
       props.currentMessage.isPayment == true &&
       props.currentMessage.isPaid == false
@@ -290,11 +299,11 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChat(this.state.chatKey, (message) =>
+    firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
         messages: GiftedChat.append(previousState.messages, message),
       }))
-    );
+    });
   }
 
   componentWillUnmount() {

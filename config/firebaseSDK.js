@@ -285,8 +285,15 @@ class FirebaseSDK {
     const { timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
 
+    let isPaid = false;
+
+    if (isPayment) {
+      isPaid = snapshot.val().isPaid;
+    }
+
     const timestamp = new Date(numberStamp);
     const message = {
+      isPaid,
       isPayment,
       _id,
       timestamp,
@@ -318,7 +325,6 @@ class FirebaseSDK {
           timestamp: this.timestamp,
           isPayment: false,
         };
-        console.log(message);
         this.getChatRef(chatKey).push(message);
         // this.append(message);
       }
@@ -335,7 +341,6 @@ class FirebaseSDK {
       isPayment: true,
       isPaid: true,
     };
-    // console.log(message);
     this.getChatRef(chatKey).push(message);
   };
 
@@ -348,7 +353,6 @@ class FirebaseSDK {
       isPayment: true,
       isPaid: false,
     };
-    // console.log(message);
     this.getChatRef(chatKey).push(message);
   };
 
