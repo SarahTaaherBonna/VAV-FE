@@ -96,60 +96,6 @@ class FirebaseSDK {
     }
   };
 
-  // updateAccount = async (newUser) => {
-  //   var currentUser = firebase.auth().currentUser;
-  //   if (newUser.name != currentUser.name) {
-  //     currentUser
-  //       .updateProfile({
-  //         displayName: newUser.name,
-  //         // photoURL: "https://example.com/jane-q-user/profile.jpg",
-  //       })
-  //       .then(function () {
-  //         // Update successful.
-  //         // Alert.alert("Update success");
-  //         console.log("Name update passed");
-  //       })
-  //       .catch(function (error) {
-  //         // An error happened.
-  //         console.log("Name update failed.");
-  //         console.log(error);
-  //       });
-  //   }
-  //   if (newUser.email != currentUser.email) {
-  //     currentUser
-  //       .updateEmail(newUser.email)
-  //       .then(function () {
-  //         // Update successful.
-  //         // Alert.alert("Update success");
-  //         console.log("Email update passed");
-  //       })
-  //       .catch(function (error) {
-  //         // An error happened.
-  //         console.log("Email update failed.");
-  //         console.log(error);
-  //       });
-  //     await firebase
-  //       .auth()
-  //       .signInWithEmailAndPassword(newUser.email, currentUser.password);
-  //   }
-  //   if (newUser.password != currentUser.password) {
-  //     currentUser
-  //       .updatePassword(newUser.password)
-  //       .then(function () {
-  //         // Update successful.
-  //         console.log("Password update passed");
-  //       })
-  //       .catch(function (error) {
-  //         // An error happened.
-  //         console.log("Password update failed.");
-  //         console.log(error);
-  //       });
-  //     await firebase
-  //       .auth()
-  //       .signInWithEmailAndPassword(currentUser.email, newUser.password);
-  //   }
-  // };
-
   updateUsername = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
     console.log("Name: " + newUser.name);
@@ -170,11 +116,6 @@ class FirebaseSDK {
           console.log(error);
         });
     }
-    // var password = currentUser.password.toString();
-    // console.log("Name Password: " + password);
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(currentUser.email, currentUser.password);
   };
 
   updateEmail = async (newUser) => {
@@ -187,17 +128,17 @@ class FirebaseSDK {
           // Update successful.
           // Alert.alert("Update success");
           console.log("Email update passed");
+          console.log(this.logout);
+          this.logout;
+          this.props.navigation.navigate("Login", {
+            screen: "Login",
+          });
         })
         .catch(function (error) {
           // An error happened.
           console.log("Email update failed.");
           console.log(error);
         });
-      // var password = currentUser.password.toString();
-      // console.log("Email Password: " + password);
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(newUser.email, currentUser.password);
     }
   };
 
@@ -210,6 +151,11 @@ class FirebaseSDK {
         .then(function () {
           // Update successful.
           console.log("Password update passed");
+          // console.log(this.logout);
+          this.logout;
+          this.props.navigation.navigate("Login", {
+            screen: "Login",
+          });
         })
         .catch(function (error) {
           // An error happened.
@@ -323,12 +269,8 @@ class FirebaseSDK {
       console.log("uploadImage try/catch error: " + err.message);
       return null;
     }
-<<<<<<< HEAD
   };
-=======
-  }
-  
->>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
+
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }

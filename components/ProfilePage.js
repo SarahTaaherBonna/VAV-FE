@@ -71,8 +71,8 @@ export default class ProfilePage extends React.Component {
       console.log(this.state.password);
       // console.log(typeof this.state.password);
       await firebaseSDK.updateUsername(user);
-      await firebaseSDK.updateEmail(user);
-      await firebaseSDK.updatePassword(user);
+      // await firebaseSDK.updateEmail(user);
+      // await firebaseSDK.updatePassword(user);
       if (this.state.image && this.state.updateImage) {
         await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
       }
@@ -164,10 +164,9 @@ export default class ProfilePage extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter password"
-              // secureTextEntry={true}
+              secureTextEntry={true}
               autoCorrect={false}
               onChangeText={this.onChangeTextPassword}
-              value={this.state.password}
             />
           </View>
 
