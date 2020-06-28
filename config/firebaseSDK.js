@@ -323,7 +323,12 @@ class FirebaseSDK {
       console.log("uploadImage try/catch error: " + err.message);
       return null;
     }
+<<<<<<< HEAD
   };
+=======
+  }
+  
+>>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }

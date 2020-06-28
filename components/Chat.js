@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Alert, Dimensions } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
-import { Header, Button, Avatar } from "react-native-elements";
+import { Button } from "react-native-elements";
 // @flow
-import { GiftedChat, MessageText, Message } from "react-native-gifted-chat";
+import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
 // import useForceUpdate from "use-force-update";
@@ -34,6 +34,7 @@ export default class Chat extends React.Component {
     merchantuid: this.props.route.params.merchantuid,
     buyeruid: this.props.route.params.buyeruid,
     uri: null,
+    showAlert: false,
   };
 
   getCurrentUserDetails() {
@@ -74,7 +75,10 @@ export default class Chat extends React.Component {
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
+<<<<<<< HEAD
       // const forceUpdate = useForceUpdate();
+=======
+>>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
 
       try {
         const response = await axios.post(
@@ -114,7 +118,11 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
+<<<<<<< HEAD
         // forceUpdate();
+=======
+      
+>>>>>>> 978f9afe3ce2e929ef0233e94dfdc99c017d48fd
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -155,14 +163,9 @@ export default class Chat extends React.Component {
       );
       console.log(response.data);
       this.setState({ invoiceid: response.data.invoice_id });
-    } catch (error) {
-      console.log("*************ERROR!!!!!!!!!!!!!!");
-      console.log(error);
-    }
-
-    let MessageToSend =
+      let MessageToSend =
       "Invoice ID: " +
-      this.state.invoiceid +
+      response.data.invoice_id +
       "\nMerchant: " +
       this.state.merchantname +
       "\nBuyer: " +
@@ -176,6 +179,13 @@ export default class Chat extends React.Component {
       user: this.getCurrentUserDetails(),
       text: MessageToSend,
     });
+    } catch (error) {
+      console.log("*************ERROR!!!!!!!!!!!!!!");
+      console.log(error);
+      Alert.alert(
+        "Payment Successful!\nTransaction ID: " + response.data.transaction_id
+      );
+    }
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -323,7 +333,9 @@ export default class Chat extends React.Component {
           buttonStyle={styles.PaymentButton}
         />
 
-        <View style={{ flex: 1 }}>{chat}</View>
+        <View style={{ flex: 1 }}>
+          {chat}
+        </View>
       </View>
     );
   }
