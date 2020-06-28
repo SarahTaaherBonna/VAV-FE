@@ -271,14 +271,21 @@ export default class Chat extends React.Component {
               ></Image>
 
               <View>
-                <Avatar
-                  size="small"
-                  rounded
+                <Image
+                  // size="small"
+                  // rounded
                   source={
                     this.state.uri
                       ? { uri: this.state.uri }
-                      : require("../assets/VisaLogo32by32.png")
+                      : require("../assets/VisaLogo64by64.png")
                   }
+                  style={{
+                    height: 30,
+                    width: 30,
+                    borderRadius: 50,
+                    resizeMode: "contain",
+                    padding: 10,
+                  }}
                 />
               </View>
             </RNSlidingButton>
@@ -335,7 +342,7 @@ export default class Chat extends React.Component {
       this.setState({ uri: uri });
     }
   }
-  
+
   componentDidMount() {
     firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
