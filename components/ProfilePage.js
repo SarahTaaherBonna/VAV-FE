@@ -73,6 +73,12 @@ export default class ProfilePage extends React.Component {
       if (this.state.image && this.state.updateImage) {
         await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
       }
+
+      console.log("updating name")
+      console.log(firebaseSDK.uid)
+      console.log(this.state.name)
+      await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
+
     } catch ({ message }) {
       console.log("Update account failed. Catch error:" + message);
     }

@@ -386,6 +386,13 @@ class FirebaseSDK {
     });
   };
 
+  updateName = async (uid, name) => {
+    let ref = this.userInfoRef;
+    let obj = {};
+    obj[uid] = name
+    ref.update(obj)
+  }
+
   // close the connection to the Backend
   closeConnection() {
     this.chatListRef.off();
