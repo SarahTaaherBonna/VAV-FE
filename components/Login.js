@@ -83,7 +83,7 @@ export default class Login extends React.Component {
       <View style={{ backgroundColor: "#FFFFFF" }}>
         <Image
           style={styles.logo}
-          source={require("../../ChatAppV2/assets/logo_replacement.png")}
+          source={require("../../ChatAppV2/assets/login_visalogo.png")}
         />
         <ScrollView>
           <KeyboardAvoidingView
