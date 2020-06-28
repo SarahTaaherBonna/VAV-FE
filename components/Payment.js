@@ -11,7 +11,7 @@ import {
   ImageBackground,
   KeyboardAvoidingView,
   ScrollView,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import FlatButton2 from "../components/Button2";
 
@@ -73,7 +73,7 @@ export default class Payment extends React.Component {
             style={{
               marginTop: resizeHeight(110),
               alignSelf: "center",
-              height: resizeHeight(580),
+              height: resizeHeight(600),
               width: resizeWidth(350),
               borderRadius: 30,
               backgroundColor: "#F7B600",
@@ -85,7 +85,7 @@ export default class Payment extends React.Component {
             <TextInput
               style={styles.nameInput}
               placeholder="Please enter buyer's name"
-              placeholderTextColor='white'
+              placeholderTextColor="white"
               autoCorrect={false}
               onChangeText={this.onChangeTextBuyerName}
               value={this.state.buyerName}
@@ -94,7 +94,7 @@ export default class Payment extends React.Component {
             <TextInput
               style={styles.nameInput}
               placeholder="Please enter merchant's name"
-              placeholderTextColor='white'
+              placeholderTextColor="white"
               autoCorrect={false}
               onChangeText={this.onChangeTextMerchantName}
               value={this.state.merchantName}
@@ -103,7 +103,7 @@ export default class Payment extends React.Component {
             <TextInput
               style={styles.nameInput}
               placeholder="Please enter name of product"
-              placeholderTextColor='white'
+              placeholderTextColor="white"
               autoCorrect={false}
               onChangeText={this.onChangeTextProductName}
             />
@@ -111,7 +111,7 @@ export default class Payment extends React.Component {
             <TextInput
               style={styles.nameInput}
               placeholder="Please enter price of product"
-              placeholderTextColor='white'
+              placeholderTextColor="white"
               autoCorrect={false}
               onChangeText={this.onChangeTextProductPrice}
               value={this.state.productPrice}
