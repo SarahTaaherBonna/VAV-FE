@@ -211,8 +211,29 @@ export default class Chat extends React.Component {
     console.log(props.currentMessage.isPayment);
     console.log(props.currentMessage.isPaid);
     console.log("--end--");
-
     if (
+      props.currentMessage.isPayment == true &&
+      props.currentMessage.isPaid == true
+    ) {
+      let message_id = props.currentMessage._id;
+      let message_text = props.currentMessage.text;
+      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
+
+      // // if it is right side (blue colour) merchant
+      if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+        return (
+          <View>
+            <Text style={styles.PaymentText}>Transaction Details</Text>
+          </View>
+        );
+      } else {
+        return (
+          <View>
+            <Text style={styles.PaymentText2}>Transaction Details</Text>
+          </View>
+        );
+      }
+    } else if (
       props.currentMessage.isPayment == true &&
       props.currentMessage.isPaid == false
     ) {
@@ -267,23 +288,6 @@ export default class Chat extends React.Component {
           </View>
         );
       }
-    }
-
-    if (
-      props.currentMessage.isPayment == true &&
-      props.currentMessage.isPaid == true
-    ) {
-      let message_id = props.currentMessage._id;
-      let message_text = props.currentMessage.text;
-      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
-
-      // // if it is right side (blue colour) merchant
-      // if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
-      return (
-        <View>
-          <Text style={styles.PaymentText}>Transaction Details</Text>
-        </View>
-      );
     }
   };
 
