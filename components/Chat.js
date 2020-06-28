@@ -292,7 +292,7 @@ export default class Chat extends React.Component {
     const chat = (
       <GiftedChat
         messages={this.state.messages}
-        onSend={firebaseSDK.getSendMessageRef(this.chatKey)}
+        onSend={firebaseSDK.getSendMessageRef(this.state.chatKey)}
         user={this.getCurrentUserDetails()}
         renderCustomView={this.renderCustomViewPayment}
         isTyping={true}
@@ -335,6 +335,7 @@ export default class Chat extends React.Component {
       this.setState({ uri: uri });
     }
   }
+  
   componentDidMount() {
     firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
