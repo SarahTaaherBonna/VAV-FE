@@ -32,9 +32,10 @@ export default class ChatList extends Component {
     chatListings: [],
   };
 
-  generateChatListing = (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
-    const newChatListing = (
+  generateChatListing = (chatKey, merchantname, buyername, merchantuid, buyeruid, text, uri) => {
+    let newChatListing = (
       <TouchableOpacity
+        key = {chatKey}
         onPress={() => {
           this.onPressListing(chatKey, merchantname, buyername, merchantuid, buyeruid);
         }}
@@ -55,10 +56,7 @@ export default class ChatList extends Component {
           <Avatar
             size="large"
             rounded
-            source={{
-              uri:
-                "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-            }}
+            source={uri ? {uri: uri} : require('../assets/person.png')}
             containerStyle={{ backgroundColor: "#F7B600", padding: 5, marginTop:resizeHeight(20), marginLeft:resizeWidth(10),}}
           />
           <View
@@ -92,8 +90,15 @@ export default class ChatList extends Component {
   }
 
   componentDidMount() {
-    firebaseSDK.getChatList((chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
-      let newChatListing = this.generateChatListing(chatKey, merchantname, buyername, merchantuid, buyeruid, text);
+    firebaseSDK.getChatList(async (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
+      let uri
+      if (firebaseSDK.uid == buyeruid){
+        uri = await firebaseSDK.getChatAvatar(merchantuid);
+      }
+      else{
+        uri = await firebaseSDK.getChatAvatar(buyeruid);
+      }
+      let newChatListing = this.generateChatListing(chatKey, merchantname, buyername, merchantuid, buyeruid, text, uri);
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));

@@ -47,6 +47,7 @@ export default class Chat extends React.Component {
     buyername: this.props.route.params.buyername,
     merchantuid: this.props.route.params.merchantuid,
     buyeruid: this.props.route.params.buyeruid,
+    uri: null
   };
 
   getCurrentUserDetails() {
@@ -275,10 +276,7 @@ export default class Chat extends React.Component {
                 <Avatar
                   size="small"
                   rounded
-                  source={{
-                    uri:
-                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg",
-                  }}
+                  source={this.state.uri ? {uri: this.state.uri}: require('../assets/person.png')}
                 />
               </View>
             </RNSlidingButton>
@@ -329,6 +327,12 @@ export default class Chat extends React.Component {
     );
   }
 
+  async getAvatar(){
+    if (this.state.buyeruid == firebaseSDK.uid){
+      let uri = await firebaseSDK.getChatAvatar(this.state.merchantuid);
+      this.setState({uri: uri})
+    }
+  }
   componentDidMount() {
     firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
