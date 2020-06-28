@@ -37,36 +37,42 @@ const ListData = [
     id: 1,
     name: "Sunglasses",
     price: "$159",
+    seller:"Sold by Gabriella",
     image: require("../../ChatAppV2/assets/Sunglasses.png"),
   },
   {
     id: 2,
     name: "Headphones",
     price: "$145",
+    seller:"Sold by Daniel",
     image: require("../../ChatAppV2/assets/Headphones.png"),
   },
   {
     id: 3,
     name: "Bag",
     price: "$128",
+    seller:"Sold by Khanh",
     image: require("../../ChatAppV2/assets/Bag.png"),
   },
   {
     id: 4,
     name: "Speakers",
     price: "$95",
+    seller:"Sold by Sarah",
     image: require("../../ChatAppV2/assets/Speakers.png"),
   },
   {
     id: 3,
     name: "Powerbank",
     price: "$79",
+    seller:"Sold by Rakshitha",
     image: require("../../ChatAppV2/assets/Powerbank.png"),
   },
   {
     id: 4,
     name: "Mouse",
     price: "$75",
+    seller:"Sold by Palak",
     image: require("../../ChatAppV2/assets/Mouse.png"),
   },
 ];
@@ -147,6 +153,7 @@ export default class ProductListing extends Component {
 
                   <Text style={styles.title}>{item.name}</Text>
                   <Text style={styles.title2}>{item.price}</Text>
+                  <Text style={styles.title3}>{item.seller}</Text>
                 </Card1>
               );
             })}
@@ -209,7 +216,7 @@ var styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: "bold",
-    marginTop: 170,
+    marginTop: 163,
     marginLeft: 5,
     color: "#FFFFFF",
     padding: 5,
@@ -218,7 +225,16 @@ var styles = StyleSheet.create({
 
   title2: {
     fontSize: 14,
-    marginTop: 200,
+    marginTop: 185,
+    marginLeft: 5,
+    color: "#FFFFFF",
+    padding: 5,
+    position: "absolute",
+  },
+
+  title3: {
+    fontSize: 14,
+    marginTop: 205,
     marginLeft: 5,
     color: "#FFFFFF",
     padding: 5,
