@@ -210,8 +210,7 @@ export default class Chat extends React.Component {
 
     if (
       props.currentMessage.isPayment == true &&
-      (props.currentMessage.isPaid == false ||
-        props.currentMessage.isPaid == undefined)
+      props.currentMessage.isPaid == false
     ) {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
