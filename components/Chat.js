@@ -333,6 +333,7 @@ export default class Chat extends React.Component {
       this.setState({uri: uri})
     }
   }
+  
   componentDidMount() {
     firebaseSDK.getChat(this.state.chatKey, (message) => {
       this.setState((previousState) => ({
