@@ -254,9 +254,10 @@ export default class Chat extends React.Component {
                 message_text
               )}
               slideDirection={SlideDirection.RIGHT}
+              successfulSlidePercent={90}
             >
               <Image
-                source={require("../../ChatAppV2/assets/SwipeGradient.png")}
+                source={require("../../ChatAppV2/assets/SwipeGradientwithSpacedArrow.png")}
                 style={{
                   flex: 1,
                   position: "absolute",
