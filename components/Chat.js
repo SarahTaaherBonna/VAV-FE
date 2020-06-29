@@ -393,7 +393,7 @@ export default class Chat extends React.Component {
   }
 
   componentWillUnmount() {
-    firebaseSDK.closeConnection();
+    firebaseSDK.closeChatConnection();
   }
 }
 

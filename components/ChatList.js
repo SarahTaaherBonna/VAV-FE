@@ -112,6 +112,10 @@ export default class ChatList extends Component {
       this.setState({loading: false})
     });
   }
+
+  componentWillUnmount() {
+    firebaseSDK.closeChatListConnection();
+  }
 }
 
 const styles = StyleSheet.create({

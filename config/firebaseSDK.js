@@ -265,7 +265,7 @@ class FirebaseSDK {
     return (firebase.auth().currentUser || {}).uid;
   }
 
-  get chatListRef() {
+  get chatRef() {
     return firebase.database().ref("chats");
   }
 
@@ -296,9 +296,8 @@ class FirebaseSDK {
       myId = temp;
     }
 
-    let ref = this.getChatRef(_id);
-
-    ref
+    this.chatRef
+      .child(_id)
       .orderByChild("timestamp")
       .limitToLast(1)
       .once("value", (data) => {
@@ -313,13 +312,9 @@ class FirebaseSDK {
   };
 
   getChatList = (callback) =>
-    this.chatListRef.on("child_added", (snapshot) => {
+    this.chatRef.on("child_added", (snapshot) => {
       this.parseChatList(snapshot, callback);
     });
-
-  getChatRef = (chatKey) => {
-    return firebase.database().ref("chats/" + chatKey);
-  };
 
   parseChat = (snapshot) => {
     const { isPayment } = snapshot.val();
@@ -345,18 +340,21 @@ class FirebaseSDK {
   };
 
   getChat = (chatKey, callback) => {
-    this.getChatRef(chatKey)
+    this.chatRef
+      .child(chatKey)
       .orderByChild("timestamp")
       .on("child_added", (snapshot) => {
         callback(this.parseChat(snapshot));
       });
   };
 
-  getChatThreadOnce = (chatKey, callback) => {
-    let messages = []
-    await this.getChatRef(chatKey)
+  getChatThreadOnce = async (chatKey, callback) => {
+    let messages = [];
+    await this.chatRef
+      .child(chatKey)
       .orderByChild("timestamp")
       .once("value", (snapshot) => {
+        console.log(snapshot);
         let message = this.parseChat(snapshot);
         messages = [...messages, message];
       });
@@ -379,7 +377,7 @@ class FirebaseSDK {
           isPayment: false,
           isPaid: false,
         };
-        this.getChatRef(chatKey).push(message);
+        this.chatRef.child(chatKey).push(message);
         // this.append(message);
       }
     };
@@ -395,7 +393,7 @@ class FirebaseSDK {
       isPayment: true,
       isPaid: true,
     };
-    this.getChatRef(chatKey).push(message);
+    this.chatRef.child(chatKey).push(message);
   };
 
   sendPaymentMessage = (chatKey, incomingMessage) => {
@@ -407,13 +405,15 @@ class FirebaseSDK {
       isPayment: true,
       isPaid: false,
     };
-    this.getChatRef(chatKey).push(message);
+    this.chatRef.child(chatKey).push(message);
   };
 
   markIsPaid = (chatKey, messageKey) => {
-    let ref = this.getChatRef(chatKey);
-    ref.child(messageKey).update({
-      isPaid: true,
+    this.chatRef
+      .child(chatKey)
+      .child(messageKey)
+      .update({
+        isPaid: true,
     });
   };
 
@@ -424,9 +424,13 @@ class FirebaseSDK {
     ref.update(obj);
   };
 
+  closeChatListConnection() {
+    this.getChatList.off();
+  }
+
   // close the connection to the Backend
-  closeConnection() {
-    this.chatListRef.off();
+  closeChatConnection() {
+    this.getChatRef.off();
   }
 }
 const firebaseSDK = new FirebaseSDK();
