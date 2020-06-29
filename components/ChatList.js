@@ -8,6 +8,7 @@ import {
 import { Avatar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
+import Loader from '../components/Loader';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -25,6 +26,7 @@ const resizeHeight = (h) => {
 export default class ChatList extends Component {
   state = {
     chatListings: [],
+    loading: false
   };
 
   generateChatListing = (chatKey, merchantname, buyername, merchantuid, buyeruid, text, uri) => {
@@ -83,10 +85,19 @@ export default class ChatList extends Component {
   };
 
   render() {
-    return this.state.chatListings;
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
+    return (
+      <View>
+        {loader}
+        {this.state.chatListings}
+      </View>
+      );
   }
 
   componentDidMount() {
+    this.setState({loading: true})
     firebaseSDK.getChatList(async (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
       let uri;
       if (firebaseSDK.uid == buyeruid){
@@ -98,6 +109,7 @@ export default class ChatList extends Component {
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));
+      this.setState({loading: false})
     });
   }
 }
