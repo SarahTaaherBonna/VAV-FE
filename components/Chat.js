@@ -115,22 +115,12 @@ export default class Chat extends React.Component {
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
 
-        console.log("Starting message download")
-
         let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
         console.log(messages);
-
-        console.log("End of message download")
 
         this.setState((previousState) => ({
           messages: GiftedChat.append([], messages),
         }))
-
-        // firebaseSDK.getChatOnce(this.state.chatKey, (message) => {
-        //   this.setState((previousState) => ({
-        //     messages: GiftedChat.append(previousState.messages, message),
-        //   }));
-        // });
 
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
