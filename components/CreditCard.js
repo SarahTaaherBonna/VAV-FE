@@ -65,6 +65,7 @@ export default class CreditCard extends Component {
   };
 
   async componentDidMount() {
+    this.setState({loading: true})
     var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
     var userEmail = dataObtainedFromFirebase.split(",")[1];
     var userUID = dataObtainedFromFirebase.split(",")[2];
@@ -91,8 +92,7 @@ export default class CreditCard extends Component {
       }
     }
     this.setState({ useremail: userEmail });
-    this.setState({ useruid: userUID });
-    this.setState({ isLoaded: true });
+    this.setState({ useruid: userUID, loading: false });
   }
 
   _onChange = (form) => {
@@ -167,18 +167,13 @@ export default class CreditCard extends Component {
   };
 
   render() {
-    if (!this.state.isLoaded) {
-      return <View style={s.cardView}>{this.renderActivityIndicator()}</View>;
-    }
-
     if (this.state.loading) {
-      var loader = <Loader />
+      return <Loader />
     }
 
     if (!this.props.isStart && this.state.cardNumber !== "") {
       return (
         <View style={s.cardView}>
-          {loader}
           <TouchableOpacity onPress={this.toggleCardView}>
             <CardView
               brand="visa"
