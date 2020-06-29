@@ -288,8 +288,7 @@ export default class Chat extends React.Component {
             <Text style={styles.PaymentText2}>Invoice Details</Text>
             <RNSlidingButton
               style={{
-                width: resizeWidth(248),
-                // width: resizeMode("contain"),
+                width: "100%",
               }}
               height={resizeHeight(35)}
               onSlidingSuccess={this.onSlideRightGenerator(
@@ -301,33 +300,30 @@ export default class Chat extends React.Component {
               successfulSlidePercent={90}
             >
               <Image
-                source={require("../../ChatAppV2/assets/SwipeGradientwithSpacedArrow.png")}
+                source={require("../../ChatAppV2/assets/SwipeGradientUpdated.png")}
                 style={{
                   flex: 1,
                   position: "absolute",
-                  width: resizeWidth(248),
+                  width: "100%",
+                  height: "100%",
+                  alignSelf: "center",
                 }}
               ></Image>
 
-              <View>
-                <Image
-                  // size="small"
-                  // rounded
-                  source={
-                    this.state.uri
-                      ? { uri: this.state.uri }
-                      : require("../assets/VisaLogo64by64.png")
-                  }
-                  style={{
-                    height: 30,
-                    width: 30,
-                    borderRadius: 15,
-                    resizeMode: "center",
-                    padding: 10,
-                    backgroundColor: "white",
-                  }}
-                />
-              </View>
+              <Image
+                // size="small"
+                // rounded
+                source={
+                  this.state.uri
+                    ? { uri: this.state.uri }
+                    : require("../assets/visaCardIcon3.png")
+                }
+                style={{
+                  height: resizeHeight(38),
+                  width: resizeWidth(48),
+                  resizeMode: "stretch",
+                }}
+              />
             </RNSlidingButton>
           </View>
         );
@@ -429,7 +425,7 @@ const styles = StyleSheet.create({
     marginTop: resizeHeight(5),
     width: resizeWidth(30),
     height: resizeHeight(30),
-    borderRadius: 80,
+    borderRadius: resizeWidth(30) / 2,
     position: "absolute",
     alignSelf: "center",
     zIndex: 10,
