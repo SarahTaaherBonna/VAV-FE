@@ -350,13 +350,48 @@ class FirebaseSDK {
 
   getChatOnce = async (chatKey) => {
     let messages = [];
-    await firebase.database().ref("chats").child(chatKey).orderByChild("timestamp").once("value", (snapshot) => {
-      let message = this.parseChat(snapshot);
-      messages = [...messages, message]
-    })
+
+    const ref = await firebase.database().ref("chats").child(chatKey);
+
+    const snapshot = await ref.orderByChild("timestamp").once("value");
+    
+    return this.parseObjectsChat(snapshot.val());
+
+  };
+
+  parseObjectsChat = (snapshots) =>{
+    let message;
+    let messages = [];
+    let isPaid = false;
+        
+    for(const key in snapshots) {
+      const isPayment = snapshots[key]['isPayment'];
+      const numberStamp = snapshots[key]['numberStamp'];
+
+      const timestamp = new Date(numberStamp);
+      const _id = key;
+      const text = snapshots[key]['text'];
+      const user = snapshots[key]['user'];
+      if (snapshots[key].isPayment) {
+        isPaid = snapshots[key]['isPaid'];
+      }
+
+      console.log(user);
+      console.log(_id);
+
+      message = {
+        isPaid,
+        isPayment,
+        _id,
+        timestamp,
+        text,
+        user
+      }
+      messages = [...messages, message];
+    }
 
     return messages;
-  };
+  }
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -421,12 +456,12 @@ class FirebaseSDK {
   };
 
   closeChatListConnection() {
-    this.getChatList.off();
+    this.chatRef.off();
   }
 
   // close the connection to the Backend
   closeChatConnection() {
-    this.getChatRef.off();
+    this.chatRef.off();
   }
 }
 const firebaseSDK = new FirebaseSDK();
