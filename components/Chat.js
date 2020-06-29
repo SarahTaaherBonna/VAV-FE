@@ -279,7 +279,7 @@ export default class Chat extends React.Component {
             <Text style={styles.PaymentText2}>Invoice Details</Text>
             <RNSlidingButton
               style={{
-                width: resizeWidth(248),
+                width: '100%'
               }}
               height={resizeHeight(35)}
               onSlidingSuccess={this.onSlideRightGenerator(
@@ -291,33 +291,31 @@ export default class Chat extends React.Component {
               successfulSlidePercent={90}
             >
               <Image
-                source={require("../../ChatAppV2/assets/SwipeGradientwithSpacedArrow.png")}
+                source={require("../../ChatAppV2/assets/SwipeGradientUpdated.png")}
                 style={{
                   flex: 1,
                   position: "absolute",
-                  width: resizeWidth(248),
+                  width: '100%',
+                  height: '100%',
+                  alignSelf:'center',
                 }}
               ></Image>
 
-              <View>
                 <Image
                   // size="small"
                   // rounded
                   source={
                     this.state.uri
                       ? { uri: this.state.uri }
-                      : require("../assets/VisaLogo64by64.png")
+                      : require("../assets/visaCardIcon3.png") 
                   }
                   style={{
-                    height: resizeHeight(30),
-                    width: resizeWidth(30),
-                    borderRadius: resizeWidth(30)/2,
-                    resizeMode: "center",
-                    padding: 10,
-                    backgroundColor: "white",
+                    height: resizeHeight(38),
+                    width: resizeWidth(48),
+                    resizeMode:"stretch"
                   }}
                 />
-              </View>
+
             </RNSlidingButton>
           </View>
         );
