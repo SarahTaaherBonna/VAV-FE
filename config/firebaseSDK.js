@@ -366,7 +366,7 @@ class FirebaseSDK {
         
     for(const key in snapshots) {
       const isPayment = snapshots[key]['isPayment'];
-      const numberStamp = snapshots[key]['numberStamp'];
+      const numberStamp = snapshots[key]['timestamp'];
 
       const timestamp = new Date(numberStamp);
       const _id = key;
