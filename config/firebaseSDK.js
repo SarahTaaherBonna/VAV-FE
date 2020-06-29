@@ -353,16 +353,16 @@ class FirebaseSDK {
   };
 
   getChatThreadOnce = async (chatKey, callback) => {
-    let messages = []
+    let messages = [];
     await this.getChatRef(chatKey)
       .orderByChild("timestamp")
       .once("value", (snapshot) => {
         let message = this.parseChat(snapshot);
         messages = [...messages, message];
       });
-    
+
     return messages;
-  }
+  };
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;

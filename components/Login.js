@@ -12,7 +12,7 @@ import {
 
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -34,7 +34,7 @@ export default class Login extends React.Component {
   state = {
     email: "",
     password: "",
-    loading: false
+    loading: false,
   };
 
   onPressLogin = async () => {
@@ -42,7 +42,7 @@ export default class Login extends React.Component {
       email: this.state.email,
       password: this.state.password,
     };
-    this.setState({loading: true});
+    this.setState({ loading: true });
 
     const response = firebaseSDK.login(
       user,
@@ -61,12 +61,12 @@ export default class Login extends React.Component {
 
   loginSuccess = () => {
     console.log("login successful, navigate to Products.");
-    this.setState({loading: false})
+    this.setState({ loading: false });
     this.props.navigation.navigate("Home");
   };
 
   loginFailed = () => {
-    this.setState({loading: false})
+    this.setState({ loading: false });
     alert("Invalid Username and/or Password.");
   };
 
@@ -75,7 +75,7 @@ export default class Login extends React.Component {
 
   render() {
     if (this.state.loading) {
-      var loader = <Loader />
+      var loader = <Loader />;
     }
 
     return (
@@ -122,7 +122,7 @@ export default class Login extends React.Component {
 
               <FlatButton text="LOGIN" onPress={this.onPressLogin} />
 
-              <FlatButton text="SIGN-UP" onPress={this.navigateToSignup} />
+              <FlatButton text="SIGN UP" onPress={this.navigateToSignup} />
 
               <Text style={styles.nameInput}>
                 {" "}

@@ -6,7 +6,6 @@ import { Button } from "react-native-elements";
 import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
-// import useForceUpdate from "use-force-update";
 import Loader from "../components/Loader";
 import firebaseSDK from "../config/firebaseSDK";
 
