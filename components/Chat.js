@@ -7,7 +7,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
 // import useForceUpdate from "use-force-update";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -35,7 +35,7 @@ export default class Chat extends React.Component {
     buyeruid: this.props.route.params.buyeruid,
     uri: null,
     showAlert: false,
-    loading: false
+    loading: false,
   };
 
   getCurrentUserDetails() {
@@ -66,17 +66,16 @@ export default class Chat extends React.Component {
       console.log(invoice_id);
       console.log("MESSAGE TEXT: ");
       console.log(message_text);
-      this.setState({loading: true})
-      var merchantName = message_text.split("\n")[1].split(":")[1];
-      var buyerName = message_text.split("\n")[2].split(":")[1];
-      var productName = message_text.split("\n")[3].split(":")[1];
-      var priceAmount = message_text.split("\n")[4].split(":")[1];
+      this.setState({ loading: true });
+      var merchantName = message_text.split("\n")[1].split(": ")[1];
+      var buyerName = message_text.split("\n")[2].split(": ")[1];
+      var productName = message_text.split("\n")[3].split(": ")[1];
+      var priceAmount = message_text.split("\n")[4].split(": ")[1];
 
       var makePaymentAPI =
         "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
 
       const idToken = await firebase.auth().currentUser.getIdToken(true);
-      // const forceUpdate = useForceUpdate();
 
       try {
         const response = await axios.post(
@@ -112,15 +111,19 @@ export default class Chat extends React.Component {
           text: ReceiptToSend,
         });
         console.log("added receipt");
-        this.setState({loading: false})
+        this.setState({ loading: false });
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-        // forceUpdate();
+        await firebaseSDK.getNewChat(this.state.chatKey, (message) => {
+          this.setState((previousState) => ({
+            messages: GiftedChat.append(previousState.messages, message),
+          }));
+        });
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
-        this.setState({loading: false})
+        this.setState({ loading: false });
         Alert.alert("Payment Failed. Please try again.");
       }
     };
@@ -202,7 +205,10 @@ export default class Chat extends React.Component {
 
   renderCustomViewPayment = (props) => {
     // Transaction Record (Receipt)
-    console.log("Message now: " + props.currentMessage.text);
+    console.log("Message now:\n" + props.currentMessage.text);
+    if (props.currentMessage.text == undefined) {
+      return;
+    }
     var messageFirstLine = props.currentMessage.text
       .split("\n")[0]
       .split(":")[0];
@@ -215,7 +221,8 @@ export default class Chat extends React.Component {
     ) {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
-      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
+      let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
+      console.log("Invoice ID 1st if: " + invoice_id);
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -239,7 +246,8 @@ export default class Chat extends React.Component {
     ) {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
-      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
+      let invoice_id = props.currentMessage.text.split("\n")[1].split(": ")[1];
+      console.log("Invoice ID 2nd else if: " + invoice_id);
 
       // // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -263,7 +271,8 @@ export default class Chat extends React.Component {
     ) {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
-      let invoice_id = props.currentMessage.text.split("\n")[0].split(" ")[2];
+      let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
+      console.log("Invoice ID 3rd else if: " + invoice_id);
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -280,6 +289,7 @@ export default class Chat extends React.Component {
             <RNSlidingButton
               style={{
                 width: resizeWidth(248),
+                // width: resizeMode("contain"),
               }}
               height={resizeHeight(35)}
               onSlidingSuccess={this.onSlideRightGenerator(
@@ -327,7 +337,7 @@ export default class Chat extends React.Component {
 
   render() {
     if (this.state.loading) {
-      var loader = <Loader />
+      var loader = <Loader />;
     }
 
     const chat = (

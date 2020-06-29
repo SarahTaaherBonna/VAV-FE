@@ -79,7 +79,7 @@ class FirebaseSDK {
       name = user.displayName;
       email = user.email;
       // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
-      uid = user.uid; 
+      uid = user.uid;
     }
     var dataToSend = name + "," + email + "," + uid;
     return dataToSend;
@@ -348,6 +348,14 @@ class FirebaseSDK {
     this.getChatRef(chatKey)
       .orderByChild("timestamp")
       .on("child_added", (snapshot) => {
+        callback(this.parseChat(snapshot));
+      });
+  };
+
+  getNewChat = (chatKey, callback) => {
+    this.getChatRef(chatKey)
+      .orderByChild("timestamp")
+      .once("value", (snapshot) => {
         callback(this.parseChat(snapshot));
       });
   };
