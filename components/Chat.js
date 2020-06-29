@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { View, Text, StyleSheet, Image, Alert, Dimensions } from "react-native";
 import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Button } from "react-native-elements";
@@ -36,7 +36,7 @@ export default class Chat extends React.Component {
     uri: null,
     showAlert: false,
     loading: false,
-    timePassed:false
+    timePassed: false,
   };
 
   getCurrentUserDetails() {
@@ -271,25 +271,25 @@ export default class Chat extends React.Component {
       props.currentMessage.isPaid == false &&
       messageFirstLine == "Invoice ID"
     ) {
+      setTimeout(this.setTimePassed, 3000);
 
-      
+      if (this.state.timePassed) {
+        Alert.alert("Timeoutttt!!");
+      }
+
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
       // console.log("Invoice ID 3rd else if: " + invoice_id);
-      
-      setTimeout( () => { this.setTimePassed()},10000);
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
-
         return (
           <View>
             <Text style={styles.PaymentText}>Invoice Details</Text>
           </View>
         );
-      } else{
-
+      } else {
         // buyer
         return (
           <View>
@@ -401,10 +401,10 @@ export default class Chat extends React.Component {
   }
 
   setTimePassed() {
-    console.log("I AM HERE")
-    this.setState({timePassed: true});
-    console.log("I AM THERE")
- }
+    console.log("I AM HERE");
+    this.setState({ timePassed: true });
+    console.log("I AM THERE");
+  }
 
   componentWillUnmount() {
     firebaseSDK.closeConnection();
