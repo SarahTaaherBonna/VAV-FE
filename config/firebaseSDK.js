@@ -93,7 +93,7 @@ class FirebaseSDK {
     }
   };
 
-  updateUsername = async (newUser) => {
+  updateUserName = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
     console.log("Name: " + newUser.name);
     if (newUser.name != currentUser.name) {
@@ -177,10 +177,7 @@ class FirebaseSDK {
       });
   };
 
-  // Avatar code - to be fixed
-
   uploadImage = async (uri, uid) => {
-    console.log("got image to upload. uri:" + uri);
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
@@ -196,12 +193,12 @@ class FirebaseSDK {
         firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
           if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
-            console.log("success!");
+            Alert.alert("Success", "Image updated successfully");
           }
         },
         (err) => {
           console.log(err);
-          Alert.alert("Error", "Image upload errors!");
+          Alert.alert("Error", "Could not update image");
         }
       );
     } catch (err) {
