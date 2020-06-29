@@ -127,6 +127,7 @@ export default class Signup extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter name"
+              placeholderTextColor="#B1B3B3"
               onChangeText={this.onChangeTextName}
               value={this.state.name}
             />
@@ -134,6 +135,7 @@ export default class Signup extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter email"
+              placeholderTextColor="#B1B3B3"
               onChangeText={this.onChangeTextEmail}
               value={this.state.email}
             />
@@ -141,6 +143,7 @@ export default class Signup extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter password"
+              placeholderTextColor="#B1B3B3"
               secureTextEntry={true}
               autoCorrect={false}
               onChangeText={this.onChangeTextPassword}
