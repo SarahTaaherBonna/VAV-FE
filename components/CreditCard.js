@@ -24,7 +24,6 @@ const resizeHeight = (h) => {
   return (value = h * (windowHeight / 872));
 };
 
-
 const s = StyleSheet.create({
   container: {
     height: resizeHeight(667),

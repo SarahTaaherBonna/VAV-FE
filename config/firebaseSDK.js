@@ -78,13 +78,10 @@ class FirebaseSDK {
     if (user != null) {
       name = user.displayName;
       email = user.email;
-      // photoUrl = user.photoURL;
-      // emailVerified = user.emailVerified;
-      uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
+      // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
+      uid = user.uid; 
     }
     var dataToSend = name + "," + email + "," + uid;
-    // console.log("%%%%%%%%%%%%IN FIREBASESDK%%%%%%%%%%%%%%%%%%%%");
-    // console.log(dataToSend);
     return dataToSend;
   };
 
@@ -96,18 +93,16 @@ class FirebaseSDK {
     }
   };
 
-  updateUsername = async (newUser) => {
+  updateUserName = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
     console.log("Name: " + newUser.name);
     if (newUser.name != currentUser.name) {
       await currentUser
         .updateProfile({
           displayName: newUser.name,
-          // photoURL: "https://example.com/jane-q-user/profile.jpg",
         })
         .then(function () {
           // Update successful.
-          // Alert.alert("Update success");
           console.log("Name update passed");
         })
         .catch(function (error) {
@@ -162,8 +157,6 @@ class FirebaseSDK {
           console.log("Password update failed.");
           console.log(error);
         });
-      // var password = currentUser.password.toString();
-      // console.log("Password Password: " + password);
       await firebase
         .auth()
         .signInWithEmailAndPassword(currentUser.email, currentUser.password);
@@ -184,10 +177,7 @@ class FirebaseSDK {
       });
   };
 
-  // Avatar code - to be fixed
-
   uploadImage = async (uri, uid) => {
-    console.log("got image to upload. uri:" + uri);
     try {
       const response = await fetch(uri);
       const blob = await response.blob();
@@ -203,12 +193,12 @@ class FirebaseSDK {
         firebase.storage.TaskEvent.STATE_CHANGED,
         (snapshot) => {
           if (snapshot.state == firebase.storage.TaskState.SUCCESS) {
-            console.log("success!");
+            Alert.alert("Success", "Image updated successfully");
           }
         },
         (err) => {
           console.log(err);
-          Alert.alert("Error", "Image upload errors!");
+          Alert.alert("Error", "Could not update image");
         }
       );
     } catch (err) {
