@@ -348,19 +348,15 @@ class FirebaseSDK {
       });
   };
 
-  getChatThreadOnce = async (chatKey, callback) => {
+  getChatOnce = async (chatKey) => {
     let messages = [];
-    await this.chatRef
-      .child(chatKey)
-      .orderByChild("timestamp")
-      .once("value", (snapshot) => {
-        console.log(snapshot);
-        let message = this.parseChat(snapshot);
-        messages = [...messages, message];
-      });
-    
+    await firebase.database().ref("chats").child(chatKey).orderByChild("timestamp").once("value", (snapshot) => {
+      let message = this.parseChat(snapshot);
+      messages = [...messages, message]
+    })
+
     return messages;
-  }
+  };
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;

@@ -1,6 +1,6 @@
 import React from "react";
 import * as ImagePicker from "expo-image-picker";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign } from "@expo/vector-icons";
 import FlatButton from "../components/Button";
 import {
   Image,
@@ -10,9 +10,9 @@ import {
   View,
   ScrollView,
   KeyboardAvoidingView,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -27,7 +27,6 @@ const resizeHeight = (h) => {
 };
 
 export default class Signup extends React.Component {
-
   constructor(props) {
     super(props);
     this.pickImage = this.pickImage.bind(this);
@@ -39,13 +38,12 @@ export default class Signup extends React.Component {
     avatar: "",
     image: null,
     setImage: false,
-    loading: false
+    loading: false,
   };
 
   onPressCreate = async () => {
-
     try {
-      this.setState({loading: true})
+      this.setState({ loading: true });
       const user = {
         name: this.state.name,
         email: this.state.email,
@@ -54,14 +52,14 @@ export default class Signup extends React.Component {
       let account = await firebaseSDK.createAccount(user);
 
       if (account != false && this.state.image) {
-        await  firebaseSDK.uploadImage(this.state.image, account.uid)
+        await firebaseSDK.uploadImage(this.state.image, account.uid);
       }
 
       firebaseSDK.updateName(account.uid, this.state.name);
-      this.setState({loading: false})
+      this.setState({ loading: false });
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
-      this.setState({loading: false})
+      this.setState({ loading: false });
     }
 
     this.props.navigation.navigate("Add Credit Card Details", {
@@ -77,8 +75,8 @@ export default class Signup extends React.Component {
   async useEffect() {
     if (Constants.platform.ios) {
       const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
-      if (status !== 'granted') {
-        alert('Sorry, we need camera roll permissions to make this work!');
+      if (status !== "granted") {
+        alert("Sorry, we need camera roll permissions to make this work!");
       }
     }
   }
@@ -94,33 +92,48 @@ export default class Signup extends React.Component {
     if (!result.cancelled) {
       this.setState({ image: result.uri, setImage: true });
     }
-  };
+  }
 
   render() {
     if (this.state.loading) {
-      var loader = <Loader />
+      var loader = <Loader />;
     }
     return (
       <ScrollView style={{ height: "100%" }}>
-        <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+        >
           {loader}
           <View
-            style={
-              {
-                marginTop: resizeHeight(130),
-                alignSelf: 'center',
-                height: resizeHeight(480),
-                width: resizeWidth(350),
-                borderRadius: 30,
-                backgroundColor: "#16267D",
-                paddingTop: resizeHeight(70)
+            style={{
+              marginTop: resizeHeight(130),
+              alignSelf: "center",
+              height: resizeHeight(480),
+              width: resizeWidth(350),
+              borderRadius: 30,
+              backgroundColor: "#16267D",
+              paddingTop: resizeHeight(70),
+            }}
+          >
+            <Image
+              style={styles.logo}
+              source={
+                this.state.setImage
+                  ? { uri: this.state.image }
+                  : require("../assets/person.png")
               }
-            }>
-
-            <Image style={styles.logo} source={this.state.setImage ? { uri: this.state.image } : require('../assets/person.png')} />
+            />
 
             <View style={styles.buttonText}>
-            <AntDesign onPress={() => { this.pickImage() }}  style={{alignSelf:'center'}}name="camera" size={24} color="white" />
+              <AntDesign
+                onPress={() => {
+                  this.pickImage();
+                }}
+                style={{ alignSelf: "center" }}
+                name="camera"
+                size={24}
+                color="white"
+              />
             </View>
 
             <Text style={styles.labeluser}>NAME</Text>
@@ -152,9 +165,8 @@ export default class Signup extends React.Component {
           </View>
 
           <View style={{ alignSelf: "center", top: resizeHeight(-25) }}>
-            <FlatButton text="SIGN-UP" onPress={this.onPressCreate} />
+            <FlatButton text="SIGN UP" onPress={this.onPressCreate} />
           </View>
-
         </KeyboardAvoidingView>
       </ScrollView>
     );
@@ -169,40 +181,40 @@ const styles = StyleSheet.create({
     height: resizeHeight(160),
     borderRadius: 80,
     borderWidth: 1,
-    borderColor: "#16267D", 
+    borderColor: "#16267D",
     position: "absolute",
-    alignSelf: "center"
+    alignSelf: "center",
   },
 
   buttonText: {
     color: "#FFFFFF",
-    alignSelf: 'center',
+    alignSelf: "center",
     backgroundColor: "#F7B600",
     width: resizeWidth(50),
     height: resizeHeight(50),
-    borderRadius:25,
-    textAlign: 'center',
-    textAlignVertical: 'center',
+    borderRadius: 25,
+    textAlign: "center",
+    textAlignVertical: "center",
     top: resizeHeight(-30),
     left: resizeWidth(50),
-    padding:10
+    padding: 10,
   },
 
   labeluser: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: resizeWidth(40),
     marginBottom: resizeHeight(5),
     fontSize: 16,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
 
   labeluser2: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginTop: resizeHeight(30),
     marginLeft: resizeWidth(30),
     marginBottom: resizeHeight(5),
     fontSize: 16,
-    color: "#FFFFFF"
+    color: "#FFFFFF",
   },
 
   inputuser: {
@@ -213,6 +225,6 @@ const styles = StyleSheet.create({
     borderColor: "#43519D",
     backgroundColor: "#283786",
     borderRadius: 8,
-    color: "#F7B600"
+    color: "#F7B600",
   },
 });
