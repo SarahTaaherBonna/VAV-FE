@@ -78,13 +78,10 @@ class FirebaseSDK {
     if (user != null) {
       name = user.displayName;
       email = user.email;
-      // photoUrl = user.photoURL;
-      // emailVerified = user.emailVerified;
-      uid = user.uid; // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
+      // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
+      uid = user.uid; 
     }
     var dataToSend = name + "," + email + "," + uid;
-    // console.log("%%%%%%%%%%%%IN FIREBASESDK%%%%%%%%%%%%%%%%%%%%");
-    // console.log(dataToSend);
     return dataToSend;
   };
 
@@ -103,11 +100,9 @@ class FirebaseSDK {
       await currentUser
         .updateProfile({
           displayName: newUser.name,
-          // photoURL: "https://example.com/jane-q-user/profile.jpg",
         })
         .then(function () {
           // Update successful.
-          // Alert.alert("Update success");
           console.log("Name update passed");
         })
         .catch(function (error) {
@@ -162,8 +157,6 @@ class FirebaseSDK {
           console.log("Password update failed.");
           console.log(error);
         });
-      // var password = currentUser.password.toString();
-      // console.log("Password Password: " + password);
       await firebase
         .auth()
         .signInWithEmailAndPassword(currentUser.email, currentUser.password);

@@ -8,10 +8,8 @@ import {
   Text,
   TextInput,
   View,
-  Button,
   ScrollView,
   KeyboardAvoidingView,
-  ImageBackground,
   Dimensions,
   Alert,
 } from "react-native";
