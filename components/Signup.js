@@ -12,7 +12,7 @@ import {
   KeyboardAvoidingView,
   Dimensions
 } from "react-native";
-
+import Loader from '../components/Loader';
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -38,12 +38,14 @@ export default class Signup extends React.Component {
     password: "",
     avatar: "",
     image: null,
-    setImage: false
+    setImage: false,
+    loading: false
   };
 
   onPressCreate = async () => {
 
     try {
+      this.setState({loading: true})
       const user = {
         name: this.state.name,
         email: this.state.email,
@@ -55,13 +57,11 @@ export default class Signup extends React.Component {
         await  firebaseSDK.uploadImage(this.state.image, account.uid)
       }
 
-      console.log("setting name")
-      console.log(account.uid)
-      console.log(this.state.name)
-      console.log("end of setting name")
       firebaseSDK.updateName(account.uid, this.state.name);
+      this.setState({loading: false})
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
+      this.setState({loading: false})
     }
 
     this.props.navigation.navigate("Add Credit Card Details", {
@@ -97,9 +97,13 @@ export default class Signup extends React.Component {
   };
 
   render() {
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
     return (
-      <ScrollView style={{ maxHeight: "100%" }}>
+      <ScrollView style={{ height: "100%" }}>
         <KeyboardAvoidingView behavior={(Platform.OS === 'ios') ? "padding" : null}>
+          {loader}
           <View
             style={
               {

@@ -12,6 +12,7 @@ import {
 
 import firebaseSDK from "../config/firebaseSDK";
 import FlatButton from "../components/Button";
+import Loader from '../components/Loader';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -33,6 +34,7 @@ export default class Login extends React.Component {
   state = {
     email: "",
     password: "",
+    loading: false
   };
 
   onPressLogin = async () => {
@@ -40,6 +42,7 @@ export default class Login extends React.Component {
       email: this.state.email,
       password: this.state.password,
     };
+    this.setState({loading: true});
 
     const response = firebaseSDK.login(
       user,
@@ -58,11 +61,12 @@ export default class Login extends React.Component {
 
   loginSuccess = () => {
     console.log("login successful, navigate to Products.");
-
+    this.setState({loading: false})
     this.props.navigation.navigate("Home");
   };
 
   loginFailed = () => {
+    this.setState({loading: false})
     alert("Invalid Username and/or Password.");
   };
 
@@ -70,8 +74,13 @@ export default class Login extends React.Component {
   onChangeTextPassword = (password) => this.setState({ password });
 
   render() {
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
+
     return (
       <View style={{ backgroundColor: "#FFFFFF" }}>
+        {loader}
         <Image
           style={styles.logo}
           source={require("../../ChatAppV2/assets/login_visalogo.png")}

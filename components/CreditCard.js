@@ -12,6 +12,7 @@ import * as firebase from "firebase";
 import firebaseSDK from "../config/firebaseSDK";
 import { CreditCardInput, CardView } from "react-native-credit-card-input";
 import FlatButton from "../components/Button";
+import Loader from '../components/Loader';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -60,6 +61,7 @@ export default class CreditCard extends Component {
     useruid: "",
     isLoaded: false,
     cardView: "front",
+    loading: false
   };
 
   async componentDidMount() {
@@ -112,6 +114,7 @@ export default class CreditCard extends Component {
 
   onPressSubmit = async () => {
     try {
+      this.setState({loading: true})
       var data = {
         email: this.state.useremail,
         card_number: this.state.cardNumber,
@@ -134,6 +137,7 @@ export default class CreditCard extends Component {
         console.log(error);
       }
 
+      this.setState({loading: false})
       this.props.navigation.navigate("Home", {
         screen: "ProductListing",
       });
@@ -143,6 +147,7 @@ export default class CreditCard extends Component {
       }
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
+      this.setState({loading: false})
     }
   };
 
@@ -166,9 +171,14 @@ export default class CreditCard extends Component {
       return <View style={s.cardView}>{this.renderActivityIndicator()}</View>;
     }
 
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
+
     if (!this.props.isStart && this.state.cardNumber !== "") {
       return (
         <View style={s.cardView}>
+          {loader}
           <TouchableOpacity onPress={this.toggleCardView}>
             <CardView
               brand="visa"

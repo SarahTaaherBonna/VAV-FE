@@ -7,7 +7,7 @@ import { GiftedChat } from "react-native-gifted-chat";
 import axios from "axios";
 import firebase from "firebase";
 // import useForceUpdate from "use-force-update";
-
+import Loader from '../components/Loader';
 import firebaseSDK from "../config/firebaseSDK";
 
 const windowWidth = Dimensions.get("window").width;
@@ -35,6 +35,7 @@ export default class Chat extends React.Component {
     buyeruid: this.props.route.params.buyeruid,
     uri: null,
     showAlert: false,
+    loading: false
   };
 
   getCurrentUserDetails() {
@@ -65,7 +66,7 @@ export default class Chat extends React.Component {
       console.log(invoice_id);
       console.log("MESSAGE TEXT: ");
       console.log(message_text);
-
+      this.setState({loading: true})
       var merchantName = message_text.split("\n")[1].split(":")[1];
       var buyerName = message_text.split("\n")[2].split(":")[1];
       var productName = message_text.split("\n")[3].split(":")[1];
@@ -111,7 +112,7 @@ export default class Chat extends React.Component {
           text: ReceiptToSend,
         });
         console.log("added receipt");
-
+        this.setState({loading: false})
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
@@ -119,6 +120,7 @@ export default class Chat extends React.Component {
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
+        this.setState({loading: false})
         Alert.alert("Payment Failed. Please try again.");
       }
     };
@@ -292,6 +294,10 @@ export default class Chat extends React.Component {
   };
 
   render() {
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
+
     const chat = (
       <GiftedChat
         messages={this.state.messages}
@@ -316,6 +322,7 @@ export default class Chat extends React.Component {
     );
     return (
       <View style={{ flex: 1 }}>
+        {loader}
         <Image
           style={styles.logo}
           source={require("../../ChatAppV2/assets/P2PLogo.png")}

@@ -13,6 +13,7 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
+import Loader from '../components/Loader';
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -36,6 +37,7 @@ export default class ProfilePage extends React.Component {
     uid: "",
     setImage: false,
     updateImage: false,
+    loading: false
   };
 
   constructor(props) {
@@ -58,6 +60,7 @@ export default class ProfilePage extends React.Component {
 
   onPressUpdate = async () => {
     try {
+      this.setState({loading: true})
       const user = {
         name: this.state.name,
         email: this.state.email,
@@ -79,12 +82,14 @@ export default class ProfilePage extends React.Component {
       console.log(firebaseSDK.uid);
       console.log(this.state.name);
       await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
+      this.setState({loading: false})
       Alert.alert("Profile updated successfully!");
       this.props.navigation.navigate("Home", {
         screen: "ProductListing",
       });
     } catch ({ message }) {
       console.log("Update account failed. Catch error: " + message);
+      this.setState({loading: false})
       Alert.alert("Profile Update failed. Please try again.");
     }
   };
@@ -107,11 +112,15 @@ export default class ProfilePage extends React.Component {
   }
 
   render() {
+    if (this.state.loading) {
+      var loader = <Loader />
+    }
     return (
       <ScrollView style={{ maxHeight: "100%" }}>
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : null}
         >
+          {loader}
           <View
             style={{
               marginTop: resizeHeight(130),
