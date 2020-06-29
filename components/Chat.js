@@ -309,9 +309,9 @@ export default class Chat extends React.Component {
                       : require("../assets/VisaLogo64by64.png")
                   }
                   style={{
-                    height: 30,
-                    width: 30,
-                    borderRadius: 15,
+                    height: resizeHeight(30),
+                    width: resizeWidth(30),
+                    borderRadius: resizeWidth(30)/2,
                     resizeMode: "center",
                     padding: 10,
                     backgroundColor: "white",
@@ -419,7 +419,7 @@ const styles = StyleSheet.create({
     marginTop: resizeHeight(5),
     width: resizeWidth(30),
     height: resizeHeight(30),
-    borderRadius: 80,
+    borderRadius: resizeWidth(30)/2,
     position: "absolute",
     alignSelf: "center",
     zIndex: 10,
