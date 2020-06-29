@@ -101,7 +101,8 @@ export default class Login extends React.Component {
               <Text style={styles.labeluser}>EMAIL ADDRESS</Text>
               <TextInput
                 style={styles.inputuser}
-                placeholder="Please enter email"
+                placeholder="Please enter email address"
+                placeholderTextColor="#B1B3B3"
                 autoCorrect={false}
                 onChangeText={this.onChangeTextEmail}
                 value={this.state.email}
@@ -110,6 +111,7 @@ export default class Login extends React.Component {
               <TextInput
                 style={styles.inputuser2}
                 placeholder="Please enter password"
+                placeholderTextColor="#B1B3B3"
                 secureTextEntry={true}
                 autoCorrect={false}
                 onChangeText={this.onChangeTextPassword}
