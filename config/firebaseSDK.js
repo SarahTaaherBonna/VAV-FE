@@ -352,13 +352,17 @@ class FirebaseSDK {
       });
   };
 
-  getNewChat = (chatKey, callback) => {
-    this.getChatRef(chatKey)
+  getChatThreadOnce = (chatKey, callback) => {
+    let messages = []
+    await this.getChatRef(chatKey)
       .orderByChild("timestamp")
       .once("value", (snapshot) => {
-        callback(this.parseChat(snapshot));
+        let message = this.parseChat(snapshot);
+        messages = [...messages, message];
       });
-  };
+    
+    return messages;
+  }
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;

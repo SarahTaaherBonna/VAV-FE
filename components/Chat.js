@@ -115,7 +115,7 @@ export default class Chat extends React.Component {
         Alert.alert(
           "Payment Successful!\nTransaction ID: " + response.data.transaction_id
         );
-        await firebaseSDK.getNewChat(this.state.chatKey, (message) => {
+        await firebaseSDK.getChatThreadOnce(this.state.chatKey, (message) => {
           this.setState((previousState) => ({
             messages: GiftedChat.append(previousState.messages, message),
           }));
