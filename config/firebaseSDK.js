@@ -352,7 +352,7 @@ class FirebaseSDK {
       });
   };
 
-  getChatThreadOnce = (chatKey, callback) => {
+  getChatThreadOnce = async (chatKey, callback) => {
     let messages = []
     await this.getChatRef(chatKey)
       .orderByChild("timestamp")
