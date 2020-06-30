@@ -7,11 +7,9 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
-import firebase from "firebase";
-import axios from "axios";
 
-import { TouchableOpacity } from "react-native-gesture-handler";
 import firebaseSDK from "../config/firebaseSDK";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 const resizeComponent = (value, percentage) => {
   return value - value * (percentage / 100);
@@ -99,13 +97,16 @@ export default class ProductListing extends Component {
                   <TouchableOpacity
                     key={item.id}
                     onPress={() => {
-
+                      let buyeruid = firebaseSDK.uid
+                      let buyername = firebaseSDK.displayName
                       let chatKey = ""
                       if (buyeruid < item.merchantuid) {
                         chatKey = buyeruid + "_" + item.merchantuid;
                       } else {
                         chatKey = item.merchantuid + "_" + buyeruid;
                       }
+
+                      console.log(chatKey);
 
                       this.props.navigation.navigate("Chats", {
                         screen: "Chat", 
