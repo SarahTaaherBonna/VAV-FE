@@ -51,7 +51,6 @@ export default class ProfilePage extends React.Component {
     var userEmail = dataObtainedFromFirebase.split(",")[1];
     this.setState({ name: username });
     this.setState({ email: userEmail });
-    console.log("-------------------IN PROFILE PAGE---------------");
     let imgAvatar = await firebaseSDK.getAvatar();
     if (imgAvatar) {
       this.setState({ image: imgAvatar, setImage: true });
@@ -66,21 +65,13 @@ export default class ProfilePage extends React.Component {
         email: this.state.email,
         password: this.state.password,
       };
-      console.log("=====================================");
-      console.log(this.state.name);
-      console.log(this.state.email);
-      console.log(this.state.password);
-      // console.log(typeof this.state.password);
+
       await firebaseSDK.updateUsername(user);
       // await firebaseSDK.updateEmail(user);
       // await firebaseSDK.updatePassword(user);
       if (this.state.image && this.state.updateImage) {
         await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
       }
-
-      console.log("updating name");
-      console.log(firebaseSDK.uid);
-      console.log(this.state.name);
       await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
       this.setState({loading: false})
       Alert.alert("Profile updated successfully!");
@@ -88,7 +79,6 @@ export default class ProfilePage extends React.Component {
         screen: "ProductListing",
       });
     } catch ({ message }) {
-      console.log("Update account failed. Catch error: " + message);
       this.setState({loading: false})
       Alert.alert("Profile Update failed. Please try again.");
     }

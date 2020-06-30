@@ -31,12 +31,6 @@ class FirebaseSDK {
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(
         function () {
-          console.log(
-            "created user successfully. User email:" +
-              user.email +
-              " name:" +
-              user.name
-          );
           var userf = firebase.auth().currentUser;
           userf.updateProfile({ displayName: user.name }).then(
             function () {
@@ -52,7 +46,6 @@ class FirebaseSDK {
           return userf;
         },
         function (error) {
-          console.log("got error:" + typeof error + " string:" + error.message);
           alert("Create account failed. Error: " + error.message);
           return false;
         }
@@ -95,35 +88,26 @@ class FirebaseSDK {
 
   updateUserName = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    console.log("Name: " + newUser.name);
     if (newUser.name != currentUser.name) {
       await currentUser
         .updateProfile({
           displayName: newUser.name,
         })
-        .then(function () {
-          // Update successful.
-          console.log("Name update passed");
-        })
         .catch(function (error) {
           // An error happened.
           console.log("Name update failed.");
-          console.log(error);
         });
     }
   };
 
   updateEmail = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    console.log("Email: " + newUser.email);
     if (newUser.email != currentUser.email) {
       await currentUser
         .updateEmail(newUser.email)
         .then(function () {
           // Update successful.
           // Alert.alert("Update success");
-          console.log("Email update passed");
-          console.log(this.logout);
           this.logout;
           this.props.navigation.navigate("Login", {
             screen: "Login",
@@ -139,14 +123,11 @@ class FirebaseSDK {
 
   updatePassword = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    console.log("Password: " + newUser.password);
     if (newUser.password != currentUser.password) {
       await currentUser
         .updatePassword(newUser.password)
         .then(function () {
           // Update successful.
-          console.log("Password update passed");
-          // console.log(this.logout);
           this.logout;
           this.props.navigation.navigate("Login", {
             screen: "Login",
@@ -197,7 +178,6 @@ class FirebaseSDK {
           }
         },
         (err) => {
-          console.log(err);
           Alert.alert("Error", "Could not update image");
         }
       );
@@ -379,9 +359,6 @@ class FirebaseSDK {
         isPaid = snapshots[key]["isPaid"];
         isTimeout = snapshots[key]["isTimeout"];
       }
-
-      console.log(user);
-      console.log(_id);
 
       message = {
         isTimeout,
