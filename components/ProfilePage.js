@@ -68,14 +68,24 @@ export default class ProfilePage extends React.Component {
 
       if (this.state.email !== firebaseSDK.email) {
         if (!this.state.currentPassword) {
-          throw ("Current password is needed to update email.")
+          throw {message: "Current password is needed to update email."};
         }
         await firebaseSDK.updateEmail(this.state.email);
         await firebaseSDK.loginWithoutCallback(this.state.email, this.state.currentPassword)
       }
 
-      if (this.state.newPassword && this.currentPassword && this.state.currentPassword !== this.state.newPassword) {
+      console.log(this.state.newPassword);
+      console.log(this.state.currentPassword);
+
+      if (this.state.newPassword) {
+        if (this.state.currentPassword === this.state.newPassword) {
+          throw {message: "New password must be different from current password."};
+        }
+        if (this.currentPassword === "") {
+          throw {message: "Current password is needed to update new password."};
+        }
         await firebaseSDK.updatePassword(this.state.newPassword)
+        await firebaseSDK.loginWithoutCallback(this.state.email, this.state.newPassword)
       }
 
       this.setState({ loading: false });
@@ -84,7 +94,7 @@ export default class ProfilePage extends React.Component {
     } catch ({ message }) {
       console.log("Update account failed. Catch error: " + message);
       this.setState({ loading: false });
-      Alert.alert("Profile Update failed. Please try again.");
+      Alert.alert("Profile Update failed.", message);
     }
   };
 
