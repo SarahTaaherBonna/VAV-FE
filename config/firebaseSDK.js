@@ -37,12 +37,6 @@ class FirebaseSDK {
       .createUserWithEmailAndPassword(user.email, user.password)
       .then(
         function () {
-          console.log(
-            "created user successfully. User email:" +
-              user.email +
-              " name:" +
-              user.name
-          );
           var userf = firebase.auth().currentUser;
           userf.updateProfile({ displayName: user.name }).then(
             function () {
@@ -58,7 +52,6 @@ class FirebaseSDK {
           return userf;
         },
         function (error) {
-          console.log("got error:" + typeof error + " string:" + error.message);
           alert("Create account failed. Error: " + error.message);
           return false;
         }
@@ -117,8 +110,6 @@ class FirebaseSDK {
 
   updatePassword = async (password) => {
     var currentUser = firebase.auth().currentUser;
-    console.log(typeof(password));
-    console.log(password);
     await currentUser.updatePassword(password).then(() => {
       console.log("Password update succeeded.")
     }).catch((error) => {
@@ -161,7 +152,6 @@ class FirebaseSDK {
           }
         },
         (err) => {
-          console.log(err);
           Alert.alert("Error", "Could not update image");
         }
       );
@@ -331,9 +321,6 @@ class FirebaseSDK {
         isPaid = snapshots[key]["isPaid"];
         isTimeout = snapshots[key]["isTimeout"];
       }
-
-      console.log(user);
-      console.log(_id);
 
       message = {
         isTimeout,

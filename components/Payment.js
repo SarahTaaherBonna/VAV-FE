@@ -33,11 +33,6 @@ export default class Payment extends React.Component {
   };
 
   onPressGeneratePaymentRequest = () => {
-    console.log("^^^^^^^^^^^^^^^IN PAYMENT PAGE^^^^^^^^^^^^^^^^^^^^^");
-    console.log("Buyer Name: " + this.state.buyerName);
-    console.log("Merchant Name: " + this.state.merchantName);
-    console.log("Product Name: " + this.state.productName);
-    console.log("Product Price: " + this.state.productPrice);
     if (! this.state.productName) {
       Alert.alert("Input invalid", "Product name can not be empty!");
       return;

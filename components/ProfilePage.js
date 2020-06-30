@@ -76,9 +76,7 @@ export default class ProfilePage extends React.Component {
 
       this.setState({ loading: false });
       Alert.alert("Profile updated successfully!");
-      // this.props.navigation.navigate("Home", {
-      //   screen: "ProductListing",
-      // });
+
     } catch ({ message }) {
       console.log("Update account failed. Catch error: " + message);
       this.setState({ loading: false });
