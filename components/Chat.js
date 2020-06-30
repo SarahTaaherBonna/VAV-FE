@@ -78,7 +78,7 @@ export default class Chat extends React.Component {
           headers: { Authorization: idToken },
         }
       );
-      
+
       this.setState({ invoiceid: response.data.invoice_id });
       let MessageToSend =
         "Invoice ID: " +
@@ -97,9 +97,7 @@ export default class Chat extends React.Component {
         text: MessageToSend,
       });
     } catch (error) {
-      Alert.alert(
-        "Payment Message unsuccessful"
-      );
+      Alert.alert("Payment Message unsuccessful");
     }
   };
 
