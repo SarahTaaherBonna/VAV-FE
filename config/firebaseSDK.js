@@ -89,9 +89,6 @@ class FirebaseSDK {
       displayName: name
     }).then(() => {
       console.log("Name update succeeded.");
-    }).catch((error) => {
-      console.log("Name update failed.")
-      console.log(error);
     })
   };
 
@@ -102,20 +99,14 @@ class FirebaseSDK {
       .updateEmail(email)
       .then(() => {
         console.log("Email update succeeded.");
-      }).catch((error) => {
-        console.log("Email update failed.")
-        console.log(error)
-      });
+      })
   };
 
   updatePassword = async (password) => {
     var currentUser = firebase.auth().currentUser;
     await currentUser.updatePassword(password).then(() => {
       console.log("Password update succeeded.")
-    }).catch((error) => {
-      console.log("Password update failed.")
-      console.log(error);
-    });
+    })
   };
 
   logout = () => {
