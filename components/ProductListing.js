@@ -11,6 +11,7 @@ import firebase from "firebase";
 import axios from "axios";
 
 import { TouchableOpacity } from "react-native-gesture-handler";
+import firebaseSDK from "../config/firebaseSDK";
 
 const resizeComponent = (value, percentage) => {
   return value - value * (percentage / 100);
@@ -33,83 +34,64 @@ const ListData = [
     price: "$159",
     seller:"Sold by Gabriella",
     image: require("../../ChatAppV2/assets/Sunglasses.png"),
+    merchantname: "Gabriella Benedicta",
+    merchantuid: "W1BGs4VGudXJmMYzQxUjvAH9mys1",
   },
   {
     id: 2,
     name: "Headphones",
     price: "$145",
-    seller:"Sold by Daniel",
+    seller:"Sold by Rakshitha",
     image: require("../../ChatAppV2/assets/Headphones.png"),
+    merchantname: "Rakshitha Arun",
+    merchantuid: "lduT2PAELobTfMatjzfWivgqL0n1",
   },
   {
     id: 3,
     name: "Bag",
     price: "$128",
-    seller:"Sold by Khanh",
+    seller:"Sold by Palak",
     image: require("../../ChatAppV2/assets/Bag.png"),
+    merchantname: "Palak Somani",
+    merchantuid: "JEMvm4wXz3fYfgTvzwwBMXmKlg33",
   },
   {
     id: 4,
     name: "Speakers",
     price: "$95",
-    seller:"Sold by Sarah",
+    seller:"Sold by Khanh",
     image: require("../../ChatAppV2/assets/Speakers.png"),
+    merchantname: "Khanh Phung",
+    merchantuid: "mcHwPy6qFAPCprN9pLPXHUS1pO63",
   },
   {
-    id: 3,
+    id: 5,
     name: "Powerbank",
     price: "$79",
-    seller:"Sold by Rakshitha",
+    seller:"Sold by Daniel",
     image: require("../../ChatAppV2/assets/Powerbank.png"),
+    merchantname: "Daniel Wong",
+    merchantuid: "JEIrJHSEzBhJNflD80ZvVx4zf4t2",
   },
   {
-    id: 4,
+    id: 6,
     name: "Mouse",
     price: "$75",
-    seller:"Sold by Palak",
+    seller:"Sold by Sarah",
     image: require("../../ChatAppV2/assets/Mouse.png"),
+    merchantname: "Sarah Taaher Bonna",
+    merchantuid: "y2bsx6pEwpWWNsENsZwrA78LRS82",
   },
 ];
 
 export default class ProductListing extends Component {
-  state = {
-    productName: "",
-    productPrice: "",
-    productDescription: "",
-    productImage: "",
-  };
-
-  functionCall = () => {
-    console.log("hereeeee");
-    firebase
-      .auth()
-      .currentUser.getIdToken(/* forceRefresh */ true)
-      .then(function (idToken) {
-        console.log(idToken);
-        const data = {
-          email: "khanh26688@gmail.com",
-          card_number: "4957030420210462",
-          full_name: "Khanh",
-          expiry_date: "10/20",
-          ccv: "022",
-          uid: "Yo6m5z2panXU4jDAtTuzoeTE3hH3",
-        };
-        axios
-          .get(`http://127.0.0.1:8000/`, data, {
-            headers: { Authorization: idToken },
-          })
-          .then((res) => {
-            console.log(res.data);
-          });
-      })
-      .catch(function (error) {
-        // Handle error
-        console.log("err");
-        console.log(error);
-      });
-  };
 
   render() {
+
+    let user = firebaseSDK.getAccountDetails();
+    let buyername = user.split(',')[0]
+    let buyeruid = user.split(',')[2]
+
     return (
       <Container>
         <ScrollView>
@@ -119,7 +101,29 @@ export default class ProductListing extends Component {
                 <Card1 key={i}>
                   <Image source={item.image} style={styles.image} />
 
-                  <TouchableOpacity>
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => {
+
+                      let chatKey = ""
+                      if (buyeruid < item.merchantuid) {
+                        chatKey = buyeruid + "_" + item.merchantuid;
+                      } else {
+                        chatKey = item.merchantuid + "_" + buyeruid;
+                      }
+
+                      this.props.navigation.navigate("Chats", {
+                        screen: "Chat", 
+                        params: {
+                          chatKey: chatKey,
+                          merchantname: buyername,
+                          buyername: item.merchantname,
+                          merchantuid: buyeruid,
+                          buyeruid: item.merchantuid,
+                        }
+                      });
+                    }}
+                  >
                     <View
                       style={{
                         width: 50,
