@@ -111,13 +111,6 @@ export default class Chat extends React.Component {
     });
   };
 
-  getCurrentUserUid = () => {
-    var user = firebase.auth().currentUser;
-    if (user != null) {
-      return user.uid;
-    }
-  };
-
   setMessages = (messages) => {
     this.setState({
       messages: messages,
@@ -149,7 +142,7 @@ export default class Chat extends React.Component {
       let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
 
       // if it is right side (blue colour) merchant
-      if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+      if (props.currentMessage.user.id == firebaseSDK.uid) {
         return (
           <View>
             <Text style={styles.PaymentText}>Invoice Details</Text>
@@ -173,7 +166,7 @@ export default class Chat extends React.Component {
       let invoice_id = props.currentMessage.text.split("\n")[1].split(": ")[1];
 
       // // if it is right side (blue colour) merchant
-      if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+      if (props.currentMessage.user.id == firebaseSDK.uid) {
         return (
           <View>
             <Text style={styles.PaymentText}>Transaction Details</Text>
@@ -199,7 +192,7 @@ export default class Chat extends React.Component {
         props.currentMessage.isTimeout !== undefined &&
         props.currentMessage.isTimeout === true
       ) {
-        if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+        if (props.currentMessage.user.id == firebaseSDK.uid) {
           return (
             <View>
               <Text style={styles.PaymentText3}>Invoice Timed Out</Text>
