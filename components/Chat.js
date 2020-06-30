@@ -1,6 +1,5 @@
 import React from "react";
 import { View, Text, StyleSheet, Image, Alert, Dimensions } from "react-native";
-import { RNSlidingButton, SlideDirection } from "rn-sliding-button";
 import { Button } from "react-native-elements";
 // @flow
 import { GiftedChat } from "react-native-gifted-chat";
@@ -8,6 +7,7 @@ import axios from "axios";
 import firebase from "firebase";
 import Loader from "../components/Loader";
 import firebaseSDK from "../config/firebaseSDK";
+import Invoice from "./Invoice";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -52,85 +52,6 @@ export default class Chat extends React.Component {
       _id: id,
     };
   }
-
-  onSlideRightGenerator = (invoice_id, message_id, message_text) => {
-    // add in props
-    let onSlideRight = async () => {
-      //perform Action on slide success.
-
-      //invoice_id is available here
-      // console.log("Message ID: ");
-      // console.log(message_id);
-      // console.log("INVOICE ID: ");
-      // console.log(invoice_id);
-      // console.log("MESSAGE TEXT: ");
-      // console.log(message_text);
-      this.setState({ loading: true });
-      var merchantName = message_text.split("\n")[1].split(": ")[1];
-      var buyerName = message_text.split("\n")[2].split(": ")[1];
-      var productName = message_text.split("\n")[3].split(": ")[1];
-      var priceAmount = message_text.split("\n")[4].split(": ")[1];
-
-      var makePaymentAPI =
-        "https://khanhphungntu.ml/make_payment/" + invoice_id.toString();
-
-      const idToken = await firebase.auth().currentUser.getIdToken(true);
-
-      try {
-        const response = await axios.post(
-          makePaymentAPI,
-          {},
-          {
-            headers: { Authorization: idToken },
-          }
-        );
-        // console.log(response.data);
-
-        await firebaseSDK.markIsPaid(this.state.chatKey, message_id);
-        console.log("marked paid");
-
-        let ReceiptToSend =
-          "Transaction ID: " +
-          response.data.transaction_id +
-          "\nInvoice ID: " +
-          invoice_id +
-          "\nMerchant: " +
-          merchantName +
-          "\nBuyer: " +
-          buyerName +
-          "\nProduct: " +
-          productName +
-          "\nPrice: " +
-          priceAmount;
-
-        // console.log("Receipt: " + ReceiptToSend);
-
-        await firebaseSDK.sendReceiptMessage(this.state.chatKey, {
-          user: this.getCurrentUserDetails(),
-          text: ReceiptToSend,
-        });
-        console.log("added receipt");
-        this.setState({ loading: false });
-        Alert.alert(
-          "Payment Successful!\nTransaction ID: " + response.data.transaction_id
-        );
-
-        let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
-        console.log(messages);
-
-        this.setState((previousState) => ({
-          messages: GiftedChat.append([], messages),
-        }));
-      } catch (error) {
-        console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
-        console.log(error);
-        this.setState({ loading: false });
-        Alert.alert("Payment Failed. Please try again.");
-      }
-    };
-
-    return onSlideRight;
-  };
 
   // callback function
   onReceivePaymentDetails = async (productname, productprice) => {
@@ -188,8 +109,9 @@ export default class Chat extends React.Component {
   };
 
   setTimeoutFunction = (message_id) => {
+    const chatKey = this.state.chatKey;
     setTimeout(async function () {
-      await firebaseSDK.markIsTimeout(this.state.chatKey, message_id);
+      await firebaseSDK.markIsTimeout(chatKey, message_id);
       let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
       console.log("TIMEOUT");
       // console.log(messages);
@@ -198,6 +120,7 @@ export default class Chat extends React.Component {
         messages: GiftedChat.append([], messages),
       }));
     }, 3000);
+    return null;
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -216,6 +139,18 @@ export default class Chat extends React.Component {
       return user.uid;
     }
   };
+
+  setMessages = (messages)=>{
+    this.setState({
+      messages: messages,
+    })
+  }
+
+  setLoading = (isLoading)=>{
+    this.setState({
+      loading: isLoading,
+    })
+  }
 
   renderCustomViewPayment = (props) => {
     // Transaction Record (Receipt)
@@ -336,60 +271,9 @@ export default class Chat extends React.Component {
           );
         }
       }
-      // if it is right side (blue colour) merchant
-      if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
-        this.setTimeoutFunction(message_id);
-        return (
-          <View>
-            <Text style={styles.PaymentText}>Invoice Details</Text>
-          </View>
-        );
-      } else {
-        // buyer
-        this.setTimeoutFunction(message_id);
-        return (
-          <View>
-            <Text style={styles.PaymentText2}>Invoice Details</Text>
-            <RNSlidingButton
-              style={{
-                width: "100%",
-              }}
-              height={resizeHeight(35)}
-              onSlidingSuccess={this.onSlideRightGenerator(
-                invoice_id,
-                message_id,
-                message_text
-              )}
-              slideDirection={SlideDirection.RIGHT}
-              successfulSlidePercent={90}
-            >
-              <Image
-                source={require("../../ChatAppV2/assets/SwipeGradientUpdated.png")}
-                style={{
-                  flex: 1,
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  alignSelf: "center",
-                }}
-              ></Image>
-
-              <Image
-                source={
-                  this.state.uri
-                    ? { uri: this.state.uri }
-                    : require("../assets/visaCardIcon3.png")
-                }
-                style={{
-                  height: resizeHeight(38),
-                  width: resizeWidth(48),
-                  resizeMode: "stretch",
-                }}
-              />
-            </RNSlidingButton>
-          </View>
-        );
-      }
+      return(
+        <Invoice chatKey={this.state.chatKey} message_id={message_id} setMessages={this.setMessages} currentMessage={props.currentMessage} setLoading={this.setLoading} uri={this.state.uri} invoice_id={invoice_id} message_text={message_text}/>
+      );
     }
   };
 
