@@ -24,7 +24,8 @@ export default function Invoice(props) {
 
   const resizeHeight = (h) => {
     return (value = h * (windowHeight / 872));
-  };
+	};
+	
   const getCurrentUserDetails = () => {
     const userDetails = firebaseSDK.getAccountDetails();
 

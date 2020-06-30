@@ -104,18 +104,6 @@ export default class Chat extends React.Component {
     }
   };
 
-  setTimeoutFunction = (message_id) => {
-    const chatKey = this.state.chatKey;
-    setTimeout(async function () {
-      await firebaseSDK.markIsTimeout(chatKey, message_id);
-      let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
-      this.setState((previousState) => ({
-        messages: GiftedChat.append([], messages),
-      }));
-    }, 3000);
-    return null;
-  };
-
   onPressGeneratePaymentRequest = () => {
     this.props.navigation.navigate("Payment", {
       screen: "Payment",
