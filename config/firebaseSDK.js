@@ -123,7 +123,6 @@ class FirebaseSDK {
 
   updatePassword = async (newUser) => {
     var currentUser = firebase.auth().currentUser;
-    console.log("Password: " + newUser.password);
     if (newUser.password != currentUser.password) {
       await currentUser
         .updatePassword(newUser.password)
