@@ -380,8 +380,8 @@ class FirebaseSDK {
         isTimeout = snapshots[key]["isTimeout"];
       }
 
-      console.log(user);
-      console.log(_id);
+      // console.log(user);
+      // console.log(_id);
 
       message = {
         isTimeout,

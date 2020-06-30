@@ -140,17 +140,17 @@ export default class Chat extends React.Component {
     }
   };
 
-  setMessages = (messages)=>{
+  setMessages = (messages) => {
     this.setState({
       messages: messages,
-    })
-  }
+    });
+  };
 
-  setLoading = (isLoading)=>{
+  setLoading = (isLoading) => {
     this.setState({
       loading: isLoading,
-    })
-  }
+    });
+  };
 
   renderCustomViewPayment = (props) => {
     // Transaction Record (Receipt)
@@ -271,8 +271,17 @@ export default class Chat extends React.Component {
           );
         }
       }
-      return(
-        <Invoice chatKey={this.state.chatKey} message_id={message_id} setMessages={this.setMessages} currentMessage={props.currentMessage} setLoading={this.setLoading} uri={this.state.uri} invoice_id={invoice_id} message_text={message_text}/>
+      return (
+        <Invoice
+          chatKey={this.state.chatKey}
+          message_id={message_id}
+          setMessages={this.setMessages}
+          currentMessage={props.currentMessage}
+          setLoading={this.setLoading}
+          uri={this.state.uri}
+          invoice_id={invoice_id}
+          message_text={message_text}
+        />
       );
     }
   };
