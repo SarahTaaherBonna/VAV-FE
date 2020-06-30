@@ -27,11 +27,10 @@ export default function Invoice(props) {
 	};
 	
   const getCurrentUserDetails = () => {
-    const userDetails = firebaseSDK.getAccountDetails();
 
-    let name = userDetails.split(",")[0];
-    let email = userDetails.split(",")[1];
-    let id = userDetails.split(",")[2];
+    let name = firebaseSDK.displayName;
+    let email = firebaseSDK.email;
+    let id = firebaseSDK.uid;
 
     return {
       name: name,
@@ -107,7 +106,7 @@ export default function Invoice(props) {
     return onSlideRight;
   };
 
-  if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+  if (props.currentMessage.user.id == firebaseSDK.uid) {
     return (
       <View>
         <Text style={styles.PaymentText}>Invoice Details</Text>
