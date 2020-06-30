@@ -25,6 +25,12 @@ class FirebaseSDK {
       .then(success_callback, failed_callback);
   };
 
+  loginWithoutCallback = async (email, password) => {
+    await firebase
+      .auth()
+      .signInWithEmailAndPassword(email, password);
+  }
+
   createAccount = async (user) => {
     return firebase
       .auth()
@@ -64,84 +70,52 @@ class FirebaseSDK {
 
   /* User Profile Functions */
 
-  getAccountDetails = () => {
-    var user = firebase.auth().currentUser;
-    var name, email, photoUrl, uid, emailVerified;
+  get uid() {
+    return (firebase.auth().currentUser || {}).uid;
+  }
 
-    if (user != null) {
-      name = user.displayName;
-      email = user.email;
-      // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
-      uid = user.uid;
-    }
-    var dataToSend = name + "," + email + "," + uid;
-    return dataToSend;
+  get displayName() {
+    return (firebase.auth().currentUser || {}).displayName;
+  }
+
+  get email() {
+    return (firebase.auth().currentUser || {}).email;
+  }
+
+  // prerequisite: must check if name is different before calling
+  updateName = async (name) => {
+    let currentUser = firebase.auth().currentUser;
+    await currentUser.updateProfile({
+      displayName: name
+    }).then(() => {
+      console.log("Name update succeeded.");
+    }).catch((error) => {
+      console.log("Name update failed.")
+      console.log(error);
+    })
   };
 
-  getCurrentUserDisplayName = () => {
-    var user = firebase.auth().currentUser;
-
-    if (user != null) {
-      return user.displayName;
-    }
-  };
-
-  updateUserName = async (newUser) => {
+    // prerequisite: must check if email is different before calling
+  updateEmail = async (email) => {
     var currentUser = firebase.auth().currentUser;
-    if (newUser.name != currentUser.name) {
-      await currentUser
-        .updateProfile({
-          displayName: newUser.name,
-        })
-        .catch(function (error) {
-          // An error happened.
-          console.log("Name update failed.");
-        });
-    }
+    await currentUser
+      .updateEmail(email)
+      .then(() => {
+        console.log("Email update succeeded.");
+      }).catch((error) => {
+        console.log("Email update failed.")
+        console.log(error)
+      });
   };
 
-  updateEmail = async (newUser) => {
+  updatePassword = async (password) => {
     var currentUser = firebase.auth().currentUser;
-    if (newUser.email != currentUser.email) {
-      await currentUser
-        .updateEmail(newUser.email)
-        .then(function () {
-          // Update successful.
-          // Alert.alert("Update success");
-          this.logout;
-          this.props.navigation.navigate("Login", {
-            screen: "Login",
-          });
-        })
-        .catch(function (error) {
-          // An error happened.
-          console.log("Email update failed.");
-          console.log(error);
-        });
-    }
-  };
-
-  updatePassword = async (newUser) => {
-    var currentUser = firebase.auth().currentUser;
-    if (newUser.password != currentUser.password) {
-      await currentUser
-        .updatePassword(newUser.password)
-        .then(function () {
-          // Update successful.
-          this.logout;
-          this.props.navigation.navigate("Login", {
-            screen: "Login",
-          });
-        })
-        .catch(function (error) {
-          // An error happened.
-          console.log("Password update failed.");
-          console.log(error);
-        });
-      await firebase
-        .auth()
-        .signInWithEmailAndPassword(currentUser.email, currentUser.password);
-    }
+    await currentUser.updatePassword(password).then(() => {
+      console.log("Password update succeeded.")
+    }).catch((error) => {
+      console.log("Password update failed.")
+      console.log(error);
+    });
   };
 
   logout = () => {
@@ -183,14 +157,6 @@ class FirebaseSDK {
       );
     } catch (err) {
       console.log("uploadImage try/catch error: " + err.message);
-    }
-  };
-
-  getCurrentUserUid = () => {
-    var user = firebase.auth().currentUser;
-
-    if (user != null) {
-      return user.uid;
     }
   };
 
@@ -241,10 +207,6 @@ class FirebaseSDK {
     }
   };
 
-  get uid() {
-    return (firebase.auth().currentUser || {}).uid;
-  }
-
   get chatRef() {
     return firebase.database().ref("chats");
   }
@@ -285,7 +247,7 @@ class FirebaseSDK {
         const { text } = data.val()[key];
 
         this.getNameFromUid(otherId, (buyername) => {
-          let merchantname = this.getCurrentUserDisplayName();
+          let merchantname = this.displayName;
           callback(_id, merchantname, buyername, myId, otherId, text);
         });
       });

@@ -13,7 +13,7 @@ import {
   Dimensions,
   Alert,
 } from "react-native";
-import Loader from '../components/Loader';
+import Loader from "../components/Loader";
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
@@ -32,12 +32,13 @@ export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
-    password: "",
+    currentPassword: "",
+    newPassword: "",
     image: "",
-    uid: "",
+    uid: firebaseSDK.uid,
     setImage: false,
     updateImage: false,
-    loading: false
+    loading: false,
   };
 
   constructor(props) {
@@ -46,11 +47,10 @@ export default class ProfilePage extends React.Component {
   }
 
   async componentDidMount() {
-    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
-    var username = dataObtainedFromFirebase.split(",")[0];
-    var userEmail = dataObtainedFromFirebase.split(",")[1];
-    this.setState({ name: username });
-    this.setState({ email: userEmail });
+    this.setState({
+      name: firebaseSDK.displayName,
+      email: firebaseSDK.email
+    })
     let imgAvatar = await firebaseSDK.getAvatar();
     if (imgAvatar) {
       this.setState({ image: imgAvatar, setImage: true });
@@ -59,33 +59,34 @@ export default class ProfilePage extends React.Component {
 
   onPressUpdate = async () => {
     try {
-      this.setState({loading: true})
-      const user = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-      };
+      this.setState({ loading: true });
 
-      await firebaseSDK.updateUsername(user);
-      // await firebaseSDK.updateEmail(user);
-      // await firebaseSDK.updatePassword(user);
-      if (this.state.image && this.state.updateImage) {
-        await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
+      if (this.state.name !== firebaseSDK.displayName) {
+        await firebaseSDK.updateName(this.state.name);
       }
-      await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
-      this.setState({loading: false})
+
+      if (this.state.email !== firebaseSDK.email) {
+        await firebaseSDK.updateEmail(this.state.email);
+        await firebaseSDK.loginWithoutCallback(this.state.email, this.state.currentPassword)
+      }
+
+      if (this.state.newPassword && this.state.currentPassword !== this.state.newPassword) {
+        await firebaseSDK.updatePassword(this.state.newPassword)
+      }
+
+      this.setState({ loading: false });
       Alert.alert("Profile updated successfully!");
-      this.props.navigation.navigate("Home", {
-        screen: "ProductListing",
-      });
+
     } catch ({ message }) {
-      this.setState({loading: false})
+      console.log("Update account failed. Catch error: " + message);
+      this.setState({ loading: false });
       Alert.alert("Profile Update failed. Please try again.");
     }
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  onChangeTextPassword = (password) => this.setState({ password });
+  onChangeTextCurrentPassword = (currentPassword) => this.setState({currentPassword});
+  onChangeTextNewPassword = (newPassword) => this.setState({newPassword})
   onChangeTextName = (name) => this.setState({ name });
 
   async pickImage() {
@@ -103,7 +104,7 @@ export default class ProfilePage extends React.Component {
 
   render() {
     if (this.state.loading) {
-      var loader = <Loader />
+      var loader = <Loader />;
     }
     return (
       <ScrollView style={{ maxHeight: "100%" }}>
@@ -113,9 +114,9 @@ export default class ProfilePage extends React.Component {
           {loader}
           <View
             style={{
-              marginTop: resizeHeight(130),
+              marginTop: resizeHeight(90),
               alignSelf: "center",
-              height: resizeHeight(480),
+              height: resizeHeight(560),
               width: resizeWidth(350),
               borderRadius: 30,
               backgroundColor: "#16267D",
@@ -147,6 +148,7 @@ export default class ProfilePage extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter name"
+              pplaceholderTextColor="#B1B3B3"
               onChangeText={this.onChangeTextName}
               value={this.state.name}
             />
@@ -154,16 +156,27 @@ export default class ProfilePage extends React.Component {
             <TextInput
               style={styles.inputuser}
               placeholder="Please enter email"
+              placeholderTextColor="#B1B3B3"
               onChangeText={this.onChangeTextEmail}
               value={this.state.email}
             />
-            <Text style={styles.labeluser2}>PASSWORD</Text>
+            <Text style={styles.labeluser2}>CURRENT PASSWORD</Text>
             <TextInput
               style={styles.inputuser}
-              placeholder="Please enter password"
+              placeholder="Required for email/password change"
+              placeholderTextColor="#B1B3B3"
               secureTextEntry={true}
               autoCorrect={false}
-              onChangeText={this.onChangeTextPassword}
+              onChangeText={this.onChangeTextCurrentPassword}
+            />
+            <Text style={styles.labeluser2}>NEW PASSWORD</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Leave blank if no change"
+              placeholderTextColor="#B1B3B3"
+              secureTextEntry={true}
+              autoCorrect={false}
+              onChangeText={this.onChangeTextNewPassword}
             />
           </View>
 
