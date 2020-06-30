@@ -8,9 +8,9 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Dimensions,
+  Alert
 } from "react-native";
 import FlatButton2 from "../components/Button2";
-
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 
@@ -38,6 +38,15 @@ export default class Payment extends React.Component {
     console.log("Merchant Name: " + this.state.merchantName);
     console.log("Product Name: " + this.state.productName);
     console.log("Product Price: " + this.state.productPrice);
+    if (! this.state.productName) {
+      Alert.alert("Input invalid", "Product name can not be empty!");
+      return;
+    }
+
+    if(! this.state.productPrice) {
+      Alert.alert("Invalid input", "Product price can not e empty!");
+      return;
+    }
 
     this.props.route.params.callback(
       this.state.productName,
@@ -78,6 +87,7 @@ export default class Payment extends React.Component {
             <Text style={styles.title}>BUYER'S NAME</Text>
             <TextInput
               style={styles.nameInput}
+              editable = {false}
               placeholder="Please enter buyer's name"
               placeholderTextColor="white"
               autoCorrect={false}
@@ -87,6 +97,7 @@ export default class Payment extends React.Component {
             <Text style={styles.title}>MERCHANT'S NAME</Text>
             <TextInput
               style={styles.nameInput}
+              editable = {false}
               placeholder="Please enter merchant's name"
               placeholderTextColor="white"
               autoCorrect={false}

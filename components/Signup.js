@@ -11,6 +11,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Dimensions,
+  Alert,
 } from "react-native";
 import Loader from "../components/Loader";
 import firebaseSDK from "../config/firebaseSDK";
@@ -43,6 +44,11 @@ export default class Signup extends React.Component {
 
   onPressCreate = async () => {
     try {
+      if (!this.state.name || !this.state.password || !this.state.email) {
+        Alert.alert("Invalid input", "Input can not be empty");
+        return;
+      }
+      
       this.setState({ loading: true });
       const user = {
         name: this.state.name,
@@ -57,15 +63,16 @@ export default class Signup extends React.Component {
 
       firebaseSDK.updateName(account.uid, this.state.name);
       this.setState({ loading: false });
+      if (account != false) {
+        this.props.navigation.navigate("Add Credit Card Details", {
+          screen: "CreditCard",
+          isAdding: true,
+        });
+      }
     } catch ({ message }) {
       console.log("Create account failed. Catch error:" + message);
       this.setState({ loading: false });
     }
-
-    this.props.navigation.navigate("Add Credit Card Details", {
-      screen: "CreditCard",
-      isAdding: true,
-    });
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
