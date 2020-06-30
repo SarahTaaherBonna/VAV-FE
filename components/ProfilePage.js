@@ -32,9 +32,10 @@ export default class ProfilePage extends React.Component {
   state = {
     name: "",
     email: "",
-    password: "",
+    currentPassword: "",
+    newPassword: "",
     image: "",
-    uid: "",
+    uid: firebaseSDK.uid,
     setImage: false,
     updateImage: false,
     loading: false,
@@ -61,32 +62,30 @@ export default class ProfilePage extends React.Component {
   onPressUpdate = async () => {
     try {
       this.setState({ loading: true });
-      const user = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-      };
-      console.log("=====================================");
       console.log(this.state.name);
       console.log(this.state.email);
-      console.log(this.state.password);
-      // console.log(typeof this.state.password);
-      await firebaseSDK.updateUsername(user);
-      // await firebaseSDK.updateEmail(user);
-      // await firebaseSDK.updatePassword(user);
-      if (this.state.image && this.state.updateImage) {
-        await firebaseSDK.uploadImage(this.state.image, firebaseSDK.uid);
+      console.log(this.state.currentPassword)
+      console.log(this.state.newPassword)
+      console.log(this.state.uid);
+
+      if (this.state.name !== firebaseSDK.displayName) {
+        await firebaseSDK.updateName(this.state.name);
       }
 
-      console.log("updating name");
-      console.log(firebaseSDK.uid);
-      console.log(this.state.name);
-      await firebaseSDK.updateName(firebaseSDK.uid, this.state.name);
+      if (this.state.email !== firebaseSDK.email) {
+        await firebaseSDK.updateEmail(this.state.email);
+        await firebaseSDK.loginWithoutCallback(this.state.email, this.state.currentPassword)
+      }
+
+      if (this.state.newPassword) {
+        await firebaseSDK.updatePassword(this.state.password)
+      }
+
       this.setState({ loading: false });
       Alert.alert("Profile updated successfully!");
-      this.props.navigation.navigate("Home", {
-        screen: "ProductListing",
-      });
+      // this.props.navigation.navigate("Home", {
+      //   screen: "ProductListing",
+      // });
     } catch ({ message }) {
       console.log("Update account failed. Catch error: " + message);
       this.setState({ loading: false });
@@ -95,7 +94,8 @@ export default class ProfilePage extends React.Component {
   };
 
   onChangeTextEmail = (email) => this.setState({ email });
-  onChangeTextPassword = (password) => this.setState({ password });
+  onChangeTextCurrentPassword = (currentPassword) => this.setState({currentPassword});
+  onChangeTextNewPassword = (newPassword) => this.setState({newPassword})
   onChangeTextName = (name) => this.setState({ name });
 
   async pickImage() {
@@ -172,11 +172,11 @@ export default class ProfilePage extends React.Component {
             <Text style={styles.labeluser2}>CURRENT PASSWORD</Text>
             <TextInput
               style={styles.inputuser}
-              placeholder="Required for email/password changes"
+              placeholder="Required for email/password change"
               placeholderTextColor="#B1B3B3"
               secureTextEntry={true}
               autoCorrect={false}
-              onChangeText={this.onChangeTextPassword}
+              onChangeText={this.onChangeTextCurrentPassword}
             />
             <Text style={styles.labeluser2}>NEW PASSWORD</Text>
             <TextInput
@@ -185,7 +185,7 @@ export default class ProfilePage extends React.Component {
               placeholderTextColor="#B1B3B3"
               secureTextEntry={true}
               autoCorrect={false}
-              onChangeText={this.onChangeTextPassword}
+              onChangeText={this.onChangeTextNewPassword}
             />
           </View>
 
