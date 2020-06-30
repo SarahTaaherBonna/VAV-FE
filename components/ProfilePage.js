@@ -167,10 +167,18 @@ export default class ProfilePage extends React.Component {
               onChangeText={this.onChangeTextEmail}
               value={this.state.email}
             />
-            <Text style={styles.labeluser2}>PASSWORD</Text>
+            <Text style={styles.labeluser2}>CURRENT PASSWORD</Text>
             <TextInput
               style={styles.inputuser}
-              placeholder="Please enter password"
+              placeholder="Required for email/password changes"
+              secureTextEntry={true}
+              autoCorrect={false}
+              onChangeText={this.onChangeTextPassword}
+            />
+            <Text style={styles.labeluser2}>NEW PASSWORD</Text>
+            <TextInput
+              style={styles.inputuser}
+              placeholder="Leave blank if no change"
               secureTextEntry={true}
               autoCorrect={false}
               onChangeText={this.onChangeTextPassword}
