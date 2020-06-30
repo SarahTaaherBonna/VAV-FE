@@ -63,14 +63,18 @@ export default class ProfilePage extends React.Component {
 
       if (this.state.name !== firebaseSDK.displayName) {
         await firebaseSDK.updateName(this.state.name);
+        await firebaseSDK.updateDatabaseName(this.state.uid, this.state.name);
       }
 
       if (this.state.email !== firebaseSDK.email) {
+        if (!this.state.currentPassword) {
+          throw ("Current password is needed to update email.")
+        }
         await firebaseSDK.updateEmail(this.state.email);
         await firebaseSDK.loginWithoutCallback(this.state.email, this.state.currentPassword)
       }
 
-      if (this.state.newPassword && this.state.currentPassword !== this.state.newPassword) {
+      if (this.state.newPassword && this.currentPassword && this.state.currentPassword !== this.state.newPassword) {
         await firebaseSDK.updatePassword(this.state.newPassword)
       }
 

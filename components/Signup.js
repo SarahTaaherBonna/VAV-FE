@@ -61,7 +61,8 @@ export default class Signup extends React.Component {
         await firebaseSDK.uploadImage(this.state.image, account.uid);
       }
 
-      firebaseSDK.updateName(account.uid, this.state.name);
+      firebaseSDK.updateDatabaseName(account.uid, this.state.name);
+      
       this.setState({ loading: false });
       if (account != false) {
         this.props.navigation.navigate("Add Credit Card Details", {

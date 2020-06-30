@@ -398,7 +398,7 @@ class FirebaseSDK {
     });
   };
 
-  updateName = async (uid, name) => {
+  updateDatabaseName = async (uid, name) => {
     let ref = this.userInfoRef;
     let obj = {};
     obj[uid] = name;
