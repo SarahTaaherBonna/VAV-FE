@@ -87,11 +87,6 @@ const ListData = [
 export default class ProductListing extends Component {
 
   render() {
-
-    let user = firebaseSDK.getAccountDetails();
-    let buyername = user.split(',')[0]
-    let buyeruid = user.split(',')[2]
-
     return (
       <Container>
         <ScrollView>

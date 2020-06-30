@@ -66,9 +66,9 @@ export default class CreditCard extends Component {
 
   async componentDidMount() {
     this.setState({loading: true})
-    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
-    var userEmail = dataObtainedFromFirebase.split(",")[1];
-    var userUID = dataObtainedFromFirebase.split(",")[2];
+
+    var userEmail = firebaseSDK.email
+    var userUID = firebaseSDK.uid
     const navigation = this.props.route.params;
     const isStart = navigation.isStart;
 

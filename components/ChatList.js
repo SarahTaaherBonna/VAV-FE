@@ -97,19 +97,25 @@ export default class ChatList extends Component {
   }
 
   componentDidMount() {
-    this.setState({loading: true})
+    this.setState({loading: true});
+
     firebaseSDK.getChatList(async (chatKey, merchantname, buyername, merchantuid, buyeruid, text) => {
       let uri;
+
       if (firebaseSDK.uid == buyeruid){
         uri = await firebaseSDK.getChatAvatar(merchantuid);
       } else {
         uri = await firebaseSDK.getChatAvatar(buyeruid);
       }
+
       let newChatListing = this.generateChatListing(chatKey, merchantname, buyername, merchantuid, buyeruid, text, uri);
+
       this.setState((previousState) => ({
         chatListings: [...previousState.chatListings, newChatListing],
       }));
+
       this.setState({loading: false})
+
     });
   }
 

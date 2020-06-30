@@ -77,20 +77,6 @@ class FirebaseSDK {
 
   /* User Profile Functions */
 
-  getAccountDetails = () => {
-    var user = firebase.auth().currentUser;
-    var name, email, photoUrl, uid, emailVerified;
-
-    if (user != null) {
-      name = user.displayName;
-      email = user.email;
-      // The user's ID, unique to the Firebase project. For authentication, use User.getToken() instead.
-      uid = user.uid;
-    }
-    var dataToSend = name + "," + email + "," + uid;
-    return dataToSend;
-  };
-
   get uid() {
     return (firebase.auth().currentUser || {}).uid;
   }
@@ -131,6 +117,8 @@ class FirebaseSDK {
 
   updatePassword = async (password) => {
     var currentUser = firebase.auth().currentUser;
+    console.log(typeof(password));
+    console.log(password);
     await currentUser.updatePassword(password).then(() => {
       console.log("Password update succeeded.")
     }).catch((error) => {

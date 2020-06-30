@@ -47,12 +47,10 @@ export default class ProfilePage extends React.Component {
   }
 
   async componentDidMount() {
-    var dataObtainedFromFirebase = await firebaseSDK.getAccountDetails();
-    var username = dataObtainedFromFirebase.split(",")[0];
-    var userEmail = dataObtainedFromFirebase.split(",")[1];
-    this.setState({ name: username });
-    this.setState({ email: userEmail });
-    console.log("-------------------IN PROFILE PAGE---------------");
+    this.setState({
+      name: firebaseSDK.displayName,
+      email: firebaseSDK.email
+    })
     let imgAvatar = await firebaseSDK.getAvatar();
     if (imgAvatar) {
       this.setState({ image: imgAvatar, setImage: true });
@@ -62,11 +60,6 @@ export default class ProfilePage extends React.Component {
   onPressUpdate = async () => {
     try {
       this.setState({ loading: true });
-      console.log(this.state.name);
-      console.log(this.state.email);
-      console.log(this.state.currentPassword)
-      console.log(this.state.newPassword)
-      console.log(this.state.uid);
 
       if (this.state.name !== firebaseSDK.displayName) {
         await firebaseSDK.updateName(this.state.name);
@@ -77,8 +70,8 @@ export default class ProfilePage extends React.Component {
         await firebaseSDK.loginWithoutCallback(this.state.email, this.state.currentPassword)
       }
 
-      if (this.state.newPassword) {
-        await firebaseSDK.updatePassword(this.state.password)
+      if (this.state.newPassword && this.state.currentPassword !== this.state.newPassword) {
+        await firebaseSDK.updatePassword(this.state.newPassword)
       }
 
       this.setState({ loading: false });
