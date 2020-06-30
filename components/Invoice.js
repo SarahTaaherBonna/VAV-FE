@@ -69,7 +69,6 @@ export default function Invoice(props) {
       );
 
       await firebaseSDK.markIsPaid(props.chatKey, message_id);
-      // console.log("marked paid");
 
       let ReceiptToSend =
         "Transaction ID: " +
@@ -85,13 +84,11 @@ export default function Invoice(props) {
         "\nPrice: " +
         priceAmount;
 
-      // console.log("Receipt: " + ReceiptToSend);
-
       await firebaseSDK.sendReceiptMessage(props.chatKey, {
         user: getCurrentUserDetails(),
         text: ReceiptToSend,
-      });
-      // console.log("added receipt");
+			});
+			
       props.setLoading(false);
       Alert.alert(
         "Payment Successful!\nTransaction ID: " + response.data.transaction_id

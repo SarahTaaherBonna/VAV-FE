@@ -33,12 +33,6 @@ export default class Payment extends React.Component {
   };
 
   onPressGeneratePaymentRequest = () => {
-    // console.log("^^^^^^^^^^^^^^^IN PAYMENT PAGE^^^^^^^^^^^^^^^^^^^^^");
-    // console.log("Buyer Name: " + this.state.buyerName);
-    // console.log("Merchant Name: " + this.state.merchantName);
-    // console.log("Product Name: " + this.state.productName);
-    // console.log("Product Price: " + this.state.productPrice);
-
     this.props.route.params.callback(
       this.state.productName,
       this.state.productPrice

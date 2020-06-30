@@ -97,7 +97,6 @@ export default class CreditCard extends Component {
 
   _onChange = (form) => {
     /* eslint no-console: 0 */
-    // console.log(form);
     if (form.valid == true) {
       this.state.cardName = form.values.name;
       var usercardNumber = form.values.number.replace(/\s/g, "");
@@ -109,7 +108,6 @@ export default class CreditCard extends Component {
 
   _onFocus = (field) => {
     /* eslint no-console: 0 */
-    console.log(field);
   };
 
   onPressSubmit = async () => {

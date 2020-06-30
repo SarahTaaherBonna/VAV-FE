@@ -70,8 +70,6 @@ export default class Chat extends React.Component {
       description: productname,
     };
 
-    // console.log(data);
-
     const idToken = await firebase.auth().currentUser.getIdToken(true);
     try {
       const response = await axios.post(
@@ -81,7 +79,7 @@ export default class Chat extends React.Component {
           headers: { Authorization: idToken },
         }
       );
-      // console.log(response.data);
+      
       this.setState({ invoiceid: response.data.invoice_id });
       let MessageToSend =
         "Invoice ID: " +
@@ -100,10 +98,8 @@ export default class Chat extends React.Component {
         text: MessageToSend,
       });
     } catch (error) {
-      console.log("*************ERROR!!!!!!!!!!!!!!");
-      console.log(error);
       Alert.alert(
-        "Payment Successful!\nTransaction ID: " + response.data.transaction_id
+        "Payment Message unsuccessful"
       );
     }
   };
@@ -113,9 +109,6 @@ export default class Chat extends React.Component {
     setTimeout(async function () {
       await firebaseSDK.markIsTimeout(chatKey, message_id);
       let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
-      console.log("TIMEOUT");
-      // console.log(messages);
-
       this.setState((previousState) => ({
         messages: GiftedChat.append([], messages),
       }));
@@ -154,14 +147,12 @@ export default class Chat extends React.Component {
 
   renderCustomViewPayment = (props) => {
     // Transaction Record (Receipt)
-    // console.log("Message now:\n" + props.currentMessage.text);
     if (props.currentMessage.text == undefined) {
       return;
     }
     var messageFirstLine = props.currentMessage.text
       .split("\n")[0]
       .split(":")[0];
-    // console.log("First Line of Message: " + messageFirstLine);
     if (
       // Invoice details (Paid yet)
       props.currentMessage.isPayment == true &&
@@ -171,7 +162,6 @@ export default class Chat extends React.Component {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
-      // console.log("Invoice ID 1st if: " + invoice_id);
 
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -196,7 +186,6 @@ export default class Chat extends React.Component {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[1].split(": ")[1];
-      // console.log("Invoice ID 2nd else if: " + invoice_id);
 
       // // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
@@ -221,7 +210,6 @@ export default class Chat extends React.Component {
       let message_id = props.currentMessage._id;
       let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
-      // console.log("Invoice ID 3rd else if: " + invoice_id);
       if (
         props.currentMessage.isTimeout !== undefined &&
         props.currentMessage.isTimeout === true

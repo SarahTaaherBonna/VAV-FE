@@ -52,15 +52,12 @@ export default class Login extends React.Component {
   };
 
   navigateToSignup = () => {
-    console.log("Navigating to Sign up");
-
     this.props.navigation.navigate("Sign Up", {
       screen: "Signup",
     });
   };
 
   loginSuccess = () => {
-    console.log("login successful, navigate to Products.");
     this.setState({ loading: false });
     this.props.navigation.navigate("Home");
   };
