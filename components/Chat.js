@@ -120,8 +120,7 @@ export default class Chat extends React.Component {
 
         this.setState((previousState) => ({
           messages: GiftedChat.append([], messages),
-        }))
-
+        }));
       } catch (error) {
         console.log("!!!!!!!!!!!!!ERROR!!!!!!!!!!!!!!");
         console.log(error);
@@ -186,6 +185,19 @@ export default class Chat extends React.Component {
         "Payment Successful!\nTransaction ID: " + response.data.transaction_id
       );
     }
+  };
+
+  setTimeoutFunction = (message_id) => {
+    setTimeout(async function () {
+      await firebaseSDK.markIsTimeout(this.state.chatKey, message_id);
+      let messages = await firebaseSDK.getChatOnce(this.state.chatKey);
+      console.log("TIMEOUT");
+      // console.log(messages);
+
+      this.setState((previousState) => ({
+        messages: GiftedChat.append([], messages),
+      }));
+    }, 3000);
   };
 
   onPressGeneratePaymentRequest = () => {
@@ -275,9 +287,58 @@ export default class Chat extends React.Component {
       let message_text = props.currentMessage.text;
       let invoice_id = props.currentMessage.text.split("\n")[0].split(": ")[1];
       // console.log("Invoice ID 3rd else if: " + invoice_id);
+      if (
+        props.currentMessage.isTimeout !== undefined &&
+        props.currentMessage.isTimeout === true
+      ) {
+        if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+          return (
+            <View>
+              <Text style={styles.PaymentText3}>Invoice Timed Out</Text>
+            </View>
+          );
+        } else {
+          // buyer
+          return (
+            <View>
+              <Text style={styles.PaymentText3}>Invoice Timed out</Text>
+              <View
+                style={{
+                  width: "100%",
+                }}
+                height={resizeHeight(35)}
+              >
+                <Image
+                  source={require("../../ChatAppV2/assets/GreyGradient.png")}
+                  style={{
+                    flex: 1,
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    alignSelf: "center",
+                  }}
+                ></Image>
 
+                <Image
+                  source={
+                    this.state.uri
+                      ? { uri: this.state.uri }
+                      : require("../assets/visaCardIcon3.png")
+                  }
+                  style={{
+                    height: resizeHeight(38),
+                    width: resizeWidth(48),
+                    resizeMode: "stretch",
+                  }}
+                />
+              </View>
+            </View>
+          );
+        }
+      }
       // if it is right side (blue colour) merchant
       if (props.currentMessage.user.id == firebaseSDK.getCurrentUserUid()) {
+        this.setTimeoutFunction(message_id);
         return (
           <View>
             <Text style={styles.PaymentText}>Invoice Details</Text>
@@ -285,6 +346,7 @@ export default class Chat extends React.Component {
         );
       } else {
         // buyer
+        this.setTimeoutFunction(message_id);
         return (
           <View>
             <Text style={styles.PaymentText2}>Invoice Details</Text>
@@ -313,8 +375,6 @@ export default class Chat extends React.Component {
               ></Image>
 
               <Image
-                // size="small"
-                // rounded
                 source={
                   this.state.uri
                     ? { uri: this.state.uri }
@@ -416,6 +476,12 @@ const styles = StyleSheet.create({
   PaymentText2: {
     fontSize: 18,
     color: "#000000",
+    textAlign: "center",
+  },
+
+  PaymentText3: {
+    fontSize: 18,
+    color: "#FF0000",
     textAlign: "center",
   },
 

@@ -322,13 +322,16 @@ class FirebaseSDK {
     const { key: _id } = snapshot;
 
     let isPaid = false;
+    let isTimeout = false;
 
     if (isPayment) {
       isPaid = snapshot.val().isPaid;
+      isTimeout = snapshot.val().isTimeout;
     }
 
     const timestamp = new Date(numberStamp);
     const message = {
+      isTimeout,
       isPaid,
       isPayment,
       _id,
@@ -354,44 +357,46 @@ class FirebaseSDK {
     const ref = await firebase.database().ref("chats").child(chatKey);
 
     const snapshot = await ref.orderByChild("timestamp").once("value");
-    
-    return this.parseObjectsChat(snapshot.val());
 
+    return this.parseObjectsChat(snapshot.val());
   };
 
-  parseObjectsChat = (snapshots) =>{
+  parseObjectsChat = (snapshots) => {
     let message;
     let messages = [];
     let isPaid = false;
-        
-    for(const key in snapshots) {
-      const isPayment = snapshots[key]['isPayment'];
-      const numberStamp = snapshots[key]['timestamp'];
+    let isTimeout = false;
+
+    for (const key in snapshots) {
+      const isPayment = snapshots[key]["isPayment"];
+      const numberStamp = snapshots[key]["timestamp"];
 
       const timestamp = new Date(numberStamp);
       const _id = key;
-      const text = snapshots[key]['text'];
-      const user = snapshots[key]['user'];
+      const text = snapshots[key]["text"];
+      const user = snapshots[key]["user"];
       if (snapshots[key].isPayment) {
-        isPaid = snapshots[key]['isPaid'];
+        isPaid = snapshots[key]["isPaid"];
+        isTimeout = snapshots[key]["isTimeout"];
       }
 
       console.log(user);
       console.log(_id);
 
       message = {
+        isTimeout,
         isPaid,
         isPayment,
         _id,
         timestamp,
         text,
-        user
-      }
+        user,
+      };
       messages = [...messages, message];
     }
 
     return messages;
-  }
+  };
 
   get timestamp() {
     return firebase.database.ServerValue.TIMESTAMP;
@@ -407,6 +412,7 @@ class FirebaseSDK {
           timestamp: this.timestamp,
           isPayment: false,
           isPaid: false,
+          isTimeout: false,
         };
         this.chatRef.child(chatKey).push(message);
         // this.append(message);
@@ -423,6 +429,7 @@ class FirebaseSDK {
       timestamp: this.timestamp,
       isPayment: true,
       isPaid: true,
+      isTimeout: false,
     };
     this.chatRef.child(chatKey).push(message);
   };
@@ -435,16 +442,20 @@ class FirebaseSDK {
       timestamp: this.timestamp,
       isPayment: true,
       isPaid: false,
+      isTimeout: false,
     };
     this.chatRef.child(chatKey).push(message);
   };
 
   markIsPaid = (chatKey, messageKey) => {
-    this.chatRef
-      .child(chatKey)
-      .child(messageKey)
-      .update({
-        isPaid: true,
+    this.chatRef.child(chatKey).child(messageKey).update({
+      isPaid: true,
+    });
+  };
+
+  markIsTimeout = (chatKey, messageKey) => {
+    this.chatRef.child(chatKey).child(messageKey).update({
+      isTimeout: true,
     });
   };
 
