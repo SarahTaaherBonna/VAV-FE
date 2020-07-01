@@ -38,10 +38,9 @@ export default class Chat extends React.Component {
   };
 
   getCurrentUserDetails() {
-
-    let name = firebaseSDK.displayName
-    let email = firebaseSDK.email
-    let id = firebaseSDK.uid
+    let name = firebaseSDK.displayName;
+    let email = firebaseSDK.email;
+    let id = firebaseSDK.uid;
 
     return {
       name: name,
@@ -146,6 +145,23 @@ export default class Chat extends React.Component {
         return (
           <View>
             <Text style={styles.PaymentText}>Invoice Details</Text>
+            <View
+              style={{
+                width: "100%",
+              }}
+              height={resizeHeight(35)}
+            >
+              <Image
+                source={require("../../ChatAppV2/assets/limeadeGradient.png")}
+                style={{
+                  flex: 1,
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  alignSelf: "center",
+                }}
+              ></Image>
+            </View>
           </View>
         );
       } else {
@@ -153,6 +169,37 @@ export default class Chat extends React.Component {
         return (
           <View>
             <Text style={styles.PaymentText2}>Invoice Details</Text>
+            <View
+              style={{
+                width: "100%",
+              }}
+              height={resizeHeight(35)}
+            >
+              <Image
+                source={require("../../ChatAppV2/assets/limeadeGradient.png")}
+                style={{
+                  flex: 1,
+                  position: "absolute",
+                  width: "100%",
+                  height: "100%",
+                  alignSelf: "center",
+                }}
+              ></Image>
+              <Image
+                source={
+                  this.state.uri
+                    ? { uri: this.state.uri }
+                    : require("../assets/visaCardIcon3.png")
+                }
+                style={{
+                  height: resizeHeight(38),
+                  width: resizeWidth(48),
+                  marginRight: 0,
+                  marginLeft: 180,
+                  resizeMode: "stretch",
+                }}
+              />
+            </View>
           </View>
         );
       }
