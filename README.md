@@ -40,10 +40,10 @@ Refer to [the backend repository](https://github.com/gabybenedicta/vav-be) for m
 <img src="./screenshots/chat.jpg" height="600">
 
 ### Requesting Payments (Invoice)
-<img src="./screenshots/createinvoice.jpg" height="600">
+<img src="./screenshots/createinvoice.png" height="600">
 
 ### Viewing Invoices
 <img src="./screenshots/invoice.jpg" height="600">
 
 ### Payment confirmed
-<img src="./screenshots/payment.jpg" height="600">
+<img src="./screenshots/payment.png" height="600">
