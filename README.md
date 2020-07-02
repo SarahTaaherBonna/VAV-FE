@@ -1,7 +1,7 @@
 # Ping2Pay
 ## A secure, convenient way to pay without ever leaving your app.
 
-![Ping2Pay Logo](assets/P2PLogo.png =250x250)
+![Ping2Pay Logo](assets/P2PLogo.png | width=250)
 
 # README
 
@@ -28,10 +28,10 @@ Refer to [the backend repository](https://github.com/gabybenedicta/vav-be) for m
 ## Screenshots
 
 ### Login
-![Login](screenshots/card.jpg =x600)
+![Login](screenshots/card.jpg | height=600)
 
 ### Product Listing
-![Login](screenshots/productlisting.jpg =x600)
+![Login](screenshots/productlisting.jpg | height=600)
 
 ### Card Display
-![Login](screenshots/card.jpg =x600)
+![Login](screenshots/card.jpg | height=600)
