@@ -28,10 +28,22 @@ Refer to [the backend repository](https://github.com/gabybenedicta/vav-be) for m
 ## Screenshots
 
 ### Login
-<img src="./screenshots/login.png" height="600">
+<img src="./screenshots/login.jpg" height="600">
 
 ### Product Listing
-<img src="./screenshots/productlisting.png" height="600">
+<img src="./screenshots/productlisting.jpg" height="600">
 
 ### Card Display
-<img src="./screenshots/card.png" height="600">
+<img src="./screenshots/card.jpg" height="600">
+
+### Chats
+<img src="./screenshots/chat.jpg" height="600">
+
+### Requesting Payments (Invoice)
+<img src="./screenshots/createinvoice.jpg" height="600">
+
+### Viewing Invoices
+<img src="./screenshots/invoice.jpg" height="600">
+
+### Payment confirmed
+<img src="./screenshots/payment.jpg" height="600">
