@@ -80,7 +80,7 @@ export default class Login extends React.Component {
         {loader}
         <Image
           style={styles.logo}
-          source={require("../../ChatAppV2/assets/login_visalogo.png")}
+          source={require("../../VAV-FE/assets/login_visalogo.png")}
         />
         <ScrollView>
           <KeyboardAvoidingView

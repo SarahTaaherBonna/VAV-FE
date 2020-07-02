@@ -30,8 +30,8 @@ const ListData = [
     id: 1,
     name: "Sunglasses",
     price: "$159",
-    seller:"Sold by Gabriella",
-    image: require("../../ChatAppV2/assets/Sunglasses.png"),
+    seller: "Sold by Gabriella",
+    image: require("../../VAV-FE/assets/Sunglasses.png"),
     merchantname: "Gabriella Benedicta",
     merchantuid: "W1BGs4VGudXJmMYzQxUjvAH9mys1",
   },
@@ -39,8 +39,8 @@ const ListData = [
     id: 2,
     name: "Headphones",
     price: "$145",
-    seller:"Sold by Rakshitha",
-    image: require("../../ChatAppV2/assets/Headphones.png"),
+    seller: "Sold by Rakshitha",
+    image: require("../../VAV-FE/assets/Headphones.png"),
     merchantname: "Rakshitha Arun",
     merchantuid: "lduT2PAELobTfMatjzfWivgqL0n1",
   },
@@ -48,8 +48,8 @@ const ListData = [
     id: 3,
     name: "Bag",
     price: "$128",
-    seller:"Sold by Palak",
-    image: require("../../ChatAppV2/assets/Bag.png"),
+    seller: "Sold by Palak",
+    image: require("../../VAV-FE/assets/Bag.png"),
     merchantname: "Palak Somani",
     merchantuid: "JEMvm4wXz3fYfgTvzwwBMXmKlg33",
   },
@@ -57,8 +57,8 @@ const ListData = [
     id: 4,
     name: "Speakers",
     price: "$95",
-    seller:"Sold by Khanh",
-    image: require("../../ChatAppV2/assets/Speakers.png"),
+    seller: "Sold by Khanh",
+    image: require("../../VAV-FE/assets/Speakers.png"),
     merchantname: "Khanh Phung",
     merchantuid: "mcHwPy6qFAPCprN9pLPXHUS1pO63",
   },
@@ -66,8 +66,8 @@ const ListData = [
     id: 5,
     name: "Powerbank",
     price: "$79",
-    seller:"Sold by Daniel",
-    image: require("../../ChatAppV2/assets/Powerbank.png"),
+    seller: "Sold by Daniel",
+    image: require("../../VAV-FE/assets/Powerbank.png"),
     merchantname: "Daniel Wong",
     merchantuid: "JEIrJHSEzBhJNflD80ZvVx4zf4t2",
   },
@@ -75,15 +75,14 @@ const ListData = [
     id: 6,
     name: "Mouse",
     price: "$75",
-    seller:"Sold by Sarah",
-    image: require("../../ChatAppV2/assets/Mouse.png"),
+    seller: "Sold by Sarah",
+    image: require("../../VAV-FE/assets/Mouse.png"),
     merchantname: "Sarah Taaher Bonna",
     merchantuid: "y2bsx6pEwpWWNsENsZwrA78LRS82",
   },
 ];
 
 export default class ProductListing extends Component {
-
   render() {
     return (
       <Container>
@@ -97,9 +96,9 @@ export default class ProductListing extends Component {
                   <TouchableOpacity
                     key={item.id}
                     onPress={() => {
-                      let buyeruid = firebaseSDK.uid
-                      let buyername = firebaseSDK.displayName
-                      let chatKey = ""
+                      let buyeruid = firebaseSDK.uid;
+                      let buyername = firebaseSDK.displayName;
+                      let chatKey = "";
                       if (buyeruid < item.merchantuid) {
                         chatKey = buyeruid + "_" + item.merchantuid;
                       } else {
@@ -109,14 +108,14 @@ export default class ProductListing extends Component {
                       console.log(chatKey);
 
                       this.props.navigation.navigate("Chats", {
-                        screen: "Chat", 
+                        screen: "Chat",
                         params: {
                           chatKey: chatKey,
                           merchantname: buyername,
                           buyername: item.merchantname,
                           merchantuid: buyeruid,
                           buyeruid: item.merchantuid,
-                        }
+                        },
                       });
                     }}
                   >
@@ -132,7 +131,7 @@ export default class ProductListing extends Component {
                       }}
                     >
                       <Image
-                        source={require("../../ChatAppV2/assets/P2PLogo.png")}
+                        source={require("../../VAV-FE/assets/P2PLogo.png")}
                         style={{
                           width: 5,
                           height: 10,

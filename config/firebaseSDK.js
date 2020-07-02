@@ -26,10 +26,8 @@ class FirebaseSDK {
   };
 
   loginWithoutCallback = async (email, password) => {
-    await firebase
-      .auth()
-      .signInWithEmailAndPassword(email, password);
-  }
+    await firebase.auth().signInWithEmailAndPassword(email, password);
+  };
 
   createAccount = async (user) => {
     return firebase
@@ -85,28 +83,28 @@ class FirebaseSDK {
   // prerequisite: must check if name is different before calling
   updateName = async (name) => {
     let currentUser = firebase.auth().currentUser;
-    await currentUser.updateProfile({
-      displayName: name
-    }).then(() => {
-      console.log("Name update succeeded.");
-    })
+    await currentUser
+      .updateProfile({
+        displayName: name,
+      })
+      .then(() => {
+        console.log("Name update succeeded.");
+      });
   };
 
-    // prerequisite: must check if email is different before calling
+  // prerequisite: must check if email is different before calling
   updateEmail = async (email) => {
     var currentUser = firebase.auth().currentUser;
-    await currentUser
-      .updateEmail(email)
-      .then(() => {
-        console.log("Email update succeeded.");
-      })
+    await currentUser.updateEmail(email).then(() => {
+      console.log("Email update succeeded.");
+    });
   };
 
   updatePassword = async (password) => {
     var currentUser = firebase.auth().currentUser;
     await currentUser.updatePassword(password).then(() => {
-      console.log("Password update succeeded.")
-    })
+      console.log("Password update succeeded.");
+    });
   };
 
   logout = () => {

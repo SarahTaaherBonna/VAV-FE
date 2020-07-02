@@ -8,7 +8,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Dimensions,
-  Alert
+  Alert,
 } from "react-native";
 import FlatButton2 from "../components/Button2";
 const windowWidth = Dimensions.get("window").width;
@@ -33,12 +33,12 @@ export default class Payment extends React.Component {
   };
 
   onPressGeneratePaymentRequest = () => {
-    if (! this.state.productName) {
+    if (!this.state.productName) {
       Alert.alert("Input invalid", "Product name can not be empty!");
       return;
     }
 
-    if(! this.state.productPrice) {
+    if (!this.state.productPrice) {
       Alert.alert("Invalid input", "Product price can not e empty!");
       return;
     }
@@ -64,7 +64,7 @@ export default class Payment extends React.Component {
         >
           <Image
             style={styles.logo}
-            source={require("../../ChatAppV2/assets/P2PLogo.png")}
+            source={require("../../VAV-FE/assets/P2PLogo.png")}
           />
 
           <View
@@ -82,7 +82,7 @@ export default class Payment extends React.Component {
             <Text style={styles.title}>BUYER'S NAME</Text>
             <TextInput
               style={styles.nameInput}
-              editable = {false}
+              editable={false}
               placeholder="Please enter buyer's name"
               placeholderTextColor="white"
               autoCorrect={false}
@@ -92,7 +92,7 @@ export default class Payment extends React.Component {
             <Text style={styles.title}>MERCHANT'S NAME</Text>
             <TextInput
               style={styles.nameInput}
-              editable = {false}
+              editable={false}
               placeholder="Please enter merchant's name"
               placeholderTextColor="white"
               autoCorrect={false}

@@ -152,7 +152,7 @@ export default class Chat extends React.Component {
               height={resizeHeight(35)}
             >
               <Image
-                source={require("../../ChatAppV2/assets/limeadeGradient.png")}
+                source={require("../../VAV-FE/assets/limeadeGradient.png")}
                 style={{
                   flex: 1,
                   position: "absolute",
@@ -176,7 +176,7 @@ export default class Chat extends React.Component {
               height={resizeHeight(35)}
             >
               <Image
-                source={require("../../ChatAppV2/assets/limeadeGradient.png")}
+                source={require("../../VAV-FE/assets/limeadeGradient.png")}
                 style={{
                   flex: 1,
                   position: "absolute",
@@ -257,7 +257,7 @@ export default class Chat extends React.Component {
                 height={resizeHeight(35)}
               >
                 <Image
-                  source={require("../../ChatAppV2/assets/GreyGradient.png")}
+                  source={require("../../VAV-FE/assets/GreyGradient.png")}
                   style={{
                     flex: 1,
                     position: "absolute",
@@ -331,7 +331,7 @@ export default class Chat extends React.Component {
         {loader}
         <Image
           style={styles.logo}
-          source={require("../../ChatAppV2/assets/P2PLogo.png")}
+          source={require("../../VAV-FE/assets/P2PLogo.png")}
         />
 
         <Button

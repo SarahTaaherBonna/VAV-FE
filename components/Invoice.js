@@ -24,10 +24,9 @@ export default function Invoice(props) {
 
   const resizeHeight = (h) => {
     return (value = h * (windowHeight / 872));
-	};
-	
-  const getCurrentUserDetails = () => {
+  };
 
+  const getCurrentUserDetails = () => {
     let name = firebaseSDK.displayName;
     let email = firebaseSDK.email;
     let id = firebaseSDK.uid;
@@ -87,8 +86,8 @@ export default function Invoice(props) {
       await firebaseSDK.sendReceiptMessage(props.chatKey, {
         user: getCurrentUserDetails(),
         text: ReceiptToSend,
-			});
-			
+      });
+
       props.setLoading(false);
       Alert.alert(
         "Payment Successful!\nTransaction ID: " + response.data.transaction_id
@@ -133,7 +132,7 @@ export default function Invoice(props) {
           successfulSlidePercent={90}
         >
           <Image
-            source={require("../../ChatAppV2/assets/SwipeGradientUpdated.png")}
+            source={require("../../VAV-FE/assets/SwipeGradientUpdated.png")}
             style={{
               flex: 1,
               position: "absolute",
