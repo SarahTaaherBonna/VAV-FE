@@ -1,17 +1,18 @@
 import firebase from "firebase";
 import { Alert } from "react-native";
+import firebaseCredentials from "./firebaseCredentials";
 
 class FirebaseSDK {
   constructor() {
     if (!firebase.apps.length) {
       //avoid re-initializing
       firebase.initializeApp({
-        apiKey: "AIzaSyDyYtgpEk64t6w63XuytDIyJvuUAMKaK8k",
-        authDomain: "chatapp-6f69b.firebaseapp.com",
-        databaseURL: "https://chatapp-6f69b.firebaseio.com",
-        projectId: "chatapp-6f69b",
-        storageBucket: "chatapp-6f69b.appspot.com",
-        messagingSenderId: "862545409242",
+        apiKey: firebaseCredentials.apiKey,
+        authDomain: firebaseCredentials.authDomain,
+        databaseURL: firebaseCredentials.databaseURL,
+        projectId: firebaseCredentials.projectId,
+        storageBucket: firebaseCredentials.storageBucket,
+        messagingSenderId: firebaseCredentials.messagingSenderId,
       });
     }
   }
