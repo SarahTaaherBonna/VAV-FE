@@ -27,3 +27,11 @@ Refer to [the backend repository](https://github.com/gabybenedicta/vav-be) for m
 
 ## Screenshots
 
+### Login
+![Login](screenshots/card.jpg =x600)
+
+### Product Listing
+![Login](screenshots/productlisting.jpg =x600)
+
+### Card Display
+![Login](screenshots/card.jpg =x600)
