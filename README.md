@@ -1,7 +1,7 @@
 # Ping2Pay
 ## A secure, convenient way to pay without ever leaving your app.
 
-![Ping2Pay Logo](assets/P2PLogo.png | width=250)
+<img src="./assets/P2PLogo.png" width="250" height="250">
 
 # README
 
