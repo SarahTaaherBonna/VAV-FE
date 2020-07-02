@@ -28,10 +28,10 @@ Refer to [the backend repository](https://github.com/gabybenedicta/vav-be) for m
 ## Screenshots
 
 ### Login
-![Login](screenshots/card.jpg | height=600)
+<img src="./screenshots/login.png" height="600">
 
 ### Product Listing
-![Login](screenshots/productlisting.jpg | height=600)
+<img src="./screenshots/productlisting.png" height="600">
 
 ### Card Display
-![Login](screenshots/card.jpg | height=600)
+<img src="./screenshots/card.png" height="600">
